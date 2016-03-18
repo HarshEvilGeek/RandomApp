@@ -1,4 +1,4 @@
-package com.example.akhil.pocketbanker.activities;
+package com.example.zaas.pocketbanker.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,9 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.akhil.pocketbanker.R;
+import com.example.zaas.pocketbanker.R;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseRestrictedActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
