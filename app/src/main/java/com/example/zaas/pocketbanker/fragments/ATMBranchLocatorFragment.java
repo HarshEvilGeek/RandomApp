@@ -92,10 +92,20 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         List<BranchAtm> branchAtmList = new ArrayList<>();
         branchAtmList.add(new BranchAtm("Richmond Road", "1, Richmond Circle, Richmond Road", "Bangalore",
                 BranchAtm.Type.BRANCH, new LatLng(12.939848,77.5872505)));
-        branchAtmList.add(new BranchAtm("Koramangala", "8th Block, Koramangala", "Bangalore", BranchAtm.Type.ATM
-                , new LatLng(12.943634, 77.617801)));
-        branchAtmList.add(new BranchAtm("Ejipura", "100 Ft Road, Ejipura", "Bangalore", BranchAtm.Type.ATM, new LatLng(12.938624, 77.631830)));
-        branchAtmList.add(new BranchAtm("Adugodi", "Near Forum Mall, Adugodi", "Bangalore", BranchAtm.Type.ATM, new LatLng(12.939955, 77.614663)));
+        branchAtmList.add(new BranchAtm("Cubbonpet", "Cubbonpet Main Road, 199/1, 9th cross", "Bangalore",
+                BranchAtm.Type.ATM, new LatLng(12.970534, 77.583551)));
+        branchAtmList.add(new BranchAtm("Ejipura", "100 Ft Road, Ejipura", "Bangalore",
+                BranchAtm.Type.ATM, new LatLng(12.938624, 77.631830)));
+        branchAtmList.add(new BranchAtm("Adugodi", "Near Forum Mall, Adugodi", "Bangalore",
+                BranchAtm.Type.ATM, new LatLng(12.939955, 77.614663)));
+        branchAtmList.add(new BranchAtm("Lal Bagh", "Lal Bagh Road, Raja Ram Mohanroy Extension, Sudhama Nagar", "Bangalore",
+                BranchAtm.Type.ATM, new LatLng(12.966250, 77.588004)));
+        branchAtmList.add(new BranchAtm("Jayanagar", "Jayanagar 9th Block", "Bangalore",
+                BranchAtm.Type.BRANCH, new LatLng(12.923837, 77.593396)));
+        branchAtmList.add(new BranchAtm("HAL", "HAL Airport Rd, ISRO Colony, Domlur", "Bangalore",
+                BranchAtm.Type.BRANCH, new LatLng(12.966355, 77.644921)));
+        branchAtmList.add(new BranchAtm("Chickpet", "OTC Road, Chickpet", "Bangalore",
+                BranchAtm.Type.BRANCH, new LatLng(12.977261, 77.574992)));
         return branchAtmList;
     }
 

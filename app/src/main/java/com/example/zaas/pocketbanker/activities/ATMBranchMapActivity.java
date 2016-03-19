@@ -14,6 +14,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
@@ -88,17 +90,22 @@ public class ATMBranchMapActivity extends AppCompatActivity implements OnMapRead
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         addMarkers();
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, 15));
     }
 
     private void addMarkers() {
         if (mIsSingleMode) {
             BranchAtm branchAtm = mBranchATMs.get(mSingleBranchAtmID);
             addMarker(branchAtm);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, 15));
         } else {
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (BranchAtm branchAtm : mBranchATMs) {
                 addMarker(branchAtm);
+                builder.include(branchAtm.getMapLocation());
             }
+            LatLngBounds bounds = builder.build();
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+                    //CameraUpdateFactory.newLatLngZoom(mCurrentLocation, 12));
         }
     }
 
