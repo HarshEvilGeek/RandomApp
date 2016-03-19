@@ -5,6 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.zaas.pocketbanker.models.local.BranchAtm;
+import com.example.zaas.pocketbanker.models.local.Payee;
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by akhil on 3/19/16.
  */
@@ -14,6 +18,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "pocketbanker.db";
     private static final int DATABASE_VERSION_1 = 1; // Version 1 released April 2016
+    private static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
 
     public PocketBankerOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION_1);
@@ -29,11 +34,64 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
         db.execSQL(Tables.CREATE_TABLE_LOANS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_EMIS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_LOAN_TRANSACTIONS_QUERY);
+
+        // Only for testing
+        insertDummyData(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    public void insertDummyData(SQLiteDatabase db)
+    {
+        insertDummyPayeeData(db);
+        insertDummyBranchAtmData(db);
+    }
+
+    public void insertDummyPayeeData(SQLiteDatabase db)
+    {
+        Payee payee = new Payee("1", "Akhil Verghese", "5100075", "Stud", System.currentTimeMillis() - 10
+                * ONE_DAY_IN_MILLIS, "AKH075");
+        db.insert(Tables.PAYEES, null, payee.toContentValues());
+        payee = new Payee("1", "Akshay Dugar", "510110", "Agz", System.currentTimeMillis() - 7 * ONE_DAY_IN_MILLIS,
+                "AKI110");
+        db.insert(Tables.PAYEES, null, payee.toContentValues());
+        payee = new Payee("1", "Shayoni Seth", "510245", "Shy", System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS,
+                "SHY245");
+        db.insert(Tables.PAYEES, null, payee.toContentValues());
+        payee = new Payee("1", "Zara Ahmed", "510540", "Zar", System.currentTimeMillis() - 2 * ONE_DAY_IN_MILLIS,
+                "ZAR540");
+        db.insert(Tables.PAYEES, null, payee.toContentValues());
+    }
+
+    public void insertDummyBranchAtmData(SQLiteDatabase db)
+    {
+        BranchAtm branchAtm = new BranchAtm("Richmond Road", "1, Richmond Circle, Richmond Road", "Bangalore",
+                BranchAtm.Type.BRANCH, new LatLng(12.939848, 77.5872505));
+        db.insert(Tables.BRANCH_ATMS, null, branchAtm.toContentValues());
+        branchAtm = new BranchAtm("Cubbonpet", "Cubbonpet Main Road, 199/1, 9th cross", "Bangalore",
+                BranchAtm.Type.ATM, new LatLng(12.970534, 77.583551));
+        db.insert(Tables.BRANCH_ATMS, null, branchAtm.toContentValues());
+        branchAtm = new BranchAtm("Ejipura", "100 Ft Road, Ejipura", "Bangalore", BranchAtm.Type.ATM, new LatLng(
+                12.938624, 77.631830));
+        db.insert(Tables.BRANCH_ATMS, null, branchAtm.toContentValues());
+        branchAtm = new BranchAtm("Adugodi", "Near Forum Mall, Adugodi", "Bangalore", BranchAtm.Type.ATM, new LatLng(
+                12.939955, 77.614663));
+        db.insert(Tables.BRANCH_ATMS, null, branchAtm.toContentValues());
+        branchAtm = new BranchAtm("Lal Bagh", "Lal Bagh Road, Raja Ram Mohanroy Extension, Sudhama Nagar", "Bangalore",
+                BranchAtm.Type.ATM, new LatLng(12.966250, 77.588004));
+        db.insert(Tables.BRANCH_ATMS, null, branchAtm.toContentValues());
+        branchAtm = new BranchAtm("Jayanagar", "Jayanagar 9th Block", "Bangalore", BranchAtm.Type.BRANCH, new LatLng(
+                12.923837, 77.593396));
+        db.insert(Tables.BRANCH_ATMS, null, branchAtm.toContentValues());
+        branchAtm = new BranchAtm("HAL", "HAL Airport Rd, ISRO Colony, Domlur", "Bangalore", BranchAtm.Type.BRANCH,
+                new LatLng(12.966355, 77.644921));
+        db.insert(Tables.BRANCH_ATMS, null, branchAtm.toContentValues());
+        branchAtm = new BranchAtm("Chickpet", "OTC Road, Chickpet", "Bangalore", BranchAtm.Type.BRANCH, new LatLng(
+                12.977261, 77.574992));
+        db.insert(Tables.BRANCH_ATMS, null, branchAtm.toContentValues());
     }
 
     public void deleteTables() {
