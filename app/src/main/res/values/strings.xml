@@ -17,4 +17,13 @@
 
     <string name="google_map_api_key">AIzaSyBhpNcwPsfMt-3Jk4mBSGdn6zGPYUF_vc0</string>
     <string name="locator_name">Nearby ATMs and Branches</string>
+    <string name="nfc_not_available">NFC is not available on this device</string>
+    <string name="nfc_not_enabled">NFC is not enabled. Do you want to enable it?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_payee_via_nfc">Add Payee Via NFC</string>
+    <string name="unable_to_add_payee">Unable to add payee</string>
+    <string name="payee_added_title">Payee added successfully</string>
+    <string name="payee_added_msg">Name: %1$s\nAccount No: %2$s</string>
+    <string name="tap_another_device_to_add_payee">Tap another device to add payee</string>
 </resources>
