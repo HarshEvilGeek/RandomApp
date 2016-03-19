@@ -8,7 +8,7 @@ public class PocketBankerContract {
     public static final String CONTENT_AUTHORITY = "com.example.zaas.pocketbanker.provider";
 
     interface BaseColumns {
-        String ID = "_id";
+        String _ID = "_id";
     }
 
     interface AccountBaseColumns {
