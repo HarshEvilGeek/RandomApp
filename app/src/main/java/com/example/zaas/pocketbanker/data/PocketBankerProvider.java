@@ -28,6 +28,8 @@ public class PocketBankerProvider extends ContentProvider {
             + "/" + PocketBankerOpenHelper.Tables.ACCOUNTS);
     public static final Uri CONTENT_URI_TRANSACTIONS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.TRANSACTIONS);
     public static final Uri CONTENT_URI_PAYEES = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.PAYEES);
+    public static final Uri CONTENT_URI_BRANCH_ATMS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY
+            + "/" + PocketBankerOpenHelper.Tables.BRANCH_ATMS);
     public static final Uri CONTENT_URI_LOANS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.LOANS);
     public static final Uri CONTENT_URI_EMIS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.EMIS);
     public static final Uri CONTENT_URI_LOAN_TRANSACTIONS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.LOAN_TRANSACTIONS);
