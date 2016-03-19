@@ -1,10 +1,10 @@
-package com.example.zaas.pocketbanker.models.network;
+package com.example.zaas.pocketbanker.sync;
 
 import retrofit.http.GET;
 import retrofit.http.Path;
 
-import com.example.zaas.pocketbanker.models.local.AuthToken;
-import com.example.zaas.pocketbanker.models.local.BalanceEnquiry;
+import com.example.zaas.pocketbanker.models.network.AuthToken;
+import com.example.zaas.pocketbanker.models.network.BalanceEnquiry;
 
 /**
  * Created by zaraahmed on 3/18/16.

@@ -1,4 +1,4 @@
-package com.example.zaas.pocketbanker.models.local;
+package com.example.zaas.pocketbanker.models.network;
 
 /**
  * Created by zaraahmed on 3/18/16.
@@ -7,13 +7,9 @@ public class BalanceEnquiry
 {
 
     private Integer code;
-
     private String balance;
-
     private String accountno;
-
     private String accounttype;
-
     private String balancetime;
 
     public Integer getCode()

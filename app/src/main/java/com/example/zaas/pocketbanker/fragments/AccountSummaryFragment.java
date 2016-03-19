@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.zaas.pocketbanker.R;
-import com.example.zaas.pocketbanker.models.network.NetworkHelper;
+import com.example.zaas.pocketbanker.sync.NetworkHelper;
 
 /**
  * Created by zaas on 3/17/16.

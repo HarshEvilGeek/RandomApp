@@ -1,4 +1,4 @@
-package com.example.zaas.pocketbanker.models.local;
+package com.example.zaas.pocketbanker.models.network;
 
 /**
  * Created by zaraahmed on 3/18/16.

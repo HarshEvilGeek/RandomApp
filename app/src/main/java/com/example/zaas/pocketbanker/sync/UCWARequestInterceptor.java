@@ -1,4 +1,4 @@
-package com.example.zaas.pocketbanker.models.network;
+package com.example.zaas.pocketbanker.sync;
 
 import retrofit.RequestInterceptor;
 
