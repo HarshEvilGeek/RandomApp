@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
-import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Recycler view adapter for branch/ATM list Created by adugar on 3/19/16.
@@ -26,13 +25,6 @@ public class BranchAtmAdapter extends RecyclerView.Adapter<BranchAtmAdapter.Bran
     private List<BranchAtm> mBranchAtmList;
     private OnClickListener mOnClickListener;
     private OnMapButtonClickListener mOnMapButtonClickListener;
-
-    public BranchAtmAdapter(Context context)
-    {
-        mContext = context;
-        mInflater = LayoutInflater.from(context);
-        mBranchAtmList = createDummyBranchAtmList();
-    }
 
     public BranchAtmAdapter(Context context, List<BranchAtm> branchAtmList)
     {
@@ -68,18 +60,6 @@ public class BranchAtmAdapter extends RecyclerView.Adapter<BranchAtmAdapter.Bran
         return mBranchAtmList.size();
     }
 
-    private List<BranchAtm> createDummyBranchAtmList()
-    {
-        List<BranchAtm> branchAtmList = new ArrayList<>();
-        branchAtmList.add(new BranchAtm("Richmond Road", "1, Richmond Circle, Richmond Road", "Bangalore",
-                BranchAtm.Type.BRANCH, new LatLng(12.939848,77.5872505)));
-        branchAtmList.add(new BranchAtm("Koramangala", "8th Block, Koramangala", "Bangalore", BranchAtm.Type.ATM
-        , new LatLng(12.943634, 77.617801)));
-        branchAtmList.add(new BranchAtm("Ejipura", "100 Ft Road, Ejipura", "Bangalore", BranchAtm.Type.ATM, new LatLng(12.938624, 77.631830)));
-        branchAtmList.add(new BranchAtm("Adugodi", "Near Forum Mall, Adugodi", "Bangalore", BranchAtm.Type.ATM, new LatLng(12.939955, 77.614663)));
-        return branchAtmList;
-    }
-
     public interface OnClickListener
     {
         void onClick(BranchAtm branchAtm);
@@ -87,7 +67,7 @@ public class BranchAtmAdapter extends RecyclerView.Adapter<BranchAtmAdapter.Bran
 
     public interface OnMapButtonClickListener
     {
-        void onMapButtonClick(BranchAtm branchAtm);
+        void onMapButtonClick(int branchAtmID);
     }
 
     public class BranchAtmViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
@@ -104,7 +84,7 @@ public class BranchAtmAdapter extends RecyclerView.Adapter<BranchAtmAdapter.Bran
                 @Override
                 public void onClick(View v) {
                     if (mOnMapButtonClickListener != null) {
-                        mOnMapButtonClickListener.onMapButtonClick(mBranchAtmList.get(getLayoutPosition()));
+                        mOnMapButtonClickListener.onMapButtonClick(getLayoutPosition());
                     }
                 }
             });
