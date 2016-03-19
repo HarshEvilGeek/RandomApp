@@ -21,10 +21,10 @@
         android:id="@+id/temp_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Maps"
-        android:background="@color/colorPrimary"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_margin="@dimen/card_margin"/>
+        android:layout_margin="@dimen/card_margin"
+        android:background="@color/colorPrimary"
+        android:text="Maps" />
 
 </RelativeLayout>

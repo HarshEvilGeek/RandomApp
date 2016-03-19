@@ -1,10 +1,8 @@
 package com.example.zaas.pocketbanker.adapters;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;

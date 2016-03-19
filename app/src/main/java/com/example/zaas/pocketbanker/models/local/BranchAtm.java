@@ -2,9 +2,9 @@ package com.example.zaas.pocketbanker.models.local;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import com.google.android.gms.maps.model.LatLng;
 
 import com.example.zaas.pocketbanker.data.PocketBankerContract;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Model for Branch/ATM Created by adugar on 3/19/16.
@@ -17,12 +17,9 @@ public class BranchAtm
     private String address;
     private String city;
     private String state;
-    private double latitude;
-    private double longitude;
     private String ifscCode;
     private String phoneNumber;
     private Type type;
-
     private LatLng mapLocation;
 
     public BranchAtm()
@@ -47,12 +44,13 @@ public class BranchAtm
         branchAtm.setAddress(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.ADDRESS)));
         branchAtm.setCity(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.CITY)));
         branchAtm.setState(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.STATE)));
-        branchAtm.setLatitude(cursor.getDouble(cursor.getColumnIndex(PocketBankerContract.BranchAtms.LATITUDE)));
-        branchAtm.setLongitude(cursor.getDouble(cursor.getColumnIndex(PocketBankerContract.BranchAtms.LONGITUDE)));
         branchAtm.setIfscCode(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.IFSC_CODE)));
         branchAtm.setFlag(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.FLAG)));
         branchAtm.setType(Type.values()[cursor.getInt(cursor.getColumnIndex(PocketBankerContract.BranchAtms.TYPE))]);
         branchAtm.setPhoneNumber(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.PHONE_NUMBER)));
+        double latitude = cursor.getDouble(cursor.getColumnIndex(PocketBankerContract.BranchAtms.LATITUDE));
+        double longitude = cursor.getDouble(cursor.getColumnIndex(PocketBankerContract.BranchAtms.LONGITUDE));
+        branchAtm.setMapLocation(new LatLng(latitude, longitude));
         return branchAtm;
     }
 
@@ -63,8 +61,8 @@ public class BranchAtm
         contentValues.put(PocketBankerContract.BranchAtms.ADDRESS, address);
         contentValues.put(PocketBankerContract.BranchAtms.CITY, city);
         contentValues.put(PocketBankerContract.BranchAtms.STATE, state);
-        contentValues.put(PocketBankerContract.BranchAtms.LATITUDE, latitude);
-        contentValues.put(PocketBankerContract.BranchAtms.LONGITUDE, longitude);
+        contentValues.put(PocketBankerContract.BranchAtms.LATITUDE, mapLocation.latitude);
+        contentValues.put(PocketBankerContract.BranchAtms.LONGITUDE, mapLocation.longitude);
         contentValues.put(PocketBankerContract.BranchAtms.IFSC_CODE, ifscCode);
         contentValues.put(PocketBankerContract.BranchAtms.FLAG, flag);
         contentValues.put(PocketBankerContract.BranchAtms.TYPE, type.ordinal());
@@ -110,26 +108,6 @@ public class BranchAtm
     public void setState(String state)
     {
         this.state = state;
-    }
-
-    public double getLatitude()
-    {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude)
-    {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude()
-    {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude)
-    {
-        this.longitude = longitude;
     }
 
     public String getIfscCode()
@@ -182,11 +160,13 @@ public class BranchAtm
         this.type = type;
     }
 
-    public LatLng getMapLocation() {
+    public LatLng getMapLocation()
+    {
         return mapLocation;
     }
 
-    public void setMapLocation(LatLng mapLocation) {
+    public void setMapLocation(LatLng mapLocation)
+    {
         this.mapLocation = mapLocation;
     }
 

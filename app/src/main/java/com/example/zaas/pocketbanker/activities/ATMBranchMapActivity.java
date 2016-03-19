@@ -1,5 +1,7 @@
 package com.example.zaas.pocketbanker.activities;
 
+import java.util.List;
+
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,15 +17,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.List;
 
 /**
  * Created by shseth on 3/19/2016.
  */
-public class ATMBranchMapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class ATMBranchMapActivity extends AppCompatActivity implements OnMapReadyCallback
+{
 
     public static final String SINGLE_BRANCH_ATM_KEY = "singleBranchATMID";
     public static final String SINGLE_MAP_KEY = "SingleMapMode";
@@ -31,12 +31,13 @@ public class ATMBranchMapActivity extends AppCompatActivity implements OnMapRead
     private boolean mIsSingleMode;
     private int mSingleBranchAtmID;
     private List<BranchAtm> mBranchATMs;
-    //TODO: implement this
+    // TODO: implement this
     private LatLng mCurrentLocation;
     private GoogleMap mMap;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -54,36 +55,39 @@ public class ATMBranchMapActivity extends AppCompatActivity implements OnMapRead
         setCurrentLocation();
         setContentView(R.layout.activity_atm_branch_map);
 
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
-    private void handleExtras(Bundle extras) {
+    private void handleExtras(Bundle extras)
+    {
         if (mIsSingleMode) {
             mSingleBranchAtmID = extras.getInt(SINGLE_BRANCH_ATM_KEY);
         }
     }
 
-    private void setCurrentLocation() {
+    private void setCurrentLocation()
+    {
         // For now, doing an average of test data to fetch current location
         if (mIsSingleMode) {
             mCurrentLocation = mBranchATMs.get(mSingleBranchAtmID).getMapLocation();
-        } else {
+        }
+        else {
             mCurrentLocation = mBranchATMs.get(0).getMapLocation();
         }
     }
 
     @Override
-    public void onMapReady(GoogleMap map) {
+    public void onMapReady(GoogleMap map)
+    {
         mMap = map;
         mMap.clear();
         mMap.setMyLocationEnabled(true);
         mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
-            public boolean onMyLocationButtonClick() {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                        mCurrentLocation, 15));
+            public boolean onMyLocationButtonClick()
+            {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, 15));
                 return true;
             }
         });
@@ -92,12 +96,14 @@ public class ATMBranchMapActivity extends AppCompatActivity implements OnMapRead
         addMarkers();
     }
 
-    private void addMarkers() {
+    private void addMarkers()
+    {
         if (mIsSingleMode) {
             BranchAtm branchAtm = mBranchATMs.get(mSingleBranchAtmID);
             addMarker(branchAtm);
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, 15));
-        } else {
+        }
+        else {
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (BranchAtm branchAtm : mBranchATMs) {
                 addMarker(branchAtm);
@@ -105,21 +111,19 @@ public class ATMBranchMapActivity extends AppCompatActivity implements OnMapRead
             }
             LatLngBounds bounds = builder.build();
             mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
-                    //CameraUpdateFactory.newLatLngZoom(mCurrentLocation, 12));
+            // CameraUpdateFactory.newLatLngZoom(mCurrentLocation, 12));
         }
     }
 
-    private void addMarker(BranchAtm branchAtm) {
+    private void addMarker(BranchAtm branchAtm)
+    {
         if (branchAtm.getType() == BranchAtm.Type.ATM) {
-            mMap.addMarker(new MarkerOptions().position(branchAtm.getMapLocation())
-                    .snippet(branchAtm.getAddress())
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_atm))
-                    .title(branchAtm.getName()));
-        } else {
-            mMap.addMarker(new MarkerOptions().position(branchAtm.getMapLocation())
-                    .snippet(branchAtm.getAddress())
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_branch))
-                    .title(branchAtm.getName()));
+            mMap.addMarker(new MarkerOptions().position(branchAtm.getMapLocation()).snippet(branchAtm.getAddress())
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_atm)).title(branchAtm.getName()));
+        }
+        else {
+            mMap.addMarker(new MarkerOptions().position(branchAtm.getMapLocation()).snippet(branchAtm.getAddress())
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_branch)).title(branchAtm.getName()));
         }
     }
 
@@ -128,9 +132,9 @@ public class ATMBranchMapActivity extends AppCompatActivity implements OnMapRead
     {
         switch (item.getItemId())
         {
-            case android.R.id.home:
-                finish();
-                return true;
+        case android.R.id.home:
+            finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -1,9 +1,11 @@
 package com.example.zaas.pocketbanker.fragments;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,18 +22,38 @@ import com.example.zaas.pocketbanker.adapters.BranchAtmAdapter;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Fragment to show branch/ATM locations Created by akhil on 3/17/16.
  */
-public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapter.OnClickListener, BranchAtmAdapter.OnMapButtonClickListener
+public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapter.OnClickListener,
+        BranchAtmAdapter.OnMapButtonClickListener
 {
     SwipeRefreshLayout mSwipeContainer;
     RecyclerView mRecyclerView;
     BranchAtmAdapter mAdapter;
     private List<BranchAtm> mBranchAtmList;
+
+    public static List<BranchAtm> createDummyBranchAtmList()
+    {
+        List<BranchAtm> branchAtmList = new ArrayList<>();
+        branchAtmList.add(new BranchAtm("Richmond Road", "1, Richmond Circle, Richmond Road", "Bangalore",
+                BranchAtm.Type.BRANCH, new LatLng(12.939848, 77.5872505)));
+        branchAtmList.add(new BranchAtm("Cubbonpet", "Cubbonpet Main Road, 199/1, 9th cross", "Bangalore",
+                BranchAtm.Type.ATM, new LatLng(12.970534, 77.583551)));
+        branchAtmList.add(new BranchAtm("Ejipura", "100 Ft Road, Ejipura", "Bangalore", BranchAtm.Type.ATM, new LatLng(
+                12.938624, 77.631830)));
+        branchAtmList.add(new BranchAtm("Adugodi", "Near Forum Mall, Adugodi", "Bangalore", BranchAtm.Type.ATM,
+                new LatLng(12.939955, 77.614663)));
+        branchAtmList.add(new BranchAtm("Lal Bagh", "Lal Bagh Road, Raja Ram Mohanroy Extension, Sudhama Nagar",
+                "Bangalore", BranchAtm.Type.ATM, new LatLng(12.966250, 77.588004)));
+        branchAtmList.add(new BranchAtm("Jayanagar", "Jayanagar 9th Block", "Bangalore", BranchAtm.Type.BRANCH,
+                new LatLng(12.923837, 77.593396)));
+        branchAtmList.add(new BranchAtm("HAL", "HAL Airport Rd, ISRO Colony, Domlur", "Bangalore",
+                BranchAtm.Type.BRANCH, new LatLng(12.966355, 77.644921)));
+        branchAtmList.add(new BranchAtm("Chickpet", "OTC Road, Chickpet", "Bangalore", BranchAtm.Type.BRANCH,
+                new LatLng(12.977261, 77.574992)));
+        return branchAtmList;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -47,7 +69,8 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         Button tempMapButton = (Button) rootView.findViewById(R.id.temp_button);
         tempMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 onFabClick();
             }
         });
@@ -57,7 +80,8 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         return rootView;
     }
 
-    private void onFabClick() {
+    private void onFabClick()
+    {
         Intent mapIntent = new Intent(getActivity(), ATMBranchMapActivity.class);
         mapIntent.putExtra(ATMBranchMapActivity.SINGLE_MAP_KEY, false);
         startActivity(mapIntent);
@@ -68,7 +92,8 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         mSwipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
         mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {
+            public void onRefresh()
+            {
                 syncBranchAtms();
             }
         });
@@ -85,28 +110,6 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         mAdapter.setOnClickListener(this, this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
-    }
-
-    public static List<BranchAtm> createDummyBranchAtmList()
-    {
-        List<BranchAtm> branchAtmList = new ArrayList<>();
-        branchAtmList.add(new BranchAtm("Richmond Road", "1, Richmond Circle, Richmond Road", "Bangalore",
-                BranchAtm.Type.BRANCH, new LatLng(12.939848,77.5872505)));
-        branchAtmList.add(new BranchAtm("Cubbonpet", "Cubbonpet Main Road, 199/1, 9th cross", "Bangalore",
-                BranchAtm.Type.ATM, new LatLng(12.970534, 77.583551)));
-        branchAtmList.add(new BranchAtm("Ejipura", "100 Ft Road, Ejipura", "Bangalore",
-                BranchAtm.Type.ATM, new LatLng(12.938624, 77.631830)));
-        branchAtmList.add(new BranchAtm("Adugodi", "Near Forum Mall, Adugodi", "Bangalore",
-                BranchAtm.Type.ATM, new LatLng(12.939955, 77.614663)));
-        branchAtmList.add(new BranchAtm("Lal Bagh", "Lal Bagh Road, Raja Ram Mohanroy Extension, Sudhama Nagar", "Bangalore",
-                BranchAtm.Type.ATM, new LatLng(12.966250, 77.588004)));
-        branchAtmList.add(new BranchAtm("Jayanagar", "Jayanagar 9th Block", "Bangalore",
-                BranchAtm.Type.BRANCH, new LatLng(12.923837, 77.593396)));
-        branchAtmList.add(new BranchAtm("HAL", "HAL Airport Rd, ISRO Colony, Domlur", "Bangalore",
-                BranchAtm.Type.BRANCH, new LatLng(12.966355, 77.644921)));
-        branchAtmList.add(new BranchAtm("Chickpet", "OTC Road, Chickpet", "Bangalore",
-                BranchAtm.Type.BRANCH, new LatLng(12.977261, 77.574992)));
-        return branchAtmList;
     }
 
     private void syncBranchAtms()
@@ -127,7 +130,8 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     }
 
     @Override
-    public void onMapButtonClick(int branchAtmID) {
+    public void onMapButtonClick(int branchAtmID)
+    {
         Intent mapIntent = new Intent(getActivity(), ATMBranchMapActivity.class);
         mapIntent.putExtra(ATMBranchMapActivity.SINGLE_MAP_KEY, true);
         mapIntent.putExtra(ATMBranchMapActivity.SINGLE_BRANCH_ATM_KEY, branchAtmID);
