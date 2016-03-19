@@ -33,7 +33,21 @@ public class PocketBankerContract {
         String ACCOUNT_NUMBER = "account_number";
         String CUST_ID = "cust_id";
         String SHORT_NAME = "short_name";
-        String ADDED_DATE = "added_date";
+        String CREATION_DATE = "creation_date";
+    }
+
+    interface BranchAtmColumns
+    {
+        String TYPE = "type";
+        String FLAG = "flag";
+        String ADDRESS = "address";
+        String CITY = "city";
+        String STATE = "state";
+        String LATITUDE = "latitude";
+        String LONGITUDE = "longitude";
+        String IFSC_CODE = "ifsc_code";
+        String PHONE_NUMBER = "phone_number";
+        String BRANCH_NAME = "branch_name";
     }
 
     interface LoanBaseColumns {
@@ -83,6 +97,11 @@ public class PocketBankerContract {
     }
 
     public static class Payees implements BaseColumns, PayeeColumns {
+
+    }
+
+    public static class BranchAtms implements BaseColumns, BranchAtmColumns
+    {
 
     }
 

@@ -21,10 +21,11 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(Tables.CREATE_TABLE_ACCOUNT_QUERY);
+        db.execSQL(Tables.CREATE_TABLE_ACCOUNTS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_TRANSACTIONS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_PAYEES_QUERY);
-        db.execSQL(Tables.CREATE_TABLE_CARD_ACCOUNT_QUERY);
+        db.execSQL(Tables.CREATE_TABLE_BRANCH_ATMS_QUERY);
+        db.execSQL(Tables.CREATE_TABLE_CARDS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_LOANS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_EMIS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_LOAN_TRANSACTIONS_QUERY);
@@ -37,30 +38,30 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
 
     public void deleteTables() {
         SQLiteDatabase db = getWritableDatabase();
-        int accountCount = db.delete(Tables.ACCOUNT, "1", null);
+        int accountCount = db.delete(Tables.ACCOUNTS, "1", null);
         int transactionCount = db.delete(Tables.TRANSACTIONS, "1", null);
         int payeeCount = db.delete(Tables.PAYEES, "1", null);
-        int cardCount = db.delete(Tables.CARD, "1", null);
+        int branchAtmCount = db.delete(Tables.BRANCH_ATMS, "1", null);
+        int cardCount = db.delete(Tables.CARDS, "1", null);
         int loanCount = db.delete(Tables.LOANS, "1", null);
         int emiCount = db.delete(Tables.EMIS, "1", null);
         int loanTransactionCount = db.delete(Tables.LOAN_TRANSACTIONS, "1", null);
-        Log.i(TAG, "Deleted " + accountCount + " accounts, " + transactionCount + " transactions, "
-                + payeeCount + " payees, " + cardCount + " cards, " + loanCount +
-                " loan details, " + emiCount + " emis and " + loanTransactionCount
-                + " loan transactions.");
+        Log.i(TAG, "Deleted " + accountCount + " accounts, " + transactionCount + " transactions, " + payeeCount
+                + " payees, " + branchAtmCount + " branches/ATMs, " + cardCount + " cards, " + loanCount
+                + " loan details, " + emiCount + " emis and " + loanTransactionCount + " loan transactions.");
     }
 
     interface Tables {
-        String ACCOUNT = "AccountModel";
+        String ACCOUNTS = "Accounts";
         String TRANSACTIONS = "Transactions";
         String PAYEES = "Payees";
+        String BRANCH_ATMS = "BranchAtms";
         String LOANS = "Loans";
         String EMIS = "Emis";
         String LOAN_TRANSACTIONS = "LoanTransactions";
-        String CARD = "Card";
+        String CARDS = "Cards";
 
-        String CREATE_TABLE_ACCOUNT_QUERY = "CREATE table " +
-                ACCOUNT + " (" +
+        String CREATE_TABLE_ACCOUNTS_QUERY = "CREATE table " + ACCOUNTS + " (" +
                 PocketBankerContract.Account._ID + " integer primary key, " +
                 PocketBankerContract.Account.ACCOUNT_NUMBER + " text, " +
                 PocketBankerContract.Account.ACCOUNT_TYPE + " text, " +
@@ -85,7 +86,17 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
                 PocketBankerContract.Payees.PAYEE_NAME + " text, " +
                 PocketBankerContract.Payees.CUST_ID + " text, " +
                 PocketBankerContract.Payees.SHORT_NAME + " text, " +
-                PocketBankerContract.Payees.ADDED_DATE + " integer);";
+ PocketBankerContract.Payees.CREATION_DATE + " integer);";
+
+        String CREATE_TABLE_BRANCH_ATMS_QUERY = "CREATE table " + BRANCH_ATMS + " ("
+                + PocketBankerContract.BranchAtms._ID + " integer primary key, " + PocketBankerContract.BranchAtms.TYPE
+                + " integer, " + PocketBankerContract.BranchAtms.FLAG + " text, "
+                + PocketBankerContract.BranchAtms.ADDRESS + " text, " + PocketBankerContract.BranchAtms.CITY
+                + " text, " + PocketBankerContract.BranchAtms.STATE + " text, "
+                + PocketBankerContract.BranchAtms.LATITUDE + " double, " + PocketBankerContract.BranchAtms.LONGITUDE
+                + " double, " + PocketBankerContract.BranchAtms.IFSC_CODE + " text, "
+                + PocketBankerContract.BranchAtms.PHONE_NUMBER + " text, "
+                + PocketBankerContract.BranchAtms.BRANCH_NAME + " text);";
 
         String CREATE_TABLE_LOANS_QUERY = "CREATE table " +
                 LOANS + " (" +
@@ -116,8 +127,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
                 PocketBankerContract.LoanTransactions.LAST_PAYMENT_MADE + " real, " +
                 PocketBankerContract.LoanTransactions.PAYMENT_MODE + " text);";
 
-        String CREATE_TABLE_CARD_ACCOUNT_QUERY = "CREATE table " +
-                CARD + " (" +
+        String CREATE_TABLE_CARDS_QUERY = "CREATE table " + CARDS + " (" +
                 PocketBankerContract.CardAccount._ID + " integer primary key, " +
                 PocketBankerContract.CardAccount.CARD_ACC_NUMBER + " text, " +
                 PocketBankerContract.CardAccount.TYPE + " text, " +
