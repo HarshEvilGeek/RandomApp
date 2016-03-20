@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.models.local.AccountSummaryDetailHeaderUIITem;
 import com.example.zaas.pocketbanker.models.local.AccountSummaryDetailItem;
+import com.example.zaas.pocketbanker.models.local.TransactionDataUIItem;
 import com.example.zaas.pocketbanker.models.local.TransactionDetailViewHolder;
 import com.example.zaas.pocketbanker.utils.Constants;
 
@@ -24,8 +26,8 @@ import com.example.zaas.pocketbanker.utils.Constants;
 public class AccountSummaryDetailFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
 
-    Context mContext;
-    List<AccountSummaryDetailItem> mUiItems;
+    private Context mContext;
+    private List<AccountSummaryDetailItem> mUiItems;
 
     public AccountSummaryDetailFragmentAdapter(Context context, List<AccountSummaryDetailItem> uiItems)
     {
@@ -164,6 +166,25 @@ public class AccountSummaryDetailFragmentAdapter extends RecyclerView.Adapter<Re
 
         }
         else if (Constants.SUMMARY_ITEM_TYPE_ITEM == viewType) {
+
+            TransactionDataUIItem transactionDataUIItem = uiItem.getTransactionDataUIItem();
+
+            TransactionDetailViewHolder viewHolder = (TransactionDetailViewHolder) vh;
+
+            viewHolder.getTransAmountTV().setText(String.valueOf(transactionDataUIItem.getTransactionAmount()));
+            viewHolder.getTransDateTV().setText(df.format(new Date(transactionDataUIItem.getTransactionDate())));
+            viewHolder.getTransTypeTV().setText(transactionDataUIItem.getTransactionType());
+
+            if (!TextUtils.isEmpty(transactionDataUIItem.getTransactionRemark())) {
+                viewHolder.getTransRemarkTV().setVisibility(View.VISIBLE);
+                viewHolder.getTransRemarkTitleTV().setVisibility(View.VISIBLE);
+                viewHolder.getTransRemarkTV().setText(transactionDataUIItem.getTransactionRemark());
+            }
+            else {
+                viewHolder.getTransRemarkTV().setVisibility(View.GONE);
+                viewHolder.getTransRemarkTitleTV().setVisibility(View.GONE);
+
+            }
 
         }
 

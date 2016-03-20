@@ -16,6 +16,7 @@ public class TransactionDetailViewHolder extends RecyclerView.ViewHolder
     private TextView transDateTV;
     private TextView transTypeTV;
     private TextView transRemarkTV;
+    private TextView transRemarkTitleTV;
 
     public TransactionDetailViewHolder(View itemView)
     {
@@ -25,6 +26,7 @@ public class TransactionDetailViewHolder extends RecyclerView.ViewHolder
         transDateTV = (TextView) itemView.findViewById(R.id.date_of_transaction_tv);
         transTypeTV = (TextView) itemView.findViewById(R.id.type_of_trans_tv);
         transRemarkTV = (TextView) itemView.findViewById(R.id.trans_remark_tv);
+        transRemarkTitleTV = (TextView) itemView.findViewById(R.id.trans_remark_heading_tv);
 
     }
 
@@ -66,5 +68,15 @@ public class TransactionDetailViewHolder extends RecyclerView.ViewHolder
     public void setTransRemarkTV(TextView transRemarkTV)
     {
         this.transRemarkTV = transRemarkTV;
+    }
+
+    public TextView getTransRemarkTitleTV()
+    {
+        return transRemarkTitleTV;
+    }
+
+    public void setTransRemarkTitleTV(TextView transRemarkTitleTV)
+    {
+        this.transRemarkTitleTV = transRemarkTitleTV;
     }
 }
