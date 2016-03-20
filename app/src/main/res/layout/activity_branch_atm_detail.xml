@@ -84,6 +84,7 @@
                     android:layout_width="30dp"
                     android:layout_margin="@dimen/card_margin"
                     android:layout_height="30dp"
+                    android:visibility="gone"
                     android:src="@drawable/ifsc_code"/>
         
             </LinearLayout>
