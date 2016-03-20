@@ -1,5 +1,8 @@
 package com.example.zaas.pocketbanker.fragments;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,9 +17,6 @@ import com.example.zaas.pocketbanker.adapters.AccountSummaryFragmentAdapter;
 import com.example.zaas.pocketbanker.models.local.SummaryUIItem;
 import com.example.zaas.pocketbanker.sync.NetworkHelper;
 import com.example.zaas.pocketbanker.utils.Constants;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by zaas on 3/17/16.
@@ -74,15 +74,21 @@ public class AccountSummaryFragment extends Fragment
         @Override
         protected List<SummaryUIItem> doInBackground(Void... voids)
         {
-            SummaryUIItem uiItem1 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Bank Account", -1);
-            SummaryUIItem uiItem4 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Card", -1);
-            SummaryUIItem uiItem7 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Loan Account", -1);
-            SummaryUIItem uiItem2 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012243547123", 2345687.00);
-            SummaryUIItem uiItem3 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012246547123", 100000.00);
-            SummaryUIItem uiItem5 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012143547234", 50000.00);
-            SummaryUIItem uiItem6 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0020012243547456", 60000.00);
-            SummaryUIItem uiItem8 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0030012243547678", 789.00);
-            SummaryUIItem uiItem9 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0007012243547789", 60975.00);
+            SummaryUIItem uiItem1 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Bank Account", -1, null);
+            SummaryUIItem uiItem4 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Card", -1, null);
+            SummaryUIItem uiItem7 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Loan Account", -1, null);
+            SummaryUIItem uiItem2 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012243547123", 2345687.00,
+                    Constants.HEADER_TYPE_BANKACCOUNT);
+            SummaryUIItem uiItem3 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012246547123", 100000.00,
+                    Constants.HEADER_TYPE_BANKACCOUNT);
+            SummaryUIItem uiItem5 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012143547234", 50000.00,
+                    Constants.HEADER_TYPE_CARD);
+            SummaryUIItem uiItem6 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0020012243547456", 60000.00,
+                    Constants.HEADER_TYPE_CARD);
+            SummaryUIItem uiItem8 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0030012243547678", 789.00,
+                    Constants.HEADER_TYPE_LOANACCOUNT);
+            SummaryUIItem uiItem9 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0007012243547789", 60975.00,
+                    Constants.HEADER_TYPE_LOANACCOUNT);
 
             List<SummaryUIItem> uiItems = new ArrayList<>();
             uiItems.add(uiItem1);
@@ -104,7 +110,8 @@ public class AccountSummaryFragment extends Fragment
             if (mAdapter == null) {
                 mAdapter = new AccountSummaryFragmentAdapter(getActivity(), -1, uiItems);
                 mAccountSummaryLV.setAdapter(mAdapter);
-            } else {
+            }
+            else {
                 mAdapter.setUiItems(uiItems);
                 mAdapter.notifyDataSetChanged();
             }

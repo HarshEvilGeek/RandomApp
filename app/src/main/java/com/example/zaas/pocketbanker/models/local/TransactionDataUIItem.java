@@ -3,45 +3,26 @@ package com.example.zaas.pocketbanker.models.local;
 /**
  * Created by zaraahmed on 3/20/16.
  */
-public class TransactionSummaryUIItem
+public class TransactionDataUIItem
 {
 
-    private int itemType;
-    private String title;
     private double transactionAmount;
+
+    // remark in case of bank account, vendor details in case of card
+    private String transactionRemark;
+
     private long transactionDate;
-    // credit/debit
+
+    // debit/credit/mode of transfer for loan
     private String transactionType;
 
-    public TransactionSummaryUIItem(int itemType, String title, double transactionAmount, long transactionDate,
+    public TransactionDataUIItem(double transactionAmount, String transactionRemark, long transactionDate,
             String transactionType)
     {
-        this.itemType = itemType;
-        this.title = title;
         this.transactionAmount = transactionAmount;
+        this.transactionRemark = transactionRemark;
         this.transactionDate = transactionDate;
         this.transactionType = transactionType;
-
-    }
-
-    public int getItemType()
-    {
-        return itemType;
-    }
-
-    public void setItemType(int itemType)
-    {
-        this.itemType = itemType;
-    }
-
-    public String getTitle()
-    {
-        return title;
-    }
-
-    public void setTitle(String title)
-    {
-        this.title = title;
     }
 
     public double getTransactionAmount()
@@ -52,6 +33,16 @@ public class TransactionSummaryUIItem
     public void setTransactionAmount(double transactionAmount)
     {
         this.transactionAmount = transactionAmount;
+    }
+
+    public String getTransactionRemark()
+    {
+        return transactionRemark;
+    }
+
+    public void setTransactionRemark(String transactionRemark)
+    {
+        this.transactionRemark = transactionRemark;
     }
 
     public long getTransactionDate()
