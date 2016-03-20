@@ -25,6 +25,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.TransferFundsToPayeeActivity"
+            android:label="@string/action_transfer"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
             android:name=".activities.AddPayeeNFCActivity"
             android:label="@string/add_payee_via_nfc"
             android:theme="@style/AppTheme.NoActionBar">
@@ -36,8 +41,7 @@
         </activity>
         <activity
             android:name=".activities.ATMBranchMapActivity"
-            android:label="@string/locator_name">
-        </activity>
+            android:label="@string/locator_name"></activity>
 
         <provider
             android:name=".data.PocketBankerProvider"
@@ -45,7 +49,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_map_api_key"/>
+            android:value="@string/google_map_api_key" />
     </application>
 
 </manifest>
