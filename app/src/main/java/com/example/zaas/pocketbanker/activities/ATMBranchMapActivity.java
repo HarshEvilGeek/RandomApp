@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.example.zaas.pocketbanker.R;
-import com.example.zaas.pocketbanker.fragments.ATMBranchLocatorFragment;
+import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,7 +49,7 @@ public class ATMBranchMapActivity extends AppCompatActivity implements OnMapRead
             ab.setHomeButtonEnabled(true);
             ab.setDisplayHomeAsUpEnabled(true);
         }
-        mBranchATMs = ATMBranchLocatorFragment.createDummyBranchAtmList();
+        mBranchATMs = PocketBankerDBHelper.getInstance().getAllBranchAtms(this);
         mIsSingleMode = extras.getBoolean(SINGLE_MAP_KEY);
         handleExtras(extras);
         setCurrentLocation();

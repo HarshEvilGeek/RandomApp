@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.activities.AddPayeeNFCActivity;
 import com.example.zaas.pocketbanker.adapters.PayeeAdapter;
+import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Payee;
 
 /**
@@ -61,7 +62,7 @@ public class TransferFundsFragment extends Fragment implements PayeeAdapter.OnCl
     private void setupRecyclerView(View rootView)
     {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
-        mAdapter = new PayeeAdapter(getActivity());
+        mAdapter = new PayeeAdapter(getActivity(), PocketBankerDBHelper.getInstance().getAllPayees(getActivity()));
         mAdapter.setOnClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
