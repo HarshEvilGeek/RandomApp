@@ -41,7 +41,7 @@ public class BranchAtmDetailActivity extends AppCompatActivity {
         int id = extras.getInt(BranchAtmMapActivity.SINGLE_BRANCH_ATM_KEY);
         mCurrentLocation = (LatLng) extras.get(BranchAtmMapActivity.CURRENT_LOCATION_KEY);
 
-        mBranchAtm = PocketBankerDBHelper.getInstance().getBranchAtm(this, id);
+        mBranchAtm = PocketBankerDBHelper.getInstance().getBranchAtmForLocalId(this, id);
 
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
