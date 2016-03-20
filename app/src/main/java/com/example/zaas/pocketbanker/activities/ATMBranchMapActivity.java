@@ -56,6 +56,10 @@ public class ATMBranchMapActivity extends AppCompatActivity implements OnMapRead
         setContentView(R.layout.activity_atm_branch_map);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        if (savedInstanceState == null) {
+            // First incarnation of this activity.
+            mapFragment.setRetainInstance(true);
+        }
         mapFragment.getMapAsync(this);
     }
 
