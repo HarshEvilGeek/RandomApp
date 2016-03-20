@@ -58,12 +58,25 @@ public class BranchAtm extends DbModel
             setMapLocation(new LatLng(latitude, longitude));
             return;
         }
-        Log.e(TAG, "Null cursor passed to instantatiate with");
+        Log.e(TAG, "Null cursor passed to instantiate with");
     }
 
     @Override
-    public String getUniqueIdentifier() {
-        return PocketBankerOpenHelper.Tables.BRANCH_ATMS;
+    public String getSelectionString() {
+        return PocketBankerContract.BranchAtms.ADDRESS + " = ? AND "
+                + PocketBankerContract.BranchAtms.TYPE + " = ?" ;
+    }
+
+    @Override
+    public String[] getSelectionValues() {
+        return new String[]{address, String.valueOf(type.ordinal())};
+    }
+
+    @Override
+    public boolean isEqual(DbModel model) {
+        return model instanceof BranchAtm
+                && (address.equals(((BranchAtm) model).getAddress()))
+                && (type == ((BranchAtm)model).getType());
     }
 
     public ContentValues toContentValues()

@@ -53,8 +53,18 @@ public class Payee extends DbModel
     }
 
     @Override
-    public String getUniqueIdentifier() {
-        return PocketBankerOpenHelper.Tables.PAYEES;
+    public String getSelectionString() {
+        return PocketBankerContract.Payees.PAYEE_ID + " = ?";
+    }
+
+    @Override
+    public String[] getSelectionValues() {
+        return new String[] {payeeId};
+    }
+
+    @Override
+    public boolean isEqual(DbModel model) {
+        return model instanceof Payee && payeeId.equals(((Payee) model).getPayeeId());
     }
 
     public ContentValues toContentValues()

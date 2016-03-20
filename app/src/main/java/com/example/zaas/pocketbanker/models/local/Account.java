@@ -9,8 +9,7 @@ import com.example.zaas.pocketbanker.data.PocketBankerOpenHelper;
 /**
  * Created by akhil on 3/19/16.
  */
-public class Account extends DbModel
-{
+public class Account extends DbModel {
     private int id;
     private String accountNumber;
     private double balance;
@@ -29,12 +28,21 @@ public class Account extends DbModel
     }
 
     @Override
-    public String getUniqueIdentifier() {
-        return accountNumber;
+    public String getSelectionString() {
+        return PocketBankerContract.Account.ACCOUNT_NUMBER + " = ?";
     }
 
-    public ContentValues toContentValues()
-    {
+    @Override
+    public String[] getSelectionValues() {
+        return new String[]{accountNumber};
+    }
+
+    @Override
+    public boolean isEqual(DbModel model) {
+        return model instanceof Account && accountNumber.equals(((Account) model).getAccountNumber());
+    }
+
+    public ContentValues toContentValues() {
         ContentValues values = new ContentValues();
         values.put(PocketBankerContract.Account.ACCOUNT_NUMBER, accountNumber);
         values.put(PocketBankerContract.Account.ACCOUNT_TYPE, type);
