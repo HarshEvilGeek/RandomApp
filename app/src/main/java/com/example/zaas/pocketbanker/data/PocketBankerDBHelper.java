@@ -1,10 +1,14 @@
 package com.example.zaas.pocketbanker.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 
 import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
@@ -18,6 +22,19 @@ public class PocketBankerDBHelper
 {
 
     private static PocketBankerDBHelper instance;
+
+    private static Map<String, Uri> tableToUriMap  = new HashMap<>();
+
+    static {
+        tableToUriMap.put(PocketBankerOpenHelper.Tables.ACCOUNTS, PocketBankerProvider.CONTENT_URI_ACCOUNTS);
+        tableToUriMap.put(PocketBankerOpenHelper.Tables.TRANSACTIONS, PocketBankerProvider.CONTENT_URI_TRANSACTIONS);
+        tableToUriMap.put(PocketBankerOpenHelper.Tables.PAYEES, PocketBankerProvider.CONTENT_URI_PAYEES);
+        tableToUriMap.put(PocketBankerOpenHelper.Tables.BRANCH_ATMS, PocketBankerProvider.CONTENT_URI_BRANCH_ATMS);
+        tableToUriMap.put(PocketBankerOpenHelper.Tables.LOANS, PocketBankerProvider.CONTENT_URI_LOANS);
+        tableToUriMap.put(PocketBankerOpenHelper.Tables.LOAN_TRANSACTIONS, PocketBankerProvider.CONTENT_URI_LOAN_TRANSACTIONS);
+        tableToUriMap.put(PocketBankerOpenHelper.Tables.EMIS, PocketBankerProvider.CONTENT_URI_EMIS);
+        tableToUriMap.put(PocketBankerOpenHelper.Tables.CARDS, PocketBankerProvider.CONTENT_URI_CARDS);
+    }
 
     private PocketBankerDBHelper()
     {
@@ -110,18 +127,18 @@ public class PocketBankerDBHelper
         return null;
     }
 
-    private void insertOrUpdateAccountsTable(Context context, List<? extends DbModel> newAccountList)
+    private void insertOrUpdateDbModelTable(Context context, List<? extends DbModel> newDbModels)
     {
         List<DbModel> modelsToDelete = new ArrayList<>();
         List<DbModel> modelsToUpdate = new ArrayList<>();
         List<DbModel> modelsToAdd = new ArrayList<>();
 
-        List<? extends DbModel> currentAccountList = getAllAccounts(context);
+        List<? extends DbModel> currentDbModels = getAllAccounts(context);
 
-        for (DbModel localModel : currentAccountList) {
+        for (DbModel localModel : currentDbModels) {
             boolean found = false;
-            for (DbModel newModel : newAccountList) {
-                if (newModel.getUniqueIdentifier().equals(localModel.getUniqueIdentifier())) {
+            for (DbModel newModel : newDbModels) {
+                if (newModel.isEqual(localModel)) {
                     modelsToUpdate.add(newModel);
                     found = true;
                 }
@@ -131,10 +148,10 @@ public class PocketBankerDBHelper
             }
         }
 
-        for (DbModel newModel : newAccountList) {
+        for (DbModel newModel : newDbModels) {
             boolean found = false;
-            for (DbModel localModel : currentAccountList) {
-                if (newModel.getUniqueIdentifier().equals(localModel.getUniqueIdentifier())) {
+            for (DbModel localModel : currentDbModels) {
+                if (newModel.isEqual(localModel)) {
                     found = true;
                 }
             }
@@ -142,6 +159,17 @@ public class PocketBankerDBHelper
                 modelsToAdd.add(newModel);
             }
         }
+    }
 
+    private void bulkInsertDbModels(Context context, List<DbModel> dbModelsToInsert) {
+        if (dbModelsToInsert == null || dbModelsToInsert.isEmpty()) {
+            return;
+        }
+        ContentValues[] values = new ContentValues[dbModelsToInsert.size()];
+        for (int i = 0; i < values.length; i++) {
+            values[i] = dbModelsToInsert.get(i).toContentValues();
+        }
+        Uri contentUri = PocketBankerDBHelper.tableToUriMap.get(dbModelsToInsert.get(0).getTable());
+        context.getContentResolver().bulkInsert(contentUri, values);
     }
 }

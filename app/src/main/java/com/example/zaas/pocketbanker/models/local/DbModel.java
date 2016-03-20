@@ -8,7 +8,9 @@ import android.database.Cursor;
  */
 public abstract class DbModel {
     public abstract void instantiateFromCursor(Cursor cursor);
-    public abstract String getUniqueIdentifier();
+    public abstract String getSelectionString();
+    public abstract String[] getSelectionValues();
+    public abstract boolean isEqual(DbModel model);
     public abstract ContentValues toContentValues();
     public abstract String getTable();
 }
