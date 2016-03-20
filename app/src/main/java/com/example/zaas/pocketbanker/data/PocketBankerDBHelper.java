@@ -8,6 +8,7 @@ import android.database.Cursor;
 
 import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
+import com.example.zaas.pocketbanker.models.local.DbModel;
 import com.example.zaas.pocketbanker.models.local.Payee;
 
 /**
@@ -38,7 +39,9 @@ public class PocketBankerDBHelper
             c = context.getContentResolver().query(PocketBankerProvider.CONTENT_URI_ACCOUNTS, null, null, null, null);
             if (c != null) {
                 while (c.moveToNext()) {
-                    accountList.add(Account.loadFromCursor(c));
+                    Account account = new Account();
+                    account.instantiateFromCursor(c);
+                    accountList.add(account);
                 }
             }
         }
@@ -58,7 +61,9 @@ public class PocketBankerDBHelper
             c = context.getContentResolver().query(PocketBankerProvider.CONTENT_URI_PAYEES, null, null, null, null);
             if (c != null) {
                 while (c.moveToNext()) {
-                    payeeList.add(Payee.loadFromCursor(c));
+                    Payee payee = new Payee();
+                    payee.instantiateFromCursor(c);
+                    payeeList.add(payee);
                 }
             }
         }
@@ -79,7 +84,9 @@ public class PocketBankerDBHelper
                     .query(PocketBankerProvider.CONTENT_URI_BRANCH_ATMS, null, null, null, null);
             if (c != null) {
                 while (c.moveToNext()) {
-                    branchAtmList.add(BranchAtm.loadFromCursor(c));
+                    BranchAtm branchAtm = new BranchAtm();
+                    branchAtm.instantiateFromCursor(c);
+                    branchAtmList.add(branchAtm);
                 }
             }
         }
@@ -91,40 +98,50 @@ public class PocketBankerDBHelper
         return branchAtmList;
     }
 
-    private void insertOrUpdateAccountsTable(Context context, List<Account> newAccountList)
+    public List<? extends DbModel> getAllDbModels(Context context, String table) {
+        switch (table) {
+            case PocketBankerOpenHelper.Tables.ACCOUNTS:
+                return getAllAccounts(context);
+            case PocketBankerOpenHelper.Tables.BRANCH_ATMS:
+                return getAllBranchAtms(context);
+            case PocketBankerOpenHelper.Tables.PAYEES:
+                return getAllPayees(context);
+        }
+        return null;
+    }
+
+    private void insertOrUpdateAccountsTable(Context context, List<? extends DbModel> newAccountList)
     {
-        List<Account> accountModelsToDelete = new ArrayList<>();
-        List<Account> accountModelsToUpdate = new ArrayList<>();
-        List<Account> accountModelsToAdd = new ArrayList<>();
+        List<DbModel> modelsToDelete = new ArrayList<>();
+        List<DbModel> modelsToUpdate = new ArrayList<>();
+        List<DbModel> modelsToAdd = new ArrayList<>();
 
-        List<Account> currentAccountList = getAllAccounts(context);
+        List<? extends DbModel> currentAccountList = getAllAccounts(context);
 
-        for (Account localModel : currentAccountList) {
+        for (DbModel localModel : currentAccountList) {
             boolean found = false;
-            for (Account newModel : newAccountList) {
-                if (newModel.getAccountNumber().equals(localModel.getAccountNumber())) {
-                    accountModelsToUpdate.add(newModel);
+            for (DbModel newModel : newAccountList) {
+                if (newModel.getUniqueIdentifier().equals(localModel.getUniqueIdentifier())) {
+                    modelsToUpdate.add(newModel);
                     found = true;
                 }
             }
             if (!found) {
-                accountModelsToDelete.add(localModel);
+                modelsToDelete.add(localModel);
             }
-
         }
 
-        for (Account newModel : newAccountList) {
+        for (DbModel newModel : newAccountList) {
             boolean found = false;
-            for (Account localModel : currentAccountList) {
-                if (newModel.getAccountNumber().equals(localModel.getAccountNumber())) {
+            for (DbModel localModel : currentAccountList) {
+                if (newModel.getUniqueIdentifier().equals(localModel.getUniqueIdentifier())) {
                     found = true;
                 }
             }
             if (!found) {
-                accountModelsToAdd.add(newModel);
+                modelsToAdd.add(newModel);
             }
         }
 
     }
-
 }

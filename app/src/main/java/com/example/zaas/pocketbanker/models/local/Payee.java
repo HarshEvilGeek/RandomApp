@@ -2,14 +2,18 @@ package com.example.zaas.pocketbanker.models.local;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.example.zaas.pocketbanker.data.PocketBankerContract;
+import com.example.zaas.pocketbanker.data.PocketBankerOpenHelper;
 
 /**
  * Model for Payee Created by adugar on 3/19/16.
  */
-public class Payee
+public class Payee extends DbModel
 {
+    private static final String TAG = "Payee";
+    
     private int id;
     private String payeeId;
     private String name;
@@ -33,17 +37,24 @@ public class Payee
         this.customerId = customerId;
     }
 
-    public static Payee loadFromCursor(Cursor cursor)
-    {
-        Payee payee = new Payee();
-        payee.setId(cursor.getInt(cursor.getColumnIndex(PocketBankerContract.Payees._ID)));
-        payee.setPayeeId(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Payees.PAYEE_ID)));
-        payee.setName(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Payees.PAYEE_NAME)));
-        payee.setAccountNo(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Payees.ACCOUNT_NUMBER)));
-        payee.setShortName(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Payees.SHORT_NAME)));
-        payee.setCreationDate(cursor.getLong(cursor.getColumnIndex(PocketBankerContract.Payees.CREATION_DATE)));
-        payee.setCustomerId(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Payees.CUST_ID)));
-        return payee;
+    @Override
+    public void instantiateFromCursor(Cursor cursor) {
+        if (cursor != null) {
+            setId(cursor.getInt(cursor.getColumnIndex(PocketBankerContract.Payees._ID)));
+            setPayeeId(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Payees.PAYEE_ID)));
+            setName(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Payees.PAYEE_NAME)));
+            setAccountNo(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Payees.ACCOUNT_NUMBER)));
+            setShortName(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Payees.SHORT_NAME)));
+            setCreationDate(cursor.getLong(cursor.getColumnIndex(PocketBankerContract.Payees.CREATION_DATE)));
+            setCustomerId(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Payees.CUST_ID)));
+            return;
+        }
+        Log.e(TAG, "Null cursor passed to instantatiate with");
+    }
+
+    @Override
+    public String getUniqueIdentifier() {
+        return PocketBankerOpenHelper.Tables.PAYEES;
     }
 
     public ContentValues toContentValues()
@@ -56,6 +67,11 @@ public class Payee
         contentValues.put(PocketBankerContract.Payees.CUST_ID, customerId);
         contentValues.put(PocketBankerContract.Payees.CREATION_DATE, creationDate);
         return contentValues;
+    }
+
+    @Override
+    public String getTable() {
+        return null;
     }
 
     public int getId()

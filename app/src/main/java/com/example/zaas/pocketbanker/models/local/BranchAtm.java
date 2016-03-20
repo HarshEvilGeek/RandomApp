@@ -3,14 +3,19 @@ package com.example.zaas.pocketbanker.models.local;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import android.util.Log;
+
 import com.example.zaas.pocketbanker.data.PocketBankerContract;
+import com.example.zaas.pocketbanker.data.PocketBankerOpenHelper;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Model for Branch/ATM Created by adugar on 3/19/16.
  */
-public class BranchAtm
+public class BranchAtm extends DbModel
 {
+    private static final String TAG = "BranchAtm";
+
     private int id;
     private String name;
     private String flag;
@@ -36,22 +41,29 @@ public class BranchAtm
         this.mapLocation = mapLocation;
     }
 
-    public static BranchAtm loadFromCursor(Cursor cursor)
-    {
-        BranchAtm branchAtm = new BranchAtm();
-        branchAtm.setId(cursor.getInt(cursor.getColumnIndex(PocketBankerContract.BranchAtms._ID)));
-        branchAtm.setName(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.BRANCH_NAME)));
-        branchAtm.setAddress(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.ADDRESS)));
-        branchAtm.setCity(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.CITY)));
-        branchAtm.setState(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.STATE)));
-        branchAtm.setIfscCode(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.IFSC_CODE)));
-        branchAtm.setFlag(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.FLAG)));
-        branchAtm.setType(Type.values()[cursor.getInt(cursor.getColumnIndex(PocketBankerContract.BranchAtms.TYPE))]);
-        branchAtm.setPhoneNumber(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.PHONE_NUMBER)));
-        double latitude = cursor.getDouble(cursor.getColumnIndex(PocketBankerContract.BranchAtms.LATITUDE));
-        double longitude = cursor.getDouble(cursor.getColumnIndex(PocketBankerContract.BranchAtms.LONGITUDE));
-        branchAtm.setMapLocation(new LatLng(latitude, longitude));
-        return branchAtm;
+    @Override
+    public void instantiateFromCursor(Cursor cursor) {
+        if (cursor != null) {
+            setId(cursor.getInt(cursor.getColumnIndex(PocketBankerContract.BranchAtms._ID)));
+            setName(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.BRANCH_NAME)));
+            setAddress(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.ADDRESS)));
+            setCity(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.CITY)));
+            setState(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.STATE)));
+            setIfscCode(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.IFSC_CODE)));
+            setFlag(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.FLAG)));
+            setType(Type.values()[cursor.getInt(cursor.getColumnIndex(PocketBankerContract.BranchAtms.TYPE))]);
+            setPhoneNumber(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.PHONE_NUMBER)));
+            double latitude = cursor.getDouble(cursor.getColumnIndex(PocketBankerContract.BranchAtms.LATITUDE));
+            double longitude = cursor.getDouble(cursor.getColumnIndex(PocketBankerContract.BranchAtms.LONGITUDE));
+            setMapLocation(new LatLng(latitude, longitude));
+            return;
+        }
+        Log.e(TAG, "Null cursor passed to instantatiate with");
+    }
+
+    @Override
+    public String getUniqueIdentifier() {
+        return PocketBankerOpenHelper.Tables.BRANCH_ATMS;
     }
 
     public ContentValues toContentValues()
@@ -68,6 +80,11 @@ public class BranchAtm
         contentValues.put(PocketBankerContract.BranchAtms.TYPE, type.ordinal());
         contentValues.put(PocketBankerContract.BranchAtms.PHONE_NUMBER, phoneNumber);
         return contentValues;
+    }
+
+    @Override
+    public String getTable() {
+        return null;
     }
 
     public int getId()
