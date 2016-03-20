@@ -36,4 +36,8 @@
     <string name="amount_hint">Enter amount</string>
     <string name="enter_amount">Please enter amount</string>
     <string name="transfer_confirmation_message">Transfer \u20B9%1$s from %2$s to %3$s?</string>
+
+    <string name="customer_id">Customer ID</string>
+    <string name="password">Password</string>
+    <string name="log_in">LOG IN</string>
 </resources>
