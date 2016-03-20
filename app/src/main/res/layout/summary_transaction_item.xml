@@ -1,15 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="75dp"
-    android:background="@android:color/white">
 
-    <TextView
-        android:id="@+id/summary_tv"
-        style="@style/Base.TextAppearance.AppCompat.Small"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:layout_margin="10dp"
+    android:padding="5dp"
+    card_view:cardElevation="5dp"
+    card_view:cardCornerRadius="5dp">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"/>
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/summary_title_tv"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+  <!--      <View
+            android:layout_width="0.3dp"
+            android:layout_height="match_parent"
+            android:background="#000000" /> -->
+
+        <TextView
+            android:id="@+id/summary_balance_tv"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical" />
 
 
-</LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

@@ -35,7 +35,7 @@ public class NetworkHelper
 
     private static final String DEFAULT_ENDPOINT = "https://retailbanking.mybluemix.net";
     private static final String ALPHA_ENDPOINT = "http://alphaiciapi2.mybluemix.net";
-    private static final String TOKEN = "090414bcb424";
+    private static final String TOKEN = "f8dc8109cc34";
 
     public NetworkHelper()
     {
