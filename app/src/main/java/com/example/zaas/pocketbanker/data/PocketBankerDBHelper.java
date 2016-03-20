@@ -129,6 +129,27 @@ public class PocketBankerDBHelper
 
     private void insertOrUpdateDbModelTable(Context context, List<? extends DbModel> newDbModels)
     {
+        List<DbModel> modelsToUpdate = new ArrayList<>();
+        List<DbModel> modelsToAdd = new ArrayList<>();
+
+        List<? extends DbModel> currentDbModels = getAllAccounts(context);
+
+        for (DbModel newModel : newDbModels) {
+            boolean found = false;
+            for (DbModel localModel : currentDbModels) {
+                if (newModel.isEqual(localModel)) {
+                    modelsToUpdate.add(newModel);
+                    found = true;
+                }
+            }
+            if (!found) {
+                modelsToAdd.add(newModel);
+            }
+        }
+    }
+
+    private void insertUpdateAndDeleteDbModelTable(Context context, List<? extends DbModel> newDbModels)
+    {
         List<DbModel> modelsToDelete = new ArrayList<>();
         List<DbModel> modelsToUpdate = new ArrayList<>();
         List<DbModel> modelsToAdd = new ArrayList<>();
