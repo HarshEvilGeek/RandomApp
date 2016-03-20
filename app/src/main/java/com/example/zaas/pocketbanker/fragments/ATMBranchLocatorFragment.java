@@ -12,6 +12,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -33,6 +35,7 @@ import com.example.zaas.pocketbanker.adapters.BranchAtmAdapter;
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.interfaces.IFloatingButtonListener;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
+import com.example.zaas.pocketbanker.services.FetchAddressIntentService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -54,10 +57,10 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
 
     private GoogleApiClient mGoogleApiClient;
     private Location mCurrentLocation;
+    private TextView mCurrentLocationHeader;
 
     private ProgressDialog mProgressDialog;
     private AlertDialog mErrorDialog;
-    private TextView mCurrentLocationHeader;
     private SwitchCompat mBranchAtmToggle;
 
     @Override
@@ -255,11 +258,35 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
             showErrorDialog();
         }
         else {
-            stopLocationProgressDialog();
             Toast.makeText(getActivity(), "Current location determined", Toast.LENGTH_SHORT).show();
             mCurrentLocation = location;
-            mCurrentLocationHeader.setText(mCurrentLocation.toString());
+            startIntentService(location);
             syncBranchAtms();
+        }
+    }
+
+    private void startIntentService(Location location) {
+        Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
+        intent.putExtra(FetchAddressIntentService.RECEIVER, new AddressResultReceiver(new Handler()));
+        intent.putExtra(FetchAddressIntentService.LOCATION_DATA_EXTRA, location);
+        getActivity().startService(intent);
+    }
+
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            stopLocationProgressDialog();
+
+            if (resultCode == FetchAddressIntentService.SUCCESS_RESULT) {
+                String name = resultData.getString(FetchAddressIntentService.RESULT_DATA_KEY);
+                mCurrentLocationHeader.setText(name);
+            } else {
+                showErrorDialog();
+            }
         }
     }
 
