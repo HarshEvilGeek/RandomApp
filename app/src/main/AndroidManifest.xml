@@ -32,6 +32,18 @@
                 <data android:mimeType="application/vnd.com.example.zaas.pocketbanker" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.ATMBranchMapActivity"
+            android:label="@string/locator_name">
+        </activity>
+
+        <provider
+            android:name=".data.PocketBankerProvider"
+            android:authorities="com.example.zaas.pocketbanker.provider" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_map_api_key"/>
     </application>
 
 </manifest>

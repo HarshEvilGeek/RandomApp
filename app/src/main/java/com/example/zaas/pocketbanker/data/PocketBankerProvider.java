@@ -1,5 +1,7 @@
 package com.example.zaas.pocketbanker.data;
 
+import java.util.ArrayList;
+
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
@@ -17,30 +19,31 @@ import android.util.Log;
 
 import com.example.zaas.pocketbanker.interfaces.IDataChangeListener;
 
-import java.util.ArrayList;
-
 /**
  * Created by akhil on 3/19/16.
  */
 public class PocketBankerProvider extends ContentProvider {
 
-    private static final String TAG = "ChatProvider";
-
-    public static final Uri CONTENT_URI_ACCOUNTS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.ACCOUNT);
+    public static final Uri CONTENT_URI_ACCOUNTS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY
+            + "/" + PocketBankerOpenHelper.Tables.ACCOUNTS);
     public static final Uri CONTENT_URI_TRANSACTIONS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.TRANSACTIONS);
     public static final Uri CONTENT_URI_PAYEES = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.PAYEES);
+    public static final Uri CONTENT_URI_BRANCH_ATMS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY
+            + "/" + PocketBankerOpenHelper.Tables.BRANCH_ATMS);
     public static final Uri CONTENT_URI_LOANS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.LOANS);
     public static final Uri CONTENT_URI_EMIS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.EMIS);
     public static final Uri CONTENT_URI_LOAN_TRANSACTIONS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.LOAN_TRANSACTIONS);
-    public static final Uri CONTENT_URI_CARD = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.CARD);
-
-    private static final int ACCOUNT_ALL_ROWS = 1;
+    public static final Uri CONTENT_URI_CARDS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/"
+            + PocketBankerOpenHelper.Tables.CARDS);
+    private static final String TAG = "ChatProvider";
+    private static final int ACCOUNTS_ALL_ROWS = 1;
     private static final int TRANSACTIONS_ALL_ROWS = 3;
     private static final int PAYEES_ALL_ROWS = 5;
     private static final int LOANS_ALL_ROWS = 7;
     private static final int EMIS_ALL_ROWS = 9;
     private static final int LOAN_TRANSACTIONS_ALL_ROWS = 11;
-    private static final int CARD_ALL_ROWS = 13;
+    private static final int CARDS_ALL_ROWS = 13;
+    private static final int BRANCH_ATMS_ALL_ROWS = 15;
 
     private static final UriMatcher uriMatcher;
 
@@ -48,16 +51,26 @@ public class PocketBankerProvider extends ContentProvider {
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.ACCOUNT, ACCOUNT_ALL_ROWS);
+        uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.ACCOUNTS,
+                ACCOUNTS_ALL_ROWS);
         uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.TRANSACTIONS, TRANSACTIONS_ALL_ROWS);
         uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.PAYEES, PAYEES_ALL_ROWS);
+        uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.BRANCH_ATMS,
+                BRANCH_ATMS_ALL_ROWS);
         uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.LOANS, LOANS_ALL_ROWS);
         uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.EMIS, EMIS_ALL_ROWS);
         uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.LOAN_TRANSACTIONS, LOAN_TRANSACTIONS_ALL_ROWS);
-        uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.ACCOUNT, CARD_ALL_ROWS);
+        uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.ACCOUNTS,
+                CARDS_ALL_ROWS);
     }
 
     private PocketBankerOpenHelper pocketBankerOpenHelper;
+
+    public static void setDataChangeListener(IDataChangeListener dataChangeListener)
+    {
+        Log.d(TAG, "Data change listener set to " + dataChangeListener);
+        PocketBankerProvider.dataChangeListener = dataChangeListener;
+    }
 
     @Override
     public boolean onCreate() {
@@ -67,20 +80,22 @@ public class PocketBankerProvider extends ContentProvider {
 
     private String getTableName(Uri uri) {
         switch (uriMatcher.match(uri)) {
-            case ACCOUNT_ALL_ROWS:
-                return PocketBankerOpenHelper.Tables.ACCOUNT;
+        case ACCOUNTS_ALL_ROWS:
+            return PocketBankerOpenHelper.Tables.ACCOUNTS;
             case TRANSACTIONS_ALL_ROWS:
                 return PocketBankerOpenHelper.Tables.TRANSACTIONS;
             case PAYEES_ALL_ROWS:
                 return PocketBankerOpenHelper.Tables.PAYEES;
+        case BRANCH_ATMS_ALL_ROWS:
+            return PocketBankerOpenHelper.Tables.BRANCH_ATMS;
             case LOANS_ALL_ROWS:
                 return PocketBankerOpenHelper.Tables.LOANS;
             case EMIS_ALL_ROWS:
                 return PocketBankerOpenHelper.Tables.EMIS;
             case LOAN_TRANSACTIONS_ALL_ROWS:
                 return PocketBankerOpenHelper.Tables.LOAN_TRANSACTIONS;
-            case CARD_ALL_ROWS:
-                return PocketBankerOpenHelper.Tables.CARD;
+        case CARDS_ALL_ROWS:
+            return PocketBankerOpenHelper.Tables.CARDS;
         }
         return null;
     }
@@ -92,13 +107,14 @@ public class PocketBankerProvider extends ContentProvider {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
         switch (uriMatcher.match(uri)) {
-            case ACCOUNT_ALL_ROWS:
+        case ACCOUNTS_ALL_ROWS:
             case TRANSACTIONS_ALL_ROWS:
             case PAYEES_ALL_ROWS:
+        case BRANCH_ATMS_ALL_ROWS:
             case LOANS_ALL_ROWS:
             case EMIS_ALL_ROWS:
             case LOAN_TRANSACTIONS_ALL_ROWS:
-            case CARD_ALL_ROWS:
+        case CARDS_ALL_ROWS:
                 qb.setTables(getTableName(uri));
                 break;
 
@@ -120,8 +136,8 @@ public class PocketBankerProvider extends ContentProvider {
 
         long id;
         switch (uriMatcher.match(uri)) {
-            case ACCOUNT_ALL_ROWS:
-                id = db.insertOrThrow(PocketBankerOpenHelper.Tables.ACCOUNT, null, values);
+        case ACCOUNTS_ALL_ROWS:
+            id = db.insertOrThrow(PocketBankerOpenHelper.Tables.ACCOUNTS, null, values);
                 break;
             case TRANSACTIONS_ALL_ROWS:
                 id = db.insertOrThrow(PocketBankerOpenHelper.Tables.TRANSACTIONS, null, values);
@@ -129,6 +145,9 @@ public class PocketBankerProvider extends ContentProvider {
             case PAYEES_ALL_ROWS:
                 id = db.insertOrThrow(PocketBankerOpenHelper.Tables.PAYEES, null, values);
                 break;
+        case BRANCH_ATMS_ALL_ROWS:
+            id = db.insertOrThrow(PocketBankerOpenHelper.Tables.BRANCH_ATMS, null, values);
+            break;
             case LOANS_ALL_ROWS:
                 id = db.insertOrThrow(PocketBankerOpenHelper.Tables.LOANS, null, values);
                 break;
@@ -138,8 +157,8 @@ public class PocketBankerProvider extends ContentProvider {
             case LOAN_TRANSACTIONS_ALL_ROWS:
                 id = db.insertOrThrow(PocketBankerOpenHelper.Tables.LOAN_TRANSACTIONS, null, values);
                 break;
-            case CARD_ALL_ROWS:
-                id = db.insertOrThrow(PocketBankerOpenHelper.Tables.CARD, null, values);
+        case CARDS_ALL_ROWS:
+            id = db.insertOrThrow(PocketBankerOpenHelper.Tables.CARDS, null, values);
                 break;
 
             default:
@@ -157,13 +176,14 @@ public class PocketBankerProvider extends ContentProvider {
 
         int count;
         switch (uriMatcher.match(uri)) {
-            case ACCOUNT_ALL_ROWS:
+        case ACCOUNTS_ALL_ROWS:
             case TRANSACTIONS_ALL_ROWS:
             case PAYEES_ALL_ROWS:
+        case BRANCH_ATMS_ALL_ROWS:
             case LOANS_ALL_ROWS:
             case EMIS_ALL_ROWS:
             case LOAN_TRANSACTIONS_ALL_ROWS:
-            case CARD_ALL_ROWS:
+        case CARDS_ALL_ROWS:
                 count = db.delete(getTableName(uri), selection, selectionArgs);
                 break;
 
@@ -180,13 +200,14 @@ public class PocketBankerProvider extends ContentProvider {
         SQLiteDatabase db = pocketBankerOpenHelper.getWritableDatabase();
         int count;
         switch (uriMatcher.match(uri)) {
-            case ACCOUNT_ALL_ROWS:
+        case ACCOUNTS_ALL_ROWS:
             case TRANSACTIONS_ALL_ROWS:
             case PAYEES_ALL_ROWS:
+        case BRANCH_ATMS_ALL_ROWS:
             case LOANS_ALL_ROWS:
             case EMIS_ALL_ROWS:
             case LOAN_TRANSACTIONS_ALL_ROWS:
-            case CARD_ALL_ROWS:
+        case CARDS_ALL_ROWS:
                 count = db.update(getTableName(uri), values, selection, selectionArgs);
                 break;
 
@@ -221,30 +242,34 @@ public class PocketBankerProvider extends ContentProvider {
         int numInserted = 0;
         String table;
 
-        switch (uriMatcher.match(uri)) {
-            case ACCOUNT_ALL_ROWS:
-                table = PocketBankerOpenHelper.Tables.ACCOUNT;
-                break;
-            case TRANSACTIONS_ALL_ROWS:
-                table = PocketBankerOpenHelper.Tables.TRANSACTIONS;
-                break;
-            case PAYEES_ALL_ROWS:
-                table = PocketBankerOpenHelper.Tables.PAYEES;
-                break;
-            case LOANS_ALL_ROWS:
-                table = PocketBankerOpenHelper.Tables.LOANS;
-                break;
-            case EMIS_ALL_ROWS:
-                table = PocketBankerOpenHelper.Tables.EMIS;
-                break;
-            case LOAN_TRANSACTIONS_ALL_ROWS:
-                table = PocketBankerOpenHelper.Tables.LOAN_TRANSACTIONS;
-                break;
-            case CARD_ALL_ROWS:
-                table = PocketBankerOpenHelper.Tables.CARD;
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported URI: " + uri);
+        switch (uriMatcher.match(uri))
+        {
+        case ACCOUNTS_ALL_ROWS:
+            table = PocketBankerOpenHelper.Tables.ACCOUNTS;
+            break;
+        case TRANSACTIONS_ALL_ROWS:
+            table = PocketBankerOpenHelper.Tables.TRANSACTIONS;
+            break;
+        case PAYEES_ALL_ROWS:
+            table = PocketBankerOpenHelper.Tables.PAYEES;
+            break;
+        case BRANCH_ATMS_ALL_ROWS:
+            table = PocketBankerOpenHelper.Tables.BRANCH_ATMS;
+            break;
+        case LOANS_ALL_ROWS:
+            table = PocketBankerOpenHelper.Tables.LOANS;
+            break;
+        case EMIS_ALL_ROWS:
+            table = PocketBankerOpenHelper.Tables.EMIS;
+            break;
+        case LOAN_TRANSACTIONS_ALL_ROWS:
+            table = PocketBankerOpenHelper.Tables.LOAN_TRANSACTIONS;
+            break;
+        case CARDS_ALL_ROWS:
+            table = PocketBankerOpenHelper.Tables.CARDS;
+            break;
+        default:
+            throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
         SQLiteDatabase db = pocketBankerOpenHelper.getWritableDatabase();
         db.beginTransaction();
@@ -264,11 +289,6 @@ public class PocketBankerProvider extends ContentProvider {
         }
         notifyListenerIfNecessary(uri, null, null);
         return numInserted;
-    }
-
-    public static void setDataChangeListener(IDataChangeListener dataChangeListener) {
-        Log.d(TAG, "Data change listener set to " + dataChangeListener);
-        PocketBankerProvider.dataChangeListener = dataChangeListener;
     }
 
     // This method can be modified to be more clever about how we notify about data changes
