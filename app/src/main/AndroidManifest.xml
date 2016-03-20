@@ -17,8 +17,8 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,22 +26,21 @@
             </intent-filter>
         </activity>
         <activity
-<<<<<<< HEAD
             android:name=".activities.AuthorizationActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-=======
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity
             android:name=".activities.TransferFundsToPayeeActivity"
             android:label="@string/action_transfer"
-            android:theme="@style/AppTheme.NoActionBar">
->>>>>>> 3f7545ba05b5cb738c7fbee179183d30e1970569
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".activities.AddPayeeNFCActivity"
             android:label="@string/add_payee_via_nfc"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -51,9 +50,10 @@
         <activity
             android:name=".activities.ATMBranchMapActivity"
             android:label="@string/locator_name"
-            android:screenOrientation="portrait">
-        </activity>
-        <service android:name=".services.FetchAddressIntentService"
+            android:screenOrientation="portrait"></activity>
+
+        <service
+            android:name=".services.FetchAddressIntentService"
             android:exported="false" />
 
         <provider
@@ -62,7 +62,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_map_api_key"/>
+            android:value="@string/google_map_api_key" />
     </application>
 
 </manifest>
