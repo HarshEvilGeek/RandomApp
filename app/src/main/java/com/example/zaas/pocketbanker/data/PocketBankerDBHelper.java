@@ -191,6 +191,7 @@ public class PocketBankerDBHelper
 
         bulkInsertDbModels(context, modelsToAdd);
         batchUpdateDbModels(context, modelsToUpdate);
+        batchDeleteDbModels(context, modelsToDelete);
     }
 
     private void bulkInsertDbModels(Context context, List<DbModel> dbModelsToInsert) {
