@@ -2,7 +2,10 @@ package com.example.zaas.pocketbanker.adapters;
 
 import java.util.List;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.zaas.pocketbanker.R;
+import com.example.zaas.pocketbanker.fragments.AccountSummaryDetailFragment;
 import com.example.zaas.pocketbanker.models.local.SummaryUIItem;
 import com.example.zaas.pocketbanker.utils.Constants;
 
@@ -52,7 +56,7 @@ public class AccountSummaryFragmentAdapter extends ArrayAdapter
 
         View view = null;
 
-        SummaryUIItem uiItem = mUiItems.get(i);
+        final SummaryUIItem uiItem = mUiItems.get(i);
 
         if (uiItem != null) {
 
@@ -72,6 +76,20 @@ public class AccountSummaryFragmentAdapter extends ArrayAdapter
 
                 TextView accountBalanceTV = (TextView) view.findViewById(R.id.summary_balance_tv);
                 accountBalanceTV.setText("Rs. " + String.valueOf(uiItem.getBalance()));
+
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        AccountSummaryDetailFragment fragment = new AccountSummaryDetailFragment();
+                        Bundle args = new Bundle();
+                        args.putString(Constants.SUMMARY_DETAIL_FRAGMENT_HEADER_TYPE, uiItem.getHeaderType());
+                        args.putString(Constants.SUMMARY_DETAIL_FRAGMENT_ACCOUNT_NUMBER, uiItem.getTitle());
+                        fragment.setArguments(args);
+                        FragmentManager fragmentManager = ((Activity) mContext).getFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                    }
+                });
             }
 
         }

@@ -9,12 +9,14 @@ public class SummaryUIItem
     private int itemType;
     private String title;
     private double balance;
+    private String headerType;
 
-    public SummaryUIItem(int itemType, String title, double balance)
+    public SummaryUIItem(int itemType, String title, double balance, String headerType)
     {
         this.itemType = itemType;
         this.title = title;
         this.balance = balance;
+        this.headerType = headerType;
     }
 
     public int getItemType()
@@ -45,5 +47,15 @@ public class SummaryUIItem
     public void setBalance(double balance)
     {
         this.balance = balance;
+    }
+
+    public String getHeaderType()
+    {
+        return headerType;
+    }
+
+    public void setHeaderType(String headerType)
+    {
+        this.headerType = headerType;
     }
 }
