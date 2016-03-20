@@ -4,8 +4,56 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:id="@+id/header"
+        android:padding="@dimen/card_margin_small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/current_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/card_margin_small"
+            android:gravity="center"
+            android:background="@drawable/rounded_corner_border"
+            android:text="Current location"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/branch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_margin_small"
+            android:text="Branch"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/branch_atm_toggle"
+            android:paddingBottom="@dimen/card_margin_small"
+            android:paddingTop="@dimen/card_margin_small"
+            android:theme="@style/SwitchStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/atm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_margin_small"
+            android:text="ATM"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
+        android:layout_below="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -15,15 +63,5 @@
             android:layout_height="match_parent" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
-    <Button
-        android:id="@+id/temp_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="@dimen/card_margin"
-        android:background="@color/colorPrimary"
-        android:text="Maps" />
 
 </RelativeLayout>

@@ -41,7 +41,10 @@
         </activity>
         <activity
             android:name=".activities.ATMBranchMapActivity"
-            android:label="@string/locator_name"></activity>
+            android:label="@string/locator_name">
+        </activity>
+        <service android:name=".services.FetchAddressIntentService"
+            android:exported="false" />
 
         <provider
             android:name=".data.PocketBankerProvider"
@@ -49,7 +52,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_map_api_key" />
+            android:value="@string/google_map_api_key"/>
     </application>
 
 </manifest>
