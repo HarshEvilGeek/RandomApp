@@ -149,9 +149,8 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
                 PocketBankerContract.Account.BALANCE + " real, " +
                 PocketBankerContract.Account.TIME + " integer);";
 
-        String CREATE_TABLE_TRANSACTIONS_QUERY = "CREATE table " +
-                TRANSACTIONS + " (" +
- PocketBankerContract.Transactions._ID + " integer primary key autoincrement, "
+        String CREATE_TABLE_TRANSACTIONS_QUERY = "CREATE table " + TRANSACTIONS + " ("
+                + PocketBankerContract.Transactions._ID + " integer primary key autoincrement, "
                 +
                 PocketBankerContract.Transactions.ACCOUNT_NUMBER + " text, " +
                 PocketBankerContract.Transactions.AMOUNT + " integer, " +
@@ -160,9 +159,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
                 PocketBankerContract.Transactions.REMARK + " text, " +
                 PocketBankerContract.Transactions.TIME + " integer);";
 
-        String CREATE_TABLE_PAYEES_QUERY = "CREATE table " +
-                PAYEES + " (" +
- PocketBankerContract.Payees._ID
+        String CREATE_TABLE_PAYEES_QUERY = "CREATE table " + PAYEES + " (" + PocketBankerContract.Payees._ID
                 + " integer primary key autoincrement, " +
                 PocketBankerContract.Payees.PAYEE_ID + " text, " +
                 PocketBankerContract.Payees.ACCOUNT_NUMBER + " text, " +
@@ -181,9 +178,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
                 + PocketBankerContract.BranchAtms.PHONE_NUMBER + " text, "
                 + PocketBankerContract.BranchAtms.BRANCH_NAME + " text);";
 
-        String CREATE_TABLE_LOANS_QUERY = "CREATE table " +
-                LOANS + " (" +
- PocketBankerContract.Loans._ID
+        String CREATE_TABLE_LOANS_QUERY = "CREATE table " + LOANS + " (" + PocketBankerContract.Loans._ID
                 + " integer primary key autoincrement, " +
                 PocketBankerContract.Loans.LOAN_ACCOUNT_NUMBER + " text, " +
                 PocketBankerContract.Loans.AMOUNT + " integer, " +
@@ -196,18 +191,15 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
                 PocketBankerContract.Loans.MONTH_DELINQUENCY + " text, " +
                 PocketBankerContract.Loans.DATE_OF_LOAN + " integer);";
 
-        String CREATE_TABLE_EMIS_QUERY = "CREATE table " +
-                EMIS + " (" +
- PocketBankerContract.Emis._ID
+        String CREATE_TABLE_EMIS_QUERY = "CREATE table " + EMIS + " (" + PocketBankerContract.Emis._ID
                 + " integer primary key autoincrement, " +
                 PocketBankerContract.Emis.LOAN_ACCOUNT_NUMBER + " text, " +
                 PocketBankerContract.Emis.NO_OF_EMI + " integer, " +
                 PocketBankerContract.Emis.EMI_DATES + " text, " +
                 PocketBankerContract.Emis.EMI_LAST_THREE + " text);";
 
-        String CREATE_TABLE_LOAN_TRANSACTIONS_QUERY = "CREATE table " +
-                LOAN_TRANSACTIONS + " (" +
- PocketBankerContract.LoanTransactions._ID + " integer primary key autoincrement, "
+        String CREATE_TABLE_LOAN_TRANSACTIONS_QUERY = "CREATE table " + LOAN_TRANSACTIONS + " ("
+                + PocketBankerContract.LoanTransactions._ID + " integer primary key autoincrement, "
                 +
                 PocketBankerContract.LoanTransactions.LOAN_ACCOUNT_NUMBER + " text, " +
                 PocketBankerContract.LoanTransactions.LAST_PAYMENT_MADE + " real, " +
