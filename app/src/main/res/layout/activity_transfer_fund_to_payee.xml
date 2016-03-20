@@ -28,18 +28,10 @@
                 android:textAllCaps="true"
                 android:textColor="@color/colorAccent" />
 
-            <TextView
-                android:id="@+id/from_name"
+            <Spinner
+                android:id="@+id/from_account_spinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="From name"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/from_account_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="From account number" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="match_parent"
