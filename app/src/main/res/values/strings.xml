@@ -16,7 +16,8 @@
     <string name="payee_short_name_default">Payee Short Name</string>
 
     <string name="google_map_api_key">AIzaSyBhpNcwPsfMt-3Jk4mBSGdn6zGPYUF_vc0</string>
-    <string name="locator_name">Nearby ATMs and Branches</string>
+    <string name="branch_atm_detail">Details</string>
+    <string name="branch_atm_map">Nearby ATMs and Branches</string>
     <string name="fetching_location">Fetching location...</string>
     <string name="unable_to_fetch_location">Unable to fetch location. Please make sure location services are enabled and try again.</string>
     <string name="go_to_settings">Go To Settings</string>

@@ -25,6 +25,8 @@ import com.example.zaas.pocketbanker.models.local.Payee;
 public class PocketBankerDBHelper
 {
     private static final String TAG = "PocketBankerDBHelper";
+    private static final String WHERE_KEY_ID_EQ = " _" +
+            "id = ? ";
 
     private static PocketBankerDBHelper instance;
 
@@ -118,6 +120,26 @@ public class PocketBankerDBHelper
             }
         }
         return branchAtmList;
+    }
+
+    public BranchAtm getBranchAtm(Context context, int dbId)
+    {
+        Cursor c = null;
+        BranchAtm branchAtm = new BranchAtm();
+        try {
+            c = context.getContentResolver()
+                    .query(PocketBankerProvider.CONTENT_URI_BRANCH_ATMS, null, WHERE_KEY_ID_EQ,
+                            new String[]{Integer.toString(dbId)}, null);
+            if (c != null && c.moveToNext()) {
+               branchAtm.instantiateFromCursor(c);
+            }
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return branchAtm;
     }
 
     public List<? extends DbModel> getAllDbModels(Context context, String table) {

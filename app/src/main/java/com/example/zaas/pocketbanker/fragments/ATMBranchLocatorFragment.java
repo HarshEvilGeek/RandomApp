@@ -3,6 +3,7 @@ package com.example.zaas.pocketbanker.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -24,13 +25,13 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zaas.pocketbanker.R;
-import com.example.zaas.pocketbanker.activities.ATMBranchMapActivity;
+import com.example.zaas.pocketbanker.activities.BranchAtmMapActivity;
+import com.example.zaas.pocketbanker.activities.BranchAtmDetailActivity;
 import com.example.zaas.pocketbanker.adapters.BranchAtmAdapter;
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.interfaces.IFloatingButtonListener;
@@ -44,7 +45,7 @@ import com.google.android.gms.location.LocationServices;
  * Fragment to show branch/ATM locations Created by akhil on 3/17/16.
  */
 public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapter.OnClickListener,
-        BranchAtmAdapter.OnMapButtonClickListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, IFloatingButtonListener
 {
     SwipeRefreshLayout mSwipeContainer;
@@ -158,7 +159,7 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         List<BranchAtm> listAll = PocketBankerDBHelper.getInstance().getAllBranchAtms(getActivity());
         splitList(listAll);
         mAdapter = new BranchAtmAdapter(getActivity(), mBranchList);
-        mAdapter.setOnClickListener(this, this);
+        mAdapter.setOnClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
     }
@@ -198,17 +199,10 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     @Override
     public void onClick(BranchAtm branchAtm)
     {
-        Toast.makeText(getActivity(), branchAtm.getName() + " clicked!", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onMapButtonClick(int branchAtmID)
-    {
-        Intent mapIntent = new Intent(getActivity(), ATMBranchMapActivity.class);
-        mapIntent.putExtra("currentLocation", mCurrentLocation);
-        mapIntent.putExtra(ATMBranchMapActivity.SINGLE_MAP_KEY, true);
-        mapIntent.putExtra(ATMBranchMapActivity.SINGLE_BRANCH_ATM_KEY, branchAtmID);
-        startActivity(mapIntent);
+        Intent detailIntent = new Intent(getActivity(), BranchAtmDetailActivity.class);
+        detailIntent.putExtra(BranchAtmMapActivity.SINGLE_BRANCH_ATM_KEY, branchAtm.getId());
+        detailIntent.putExtra(BranchAtmMapActivity.CURRENT_LOCATION_KEY, mCurrentLocation);
+        startActivity(detailIntent);
     }
 
     private void setupCurrentLocation()
@@ -258,7 +252,7 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
             showErrorDialog();
         }
         else {
-            Toast.makeText(getActivity(), "Current location determined", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Current location determined", Toast.LENGTH_SHORT).show();
             mCurrentLocation = location;
             startIntentService(location);
             syncBranchAtms();
@@ -272,6 +266,7 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         getActivity().startService(intent);
     }
 
+    @SuppressLint("ParcelCreator")
     class AddressResultReceiver extends ResultReceiver {
         public AddressResultReceiver(Handler handler) {
             super(handler);
@@ -357,9 +352,9 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
 
     @Override
     public void onFloatingButtonPressed() {
-        Intent mapIntent = new Intent(getActivity(), ATMBranchMapActivity.class);
-        mapIntent.putExtra("currentLocation", mCurrentLocation);
-        mapIntent.putExtra(ATMBranchMapActivity.SINGLE_MAP_KEY, false);
+        Intent mapIntent = new Intent(getActivity(), BranchAtmMapActivity.class);
+        mapIntent.putExtra(BranchAtmMapActivity.CURRENT_LOCATION_KEY, mCurrentLocation);
+        mapIntent.putExtra(BranchAtmMapActivity.SINGLE_MAP_KEY, false);
         startActivity(mapIntent);
     }
 }

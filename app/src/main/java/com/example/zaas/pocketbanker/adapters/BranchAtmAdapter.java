@@ -22,7 +22,6 @@ public class BranchAtmAdapter extends RecyclerView.Adapter<BranchAtmAdapter.Bran
     private LayoutInflater mInflater;
     private List<BranchAtm> mList;
     private OnClickListener mOnClickListener;
-    private OnMapButtonClickListener mOnMapButtonClickListener;
 
     public BranchAtmAdapter(Context context, List<BranchAtm> branchAtmList)
     {
@@ -36,10 +35,9 @@ public class BranchAtmAdapter extends RecyclerView.Adapter<BranchAtmAdapter.Bran
         notifyDataSetChanged();
     }
 
-    public void setOnClickListener(OnClickListener onClickListener, OnMapButtonClickListener onMapButtonClickListener)
+    public void setOnClickListener(OnClickListener onClickListener)
     {
         mOnClickListener = onClickListener;
-        mOnMapButtonClickListener = onMapButtonClickListener;
     }
 
     @Override
@@ -68,11 +66,6 @@ public class BranchAtmAdapter extends RecyclerView.Adapter<BranchAtmAdapter.Bran
         void onClick(BranchAtm branchAtm);
     }
 
-    public interface OnMapButtonClickListener
-    {
-        void onMapButtonClick(int branchAtmID);
-    }
-
     public class BranchAtmViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         private final TextView name;
@@ -82,15 +75,6 @@ public class BranchAtmAdapter extends RecyclerView.Adapter<BranchAtmAdapter.Bran
         {
             super(itemView);
             itemView.setOnClickListener(this);
-            ImageButton mapButton = (ImageButton) itemView.findViewById(R.id.map_button);
-            mapButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mOnMapButtonClickListener != null) {
-                        mOnMapButtonClickListener.onMapButtonClick(getLayoutPosition());
-                    }
-                }
-            });
             name = (TextView) itemView.findViewById(R.id.name);
             address = (TextView) itemView.findViewById(R.id.address);
         }
