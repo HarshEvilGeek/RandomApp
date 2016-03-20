@@ -102,6 +102,26 @@ public class PocketBankerDBHelper
         for (Account localModel : currentAccountList) {
             boolean found = false;
             for (Account newModel : newAccountList) {
+                if (newModel.getAccountNumber().equals(localModel.getAccountNumber())) {
+                    accountModelsToUpdate.add(newModel);
+                    found = true;
+                }
+            }
+            if (!found) {
+                accountModelsToDelete.add(localModel);
+            }
+
+        }
+
+        for (Account newModel : newAccountList) {
+            boolean found = false;
+            for (Account localModel : currentAccountList) {
+                if (newModel.getAccountNumber().equals(localModel.getAccountNumber())) {
+                    found = true;
+                }
+            }
+            if (!found) {
+                accountModelsToAdd.add(newModel);
             }
         }
 
