@@ -49,12 +49,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ATMBranchMapActivity"
-            android:label="@string/locator_name"
-            android:screenOrientation="portrait"></activity>
-
-        <service
-            android:name=".services.FetchAddressIntentService"
+            android:name=".activities.BranchAtmDetailActivity"
+            android:label="@string/branch_atm_map">
+        </activity>
+        <activity
+            android:name=".activities.BranchAtmMapActivity"
+            android:label="@string/branch_atm_map">
+        </activity>
+        <service android:name=".services.FetchAddressIntentService"
             android:exported="false" />
 
         <provider

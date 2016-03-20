@@ -23,11 +23,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * Created by shseth on 3/19/2016.
  */
-public class ATMBranchMapActivity extends AppCompatActivity implements OnMapReadyCallback
+public class BranchAtmMapActivity extends AppCompatActivity implements OnMapReadyCallback
 {
 
     public static final String SINGLE_BRANCH_ATM_KEY = "singleBranchATMID";
     public static final String SINGLE_MAP_KEY = "SingleMapMode";
+    public static final String CURRENT_LOCATION_KEY = "currentLocation";
 
     private boolean mIsSingleMode;
     private int mSingleBranchAtmID;
@@ -68,10 +69,8 @@ public class ATMBranchMapActivity extends AppCompatActivity implements OnMapRead
         if (mIsSingleMode) {
             mSingleBranchAtmID = extras.getInt(SINGLE_BRANCH_ATM_KEY);
         }
-        Location loc = (Location) extras.get("currentLocation");
-        if (mCurrentLocation != null) {
-            mCurrentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
-        } else {
+        mCurrentLocation = (LatLng) extras.get(CURRENT_LOCATION_KEY);
+        if (mCurrentLocation == null) {
             setCurrentLocation();
         }
     }
@@ -114,7 +113,7 @@ public class ATMBranchMapActivity extends AppCompatActivity implements OnMapRead
         if (mIsSingleMode) {
             BranchAtm branchAtm = mBranchATMs.get(mSingleBranchAtmID);
             addMarker(branchAtm);
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, 15));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(branchAtm.getMapLocation(), 15));
         }
         else {
             LatLngBounds.Builder builder = new LatLngBounds.Builder();

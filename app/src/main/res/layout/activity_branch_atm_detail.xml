@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        style="@style/CardStyle">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/map_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="@dimen/card_margin"
+            android:background="@drawable/address" />
+
+        <TextView
+            android:id="@+id/address_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/card_margin"
+            android:layout_marginTop="@dimen/card_margin"
+            android:layout_marginBottom="@dimen/card_margin"
+            android:gravity="center_vertical"
+            android:text="408, Ganga Block, National Games Village, Koramangala 6th Block, Bangalore, Karnataka, "
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        style="@style/CardStyle">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_margin="@dimen/card_margin"
+            android:layout_height="30dp"
+            android:src="@drawable/ifsc_code"/>
+
+        <TextView
+            android:id="@+id/ifsc_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/card_margin"
+            android:layout_marginTop="@dimen/card_margin"
+            android:layout_marginBottom="@dimen/card_margin"
+            android:gravity="center_vertical"
+            android:text="HDFC0000231"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        style="@style/CardStyle">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Phone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/phone_button"
+            android:layout_width="30dp"
+            android:layout_margin="@dimen/card_margin"
+            android:layout_height="30dp"
+            android:background="@drawable/phone"/>
+
+        <TextView
+            android:id="@+id/phone_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/card_margin"
+            android:layout_marginTop="@dimen/card_margin"
+            android:layout_marginBottom="@dimen/card_margin"
+            android:gravity="center_vertical"
+            android:text="080 4112 6778"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
