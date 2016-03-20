@@ -24,6 +24,7 @@
             android:textStyle="bold"/>
 
         <TextView
+            android:id="@+id/branch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/card_margin_small"
@@ -35,10 +36,12 @@
             android:id="@+id/branch_atm_toggle"
             android:paddingBottom="@dimen/card_margin_small"
             android:paddingTop="@dimen/card_margin_small"
+            android:theme="@style/SwitchStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
+            android:id="@+id/atm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/card_margin_small"

@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -44,7 +45,9 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     RecyclerView mRecyclerView;
     BranchAtmAdapter mAdapter;
     private List<BranchAtm> mAtmList = new ArrayList<>();
-    private List<BranchAtm> mBranchList = new ArrayList<>();;
+    private TextView mAtm;
+    private List<BranchAtm> mBranchList = new ArrayList<>();
+    private TextView mBranch;
 
     private GoogleApiClient mGoogleApiClient;
     private Location mCurrentLocation;
@@ -67,32 +70,41 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         View rootView = inflater.inflate(R.layout.fragment_atm_branch_locator, container, false);
         mCurrentLocationHeader = (TextView) rootView.findViewById(R.id.current_location);
         mBranchAtmToggle = (SwitchCompat) rootView.findViewById(R.id.branch_atm_toggle);
-        mBranchAtmToggle.setHighlightColor(getResources().getColor(R.color.colorPrimary));
+        mAtm = (TextView) rootView.findViewById(R.id.atm);
+        mBranch = (TextView) rootView.findViewById(R.id.branch);
+        mBranch.setTextColor(getResources().getColor(R.color.colorPrimary));
+        setClickListeners();
+        setupSwipeContainer(rootView);
+        setupRecyclerView(rootView);
+        Button tempMapButton = (Button) rootView.findViewById(R.id.temp_button);
+        tempMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFabClick();
+            }
+        });
+
+        return rootView;
+    }
+
+    private void setClickListeners() {
         mBranchAtmToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 toggleList(isChecked ? BranchAtm.Type.ATM : BranchAtm.Type.BRANCH);
             }
         });
-        Button tempMapButton = (Button) rootView.findViewById(R.id.temp_button);
-        tempMapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                onFabClick();
-            }
-        });
-        setupSwipeContainer(rootView);
-        setupRecyclerView(rootView);
-
-        return rootView;
     }
 
     private void toggleList(BranchAtm.Type type) {
         if (type == BranchAtm.Type.ATM) {
             mAdapter.updateList(mAtmList);
+            mAtm.setTextColor(getResources().getColor(R.color.colorPrimary));
+            mBranch.setTextColor(Color.DKGRAY);
         } else {
             mAdapter.updateList(mBranchList);
+            mAtm.setTextColor(Color.DKGRAY);
+            mBranch.setTextColor(getResources().getColor(R.color.colorPrimary));
         }
     }
 

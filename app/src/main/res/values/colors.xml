@@ -3,4 +3,6 @@
     <color name="colorPrimary">#FF9800</color>
     <color name="colorPrimaryDark">#F57C00</color>
     <color name="colorAccent">#536DFE</color>
+    <color name="colorControlNormal">#FF9800</color>
+    <color name="colorControlActivated">#FF9800</color>
 </resources>
