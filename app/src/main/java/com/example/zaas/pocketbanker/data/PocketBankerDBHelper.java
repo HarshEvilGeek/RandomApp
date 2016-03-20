@@ -5,10 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.content.ContentProviderOperation;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.RemoteException;
+import android.util.Log;
 
 import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
@@ -20,6 +24,7 @@ import com.example.zaas.pocketbanker.models.local.Payee;
  */
 public class PocketBankerDBHelper
 {
+    private static final String TAG = "PocketBankerDBHelper";
 
     private static PocketBankerDBHelper instance;
 
@@ -146,6 +151,9 @@ public class PocketBankerDBHelper
                 modelsToAdd.add(newModel);
             }
         }
+
+        bulkInsertDbModels(context, modelsToAdd);
+        batchUpdateDbModels(context, modelsToUpdate);
     }
 
     private void insertUpdateAndDeleteDbModelTable(Context context, List<? extends DbModel> newDbModels)
@@ -180,6 +188,9 @@ public class PocketBankerDBHelper
                 modelsToAdd.add(newModel);
             }
         }
+
+        bulkInsertDbModels(context, modelsToAdd);
+        batchUpdateDbModels(context, modelsToUpdate);
     }
 
     private void bulkInsertDbModels(Context context, List<DbModel> dbModelsToInsert) {
@@ -192,5 +203,48 @@ public class PocketBankerDBHelper
         }
         Uri contentUri = PocketBankerDBHelper.tableToUriMap.get(dbModelsToInsert.get(0).getTable());
         context.getContentResolver().bulkInsert(contentUri, values);
+    }
+
+    private void batchUpdateDbModels(Context context, List<DbModel> dbModelsToUpdate) {
+        if (dbModelsToUpdate == null || dbModelsToUpdate.isEmpty()) {
+            return;
+        }
+        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+        Uri contentUri = PocketBankerDBHelper.tableToUriMap.get(dbModelsToUpdate.get(0).getTable());
+        for (DbModel data : dbModelsToUpdate) {
+            operations.add(ContentProviderOperation.newUpdate(contentUri)
+                    .withValues(data.toContentValues())
+                    .withSelection(data.getSelectionString(), data.getSelectionValues())
+                    .withYieldAllowed(true)
+                    .build());
+        }
+        try {
+            context.getContentResolver().applyBatch(PocketBankerContract.CONTENT_AUTHORITY, operations);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed to update private groups with a batch operation", e);
+        } catch (OperationApplicationException e) {
+            Log.e(TAG, "Failed to update private groups with a batch operation", e);
+        }
+    }
+
+    private void batchDeleteDbModels(Context context, List<DbModel> dbModelsToDelete) {
+        if (dbModelsToDelete == null || dbModelsToDelete.isEmpty()) {
+            return;
+        }
+        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+        Uri contentUri = PocketBankerDBHelper.tableToUriMap.get(dbModelsToDelete.get(0).getTable());
+        for (DbModel data : dbModelsToDelete) {
+            operations.add(ContentProviderOperation.newDelete(contentUri)
+                    .withSelection(data.getSelectionString(), data.getSelectionValues())
+                    .withYieldAllowed(true)
+                    .build());
+        }
+        try {
+            context.getContentResolver().applyBatch(PocketBankerContract.CONTENT_AUTHORITY, operations);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed to delete private groups with a batch operation", e);
+        } catch (OperationApplicationException e) {
+            Log.e(TAG, "Failed to delete private groups with a batch operation", e);
+        }
     }
 }
