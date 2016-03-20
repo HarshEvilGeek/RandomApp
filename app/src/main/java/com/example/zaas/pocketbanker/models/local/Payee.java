@@ -13,7 +13,7 @@ import com.example.zaas.pocketbanker.data.PocketBankerOpenHelper;
 public class Payee extends DbModel
 {
     private static final String TAG = "Payee";
-    
+
     private int id;
     private String payeeId;
     private String name;
