@@ -3,17 +3,13 @@ package com.example.zaas.pocketbanker.activities;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
-import android.nfc.NfcAdapter;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
@@ -47,7 +43,7 @@ public class BranchAtmDetailActivity extends AppCompatActivity {
         if (loc != null) {
             mCurrentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
         }
-        mBranchAtm = PocketBankerDBHelper.getInstance().getBranchAtm(this, id);
+        mBranchAtm = PocketBankerDBHelper.getInstance().getBranchAtmForLocalId(this, id);
 
         ActionBar ab = getSupportActionBar();
         if (ab != null) {

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.ContentProviderOperation;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.OperationApplicationException;
@@ -25,12 +26,10 @@ import com.example.zaas.pocketbanker.models.local.Payee;
 public class PocketBankerDBHelper
 {
     private static final String TAG = "PocketBankerDBHelper";
-    private static final String WHERE_KEY_ID_EQ = " _" +
-            "id = ? ";
 
     private static PocketBankerDBHelper instance;
 
-    private static Map<String, Uri> tableToUriMap  = new HashMap<>();
+    private static Map<String, Uri> tableToUriMap = new HashMap<>();
 
     static {
         tableToUriMap.put(PocketBankerOpenHelper.Tables.ACCOUNTS, PocketBankerProvider.CONTENT_URI_ACCOUNTS);
@@ -38,7 +37,8 @@ public class PocketBankerDBHelper
         tableToUriMap.put(PocketBankerOpenHelper.Tables.PAYEES, PocketBankerProvider.CONTENT_URI_PAYEES);
         tableToUriMap.put(PocketBankerOpenHelper.Tables.BRANCH_ATMS, PocketBankerProvider.CONTENT_URI_BRANCH_ATMS);
         tableToUriMap.put(PocketBankerOpenHelper.Tables.LOANS, PocketBankerProvider.CONTENT_URI_LOANS);
-        tableToUriMap.put(PocketBankerOpenHelper.Tables.LOAN_TRANSACTIONS, PocketBankerProvider.CONTENT_URI_LOAN_TRANSACTIONS);
+        tableToUriMap.put(PocketBankerOpenHelper.Tables.LOAN_TRANSACTIONS,
+                PocketBankerProvider.CONTENT_URI_LOAN_TRANSACTIONS);
         tableToUriMap.put(PocketBankerOpenHelper.Tables.EMIS, PocketBankerProvider.CONTENT_URI_EMIS);
         tableToUriMap.put(PocketBankerOpenHelper.Tables.CARDS, PocketBankerProvider.CONTENT_URI_CARDS);
     }
@@ -99,6 +99,26 @@ public class PocketBankerDBHelper
         return payeeList;
     }
 
+    public Payee getPayeeForLocalId(Context context, int id)
+    {
+        Cursor c = null;
+        Payee payee = null;
+        try {
+            c = context.getContentResolver().query(
+                    ContentUris.withAppendedId(PocketBankerProvider.CONTENT_URI_PAYEES, id), null, null, null, null);
+            if (c != null && c.moveToFirst()) {
+                payee = new Payee();
+                payee.instantiateFromCursor(c);
+            }
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return payee;
+    }
+
     public List<BranchAtm> getAllBranchAtms(Context context)
     {
         Cursor c = null;
@@ -122,16 +142,17 @@ public class PocketBankerDBHelper
         return branchAtmList;
     }
 
-    public BranchAtm getBranchAtm(Context context, int dbId)
+    public BranchAtm getBranchAtmForLocalId(Context context, int id)
     {
         Cursor c = null;
-        BranchAtm branchAtm = new BranchAtm();
+        BranchAtm branchAtm = null;
         try {
-            c = context.getContentResolver()
-                    .query(PocketBankerProvider.CONTENT_URI_BRANCH_ATMS, null, WHERE_KEY_ID_EQ,
-                            new String[]{Integer.toString(dbId)}, null);
+            c = context.getContentResolver().query(
+                    ContentUris.withAppendedId(PocketBankerProvider.CONTENT_URI_BRANCH_ATMS, id), null, null, null,
+                    null);
             if (c != null && c.moveToNext()) {
-               branchAtm.instantiateFromCursor(c);
+                branchAtm = new BranchAtm();
+                branchAtm.instantiateFromCursor(c);
             }
         }
         finally {
@@ -142,14 +163,16 @@ public class PocketBankerDBHelper
         return branchAtm;
     }
 
-    public List<? extends DbModel> getAllDbModels(Context context, String table) {
-        switch (table) {
-            case PocketBankerOpenHelper.Tables.ACCOUNTS:
-                return getAllAccounts(context);
-            case PocketBankerOpenHelper.Tables.BRANCH_ATMS:
-                return getAllBranchAtms(context);
-            case PocketBankerOpenHelper.Tables.PAYEES:
-                return getAllPayees(context);
+    public List<? extends DbModel> getAllDbModels(Context context, String table)
+    {
+        switch (table)
+        {
+        case PocketBankerOpenHelper.Tables.ACCOUNTS:
+            return getAllAccounts(context);
+        case PocketBankerOpenHelper.Tables.BRANCH_ATMS:
+            return getAllBranchAtms(context);
+        case PocketBankerOpenHelper.Tables.PAYEES:
+            return getAllPayees(context);
         }
         return null;
     }
@@ -216,7 +239,8 @@ public class PocketBankerDBHelper
         batchDeleteDbModels(context, modelsToDelete);
     }
 
-    private void bulkInsertDbModels(Context context, List<DbModel> dbModelsToInsert) {
+    private void bulkInsertDbModels(Context context, List<DbModel> dbModelsToInsert)
+    {
         if (dbModelsToInsert == null || dbModelsToInsert.isEmpty()) {
             return;
         }
@@ -228,45 +252,50 @@ public class PocketBankerDBHelper
         context.getContentResolver().bulkInsert(contentUri, values);
     }
 
-    private void batchUpdateDbModels(Context context, List<DbModel> dbModelsToUpdate) {
+    private void batchUpdateDbModels(Context context, List<DbModel> dbModelsToUpdate)
+    {
         if (dbModelsToUpdate == null || dbModelsToUpdate.isEmpty()) {
             return;
         }
         ArrayList<ContentProviderOperation> operations = new ArrayList<>();
         Uri contentUri = PocketBankerDBHelper.tableToUriMap.get(dbModelsToUpdate.get(0).getTable());
         for (DbModel data : dbModelsToUpdate) {
-            operations.add(ContentProviderOperation.newUpdate(contentUri)
-                    .withValues(data.toContentValues())
-                    .withSelection(data.getSelectionString(), data.getSelectionValues())
-                    .withYieldAllowed(true)
-                    .build());
+            operations
+                    .add(ContentProviderOperation.newUpdate(contentUri).withValues(data.toContentValues())
+                            .withSelection(data.getSelectionString(), data.getSelectionValues()).withYieldAllowed(true)
+                            .build());
         }
         try {
             context.getContentResolver().applyBatch(PocketBankerContract.CONTENT_AUTHORITY, operations);
-        } catch (RemoteException e) {
+        }
+        catch (RemoteException e) {
             Log.e(TAG, "Failed to update private groups with a batch operation", e);
-        } catch (OperationApplicationException e) {
+        }
+        catch (OperationApplicationException e) {
             Log.e(TAG, "Failed to update private groups with a batch operation", e);
         }
     }
 
-    private void batchDeleteDbModels(Context context, List<DbModel> dbModelsToDelete) {
+    private void batchDeleteDbModels(Context context, List<DbModel> dbModelsToDelete)
+    {
         if (dbModelsToDelete == null || dbModelsToDelete.isEmpty()) {
             return;
         }
         ArrayList<ContentProviderOperation> operations = new ArrayList<>();
         Uri contentUri = PocketBankerDBHelper.tableToUriMap.get(dbModelsToDelete.get(0).getTable());
         for (DbModel data : dbModelsToDelete) {
-            operations.add(ContentProviderOperation.newDelete(contentUri)
-                    .withSelection(data.getSelectionString(), data.getSelectionValues())
-                    .withYieldAllowed(true)
-                    .build());
+            operations
+                    .add(ContentProviderOperation.newDelete(contentUri)
+                            .withSelection(data.getSelectionString(), data.getSelectionValues()).withYieldAllowed(true)
+                            .build());
         }
         try {
             context.getContentResolver().applyBatch(PocketBankerContract.CONTENT_AUTHORITY, operations);
-        } catch (RemoteException e) {
+        }
+        catch (RemoteException e) {
             Log.e(TAG, "Failed to delete private groups with a batch operation", e);
-        } catch (OperationApplicationException e) {
+        }
+        catch (OperationApplicationException e) {
             Log.e(TAG, "Failed to delete private groups with a batch operation", e);
         }
     }
