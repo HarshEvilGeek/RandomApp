@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
@@ -36,6 +37,7 @@ public class BranchAtmMapActivity extends AppCompatActivity implements OnMapRead
     // TODO: implement this
     private LatLng mCurrentLocation;
     private GoogleMap mMap;
+    private boolean mCurrent = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -69,6 +71,7 @@ public class BranchAtmMapActivity extends AppCompatActivity implements OnMapRead
         if (mIsSingleMode) {
             mSingleBranchAtmID = extras.getInt(SINGLE_BRANCH_ATM_KEY);
         }
+        mCurrent = true;
         mCurrentLocation = (LatLng) extras.get(CURRENT_LOCATION_KEY);
         if (mCurrentLocation == null) {
             setCurrentLocation();
@@ -77,6 +80,7 @@ public class BranchAtmMapActivity extends AppCompatActivity implements OnMapRead
 
     private void setCurrentLocation()
     {
+        mCurrent = false;
         // For now, doing an average of test data to fetch current location
         if (mIsSingleMode) {
             mCurrentLocation = mBranchATMs.get(mSingleBranchAtmID).getMapLocation();
@@ -94,13 +98,16 @@ public class BranchAtmMapActivity extends AppCompatActivity implements OnMapRead
         mMap.setMyLocationEnabled(true);
         mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
-            public boolean onMyLocationButtonClick()
-            {
+            public boolean onMyLocationButtonClick() {
                 if (mMap.getMyLocation() != null) {
+                    mCurrent = true;
                     mCurrentLocation = new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
                 }
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, 15));
-                return true;
+                if (!mCurrent) {
+                    Toast.makeText(getApplicationContext(), "Current not set, using random", Toast.LENGTH_SHORT).show();
+                }
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, 15));
+                    return true;
             }
         });
         mMap.getUiSettings().setZoomControlsEnabled(true);

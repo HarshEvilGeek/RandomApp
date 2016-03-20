@@ -40,6 +40,7 @@ import com.example.zaas.pocketbanker.services.FetchAddressIntentService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Fragment to show branch/ATM locations Created by akhil on 3/17/16.
@@ -201,7 +202,10 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     {
         Intent detailIntent = new Intent(getActivity(), BranchAtmDetailActivity.class);
         detailIntent.putExtra(BranchAtmMapActivity.SINGLE_BRANCH_ATM_KEY, branchAtm.getId());
-        detailIntent.putExtra(BranchAtmMapActivity.CURRENT_LOCATION_KEY, mCurrentLocation);
+        if (mCurrentLocation != null) {
+            detailIntent.putExtra(BranchAtmMapActivity.CURRENT_LOCATION_KEY,
+                    new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
+        }
         startActivity(detailIntent);
     }
 
@@ -353,7 +357,10 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     @Override
     public void onFloatingButtonPressed() {
         Intent mapIntent = new Intent(getActivity(), BranchAtmMapActivity.class);
-        mapIntent.putExtra(BranchAtmMapActivity.CURRENT_LOCATION_KEY, mCurrentLocation);
+        if (mCurrentLocation != null) {
+            mapIntent.putExtra(BranchAtmMapActivity.CURRENT_LOCATION_KEY,
+                    new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
+        }
         mapIntent.putExtra(BranchAtmMapActivity.SINGLE_MAP_KEY, false);
         startActivity(mapIntent);
     }

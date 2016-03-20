@@ -43,10 +43,8 @@ public class BranchAtmDetailActivity extends AppCompatActivity {
             return;
         }
         int id = extras.getInt(BranchAtmMapActivity.SINGLE_BRANCH_ATM_KEY);
-        Location loc = (Location) extras.get(BranchAtmMapActivity.CURRENT_LOCATION_KEY);
-        if (loc != null) {
-            mCurrentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
-        }
+        mCurrentLocation = (LatLng) extras.get(BranchAtmMapActivity.CURRENT_LOCATION_KEY);
+
         mBranchAtm = PocketBankerDBHelper.getInstance().getBranchAtm(this, id);
 
         ActionBar ab = getSupportActionBar();
@@ -63,7 +61,9 @@ public class BranchAtmDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent mapIntent = new Intent(v.getContext(), BranchAtmMapActivity.class);
-                mapIntent.putExtra(BranchAtmMapActivity.CURRENT_LOCATION_KEY, mCurrentLocation);
+                if (mCurrentLocation != null) {
+                    mapIntent.putExtra(BranchAtmMapActivity.CURRENT_LOCATION_KEY, mCurrentLocation);
+                }
                 mapIntent.putExtra(BranchAtmMapActivity.SINGLE_MAP_KEY, true);
                 mapIntent.putExtra(BranchAtmMapActivity.SINGLE_BRANCH_ATM_KEY, mBranchAtm.getId());
                 startActivity(mapIntent);
