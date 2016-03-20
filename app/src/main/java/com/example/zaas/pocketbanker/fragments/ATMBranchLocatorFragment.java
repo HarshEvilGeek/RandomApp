@@ -45,6 +45,7 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     private Location mCurrentLocation;
 
     private ProgressDialog mProgressDialog;
+    private AlertDialog mErrorDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -72,10 +73,18 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     }
 
     @Override
-    public void onResume()
+    public void onStart()
     {
-        super.onResume();
+        super.onStart();
         syncBranchAtms();
+    }
+
+    @Override
+    public void onStop()
+    {
+        stopLocationProgressDialog();
+        dismissErrorDialog();
+        super.onStop();
     }
 
     private void onFabClick()
@@ -228,7 +237,7 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
 
     private void showErrorDialog()
     {
-        new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.unable_to_fetch_location))
+        mErrorDialog = new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.unable_to_fetch_location))
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which)
                     {
@@ -242,7 +251,22 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
                         startActivity(viewIntent);
                         dialog.cancel();
                     }
-                }).show();
+                }).create();
+        mErrorDialog.show();
     }
 
+    private void dismissErrorDialog()
+    {
+        if (mErrorDialog != null) {
+            try {
+                mErrorDialog.dismiss();
+            }
+            catch (Exception e) {
+                // Ignore
+            }
+            finally {
+                mErrorDialog = null;
+            }
+        }
+    }
 }

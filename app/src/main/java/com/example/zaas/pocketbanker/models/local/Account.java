@@ -4,11 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.example.zaas.pocketbanker.data.PocketBankerContract;
+import com.example.zaas.pocketbanker.data.PocketBankerOpenHelper;
 
 /**
  * Created by akhil on 3/19/16.
  */
-public class Account
+public class Account extends DbModel
 {
     private int id;
     private String accountNumber;
@@ -16,15 +17,20 @@ public class Account
     private String type;
     private long lastUpdateTime;
 
-    public static Account loadFromCursor(Cursor cursor)
-    {
-        Account account = new Account();
-        account.setId(cursor.getInt(cursor.getColumnIndex(PocketBankerContract.Account._ID)));
-        account.setAccountNumber(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Account.ACCOUNT_NUMBER)));
-        account.setType(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Account.ACCOUNT_TYPE)));
-        account.setBalance(cursor.getDouble(cursor.getColumnIndex(PocketBankerContract.Account.BALANCE)));
-        account.setLastUpdateTime(cursor.getLong(cursor.getColumnIndex(PocketBankerContract.Account.TIME)));
-        return account;
+    @Override
+    public void instantiateFromCursor(Cursor cursor) {
+        if (cursor != null) {
+            setId(cursor.getInt(cursor.getColumnIndex(PocketBankerContract.Account._ID)));
+            setAccountNumber(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Account.ACCOUNT_NUMBER)));
+            setType(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Account.ACCOUNT_TYPE)));
+            setBalance(cursor.getDouble(cursor.getColumnIndex(PocketBankerContract.Account.BALANCE)));
+            setLastUpdateTime(cursor.getLong(cursor.getColumnIndex(PocketBankerContract.Account.TIME)));
+        }
+    }
+
+    @Override
+    public String getUniqueIdentifier() {
+        return accountNumber;
     }
 
     public ContentValues toContentValues()
@@ -35,6 +41,11 @@ public class Account
         values.put(PocketBankerContract.Account.BALANCE, balance);
         values.put(PocketBankerContract.Account.TIME, lastUpdateTime);
         return values;
+    }
+
+    @Override
+    public String getTable() {
+        return PocketBankerOpenHelper.Tables.ACCOUNTS;
     }
 
     public int getId() {

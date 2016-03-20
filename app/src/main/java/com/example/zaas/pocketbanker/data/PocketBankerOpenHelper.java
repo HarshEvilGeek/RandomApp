@@ -109,7 +109,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
                 + " loan details, " + emiCount + " emis and " + loanTransactionCount + " loan transactions.");
     }
 
-    interface Tables {
+    public interface Tables {
         String ACCOUNTS = "Accounts";
         String TRANSACTIONS = "Transactions";
         String PAYEES = "Payees";
