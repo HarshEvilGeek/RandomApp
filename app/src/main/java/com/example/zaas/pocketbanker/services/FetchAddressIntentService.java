@@ -68,14 +68,16 @@ public class FetchAddressIntentService extends IntentService {
 
     private void deliverResultToReceiver(int resultCode, Address address) {
         Bundle bundle = new Bundle();
-        String addressString = address.getSubLocality();
-        if (TextUtils.isEmpty(addressString)) {
-            addressString = address.getThoroughfare();
+        if (address != null) {
+            String addressString = address.getSubLocality();
+            if (TextUtils.isEmpty(addressString)) {
+                addressString = address.getThoroughfare();
+            }
+            if (TextUtils.isEmpty(addressString)) {
+                addressString = address.getLocality();
+            }
+            bundle.putString(RESULT_DATA_KEY, addressString);
         }
-        if (TextUtils.isEmpty(addressString)) {
-            addressString = address.getLocality();
-        }
-        bundle.putString(RESULT_DATA_KEY, addressString);
-        mReceiver.send(resultCode, bundle);
+            mReceiver.send(resultCode, bundle);
     }
 }
