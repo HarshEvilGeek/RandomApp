@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.zaas.pocketbanker.R;
 
@@ -18,7 +19,7 @@ public class LoginFragment extends Fragment {
 
     EditText custIdField;
     EditText passwordField;
-    Button loginButton;
+    TextView loginButton;
 
     @Nullable
     @Override
@@ -26,7 +27,7 @@ public class LoginFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_login, container,false);
         custIdField = (EditText) rootView.findViewById(R.id.customer_id);
         passwordField = (EditText) rootView.findViewById(R.id.password);
-        loginButton = (Button) rootView.findViewById(R.id.login_button);
+        loginButton = (TextView) rootView.findViewById(R.id.login_button);
 
 
         return rootView;
