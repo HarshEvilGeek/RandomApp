@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.example.zaas.pocketbanker.models.local.Payee;
 import com.google.android.gms.maps.model.LatLng;
@@ -46,8 +47,29 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
 
     public void insertDummyData(SQLiteDatabase db)
     {
+        insertDummyAccountData(db);
         insertDummyPayeeData(db);
         insertDummyBranchAtmData(db);
+    }
+
+    public void insertDummyAccountData(SQLiteDatabase db)
+    {
+        Account account = new Account();
+        account.setAccountNumber("120938029383");
+        account.setBalance(203000);
+        account.setType("Savings");
+        account.setLastUpdateTime(System.currentTimeMillis());
+        db.insert(Tables.ACCOUNTS, null, account.toContentValues());
+        account.setAccountNumber("12398120938");
+        account.setBalance(3243000);
+        account.setType("Current");
+        account.setLastUpdateTime(System.currentTimeMillis());
+        db.insert(Tables.ACCOUNTS, null, account.toContentValues());
+        account.setAccountNumber("90485098232");
+        account.setBalance(4905832);
+        account.setType("Savings");
+        account.setLastUpdateTime(System.currentTimeMillis());
+        db.insert(Tables.ACCOUNTS, null, account.toContentValues());
     }
 
     public void insertDummyPayeeData(SQLiteDatabase db)
