@@ -118,21 +118,29 @@ public class MainActivity extends BaseRestrictedActivity
     private void goToFragment(Fragment fragment) {
         if (fragment != null) {
             if (fragment instanceof IFloatingButtonListener) {
-                floatingButtonListener = (IFloatingButtonListener)fragment;
-                Drawable floatingButtonDrawable = floatingButtonListener.getFloatingButtonDrawable(this);
-                if (floatingButtonDrawable == null) {
-                    floatingButtonListener = null;
-                    fab.setVisibility(View.GONE);
-                } else {
-                    fab.setVisibility(View.VISIBLE);
-                    fab.setImageDrawable(floatingButtonDrawable);
-                }
+                setFloatingButtonListener((IFloatingButtonListener)fragment);
             } else {
-                floatingButtonListener = null;
-                fab.setVisibility(View.GONE);
+                setFloatingButtonListener(null);
             }
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        }
+    }
+
+    public void setFloatingButtonListener(IFloatingButtonListener listener) {
+        floatingButtonListener = listener;
+        if (floatingButtonListener != null) {
+            Drawable floatingButtonDrawable = floatingButtonListener.getFloatingButtonDrawable(this);
+            if (floatingButtonDrawable == null) {
+                floatingButtonListener = null;
+                fab.setVisibility(View.GONE);
+            } else {
+                fab.setVisibility(View.VISIBLE);
+                fab.setImageDrawable(floatingButtonDrawable);
+            }
+        } else {
+            floatingButtonListener = null;
+            fab.setVisibility(View.GONE);
         }
     }
 }
