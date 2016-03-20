@@ -8,9 +8,9 @@ public class SummaryUIItem
 
     private int itemType;
     private String title;
-    private long balance;
+    private double balance;
 
-    public SummaryUIItem(int itemType, String title, long balance)
+    public SummaryUIItem(int itemType, String title, double balance)
     {
         this.itemType = itemType;
         this.title = title;
@@ -37,12 +37,12 @@ public class SummaryUIItem
         this.title = title;
     }
 
-    public long getBalance()
+    public double getBalance()
     {
         return balance;
     }
 
-    public void setBalance(long balance)
+    public void setBalance(double balance)
     {
         this.balance = balance;
     }
