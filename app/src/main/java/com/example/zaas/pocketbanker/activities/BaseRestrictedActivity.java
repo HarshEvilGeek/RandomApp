@@ -16,7 +16,7 @@ public class BaseRestrictedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!SecurityUtils.isAccessAuthorize()) {
+        if (!SecurityUtils.isAccessAuthorized()) {
             Intent intent = new Intent(this, AuthorizationActivity.class);
             startActivity(intent);
         }
@@ -25,7 +25,16 @@ public class BaseRestrictedActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!SecurityUtils.isAccessAuthorize()) {
+        if (!SecurityUtils.isAccessAuthorized()) {
+            Intent intent = new Intent(this, AuthorizationActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if (!SecurityUtils.isAccessAuthorized()) {
             Intent intent = new Intent(this, AuthorizationActivity.class);
             startActivity(intent);
         }
