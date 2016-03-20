@@ -20,7 +20,7 @@ public class BranchAtmAdapter extends RecyclerView.Adapter<BranchAtmAdapter.Bran
 {
     private Context mContext;
     private LayoutInflater mInflater;
-    private List<BranchAtm> mBranchAtmList;
+    private List<BranchAtm> mList;
     private OnClickListener mOnClickListener;
     private OnMapButtonClickListener mOnMapButtonClickListener;
 
@@ -28,7 +28,12 @@ public class BranchAtmAdapter extends RecyclerView.Adapter<BranchAtmAdapter.Bran
     {
         mContext = context;
         mInflater = LayoutInflater.from(context);
-        mBranchAtmList = branchAtmList;
+        mList = branchAtmList;
+    }
+
+    public void updateList(List<BranchAtm> branchAtmList) {
+        mList = branchAtmList;
+        notifyDataSetChanged();
     }
 
     public void setOnClickListener(OnClickListener onClickListener, OnMapButtonClickListener onMapButtonClickListener)
@@ -47,7 +52,7 @@ public class BranchAtmAdapter extends RecyclerView.Adapter<BranchAtmAdapter.Bran
     @Override
     public void onBindViewHolder(BranchAtmViewHolder holder, int position)
     {
-        BranchAtm branchAtm = mBranchAtmList.get(position);
+        BranchAtm branchAtm = mList.get(position);
         holder.name.setText(branchAtm.getName());
         holder.address.setText(branchAtm.getAddress());
     }
@@ -55,7 +60,7 @@ public class BranchAtmAdapter extends RecyclerView.Adapter<BranchAtmAdapter.Bran
     @Override
     public int getItemCount()
     {
-        return mBranchAtmList.size();
+        return mList.size();
     }
 
     public interface OnClickListener
@@ -94,7 +99,7 @@ public class BranchAtmAdapter extends RecyclerView.Adapter<BranchAtmAdapter.Bran
         public void onClick(View v)
         {
             if (mOnClickListener != null) {
-                mOnClickListener.onClick(mBranchAtmList.get(getLayoutPosition()));
+                mOnClickListener.onClick(mList.get(getLayoutPosition()));
             }
         }
     }

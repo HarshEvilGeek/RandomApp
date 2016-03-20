@@ -2,6 +2,7 @@ package com.example.zaas.pocketbanker.activities;
 
 import java.util.List;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -52,7 +53,6 @@ public class ATMBranchMapActivity extends AppCompatActivity implements OnMapRead
         mBranchATMs = PocketBankerDBHelper.getInstance().getAllBranchAtms(this);
         mIsSingleMode = extras.getBoolean(SINGLE_MAP_KEY);
         handleExtras(extras);
-        setCurrentLocation();
         setContentView(R.layout.activity_atm_branch_map);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -67,6 +67,12 @@ public class ATMBranchMapActivity extends AppCompatActivity implements OnMapRead
     {
         if (mIsSingleMode) {
             mSingleBranchAtmID = extras.getInt(SINGLE_BRANCH_ATM_KEY);
+        }
+        Location loc = (Location) extras.get("currentLocation");
+        if (mCurrentLocation != null) {
+            mCurrentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
+        } else {
+            setCurrentLocation();
         }
     }
 
@@ -91,6 +97,9 @@ public class ATMBranchMapActivity extends AppCompatActivity implements OnMapRead
             @Override
             public boolean onMyLocationButtonClick()
             {
+                if (mMap.getMyLocation() != null) {
+                    mCurrentLocation = new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
+                }
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCurrentLocation, 15));
                 return true;
             }

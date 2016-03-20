@@ -1,5 +1,6 @@
 package com.example.zaas.pocketbanker.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Fragment;
@@ -14,10 +15,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zaas.pocketbanker.R;
@@ -39,13 +43,16 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     SwipeRefreshLayout mSwipeContainer;
     RecyclerView mRecyclerView;
     BranchAtmAdapter mAdapter;
-    private List<BranchAtm> mBranchAtmList;
+    private List<BranchAtm> mAtmList = new ArrayList<>();
+    private List<BranchAtm> mBranchList = new ArrayList<>();;
 
     private GoogleApiClient mGoogleApiClient;
     private Location mCurrentLocation;
 
     private ProgressDialog mProgressDialog;
     private AlertDialog mErrorDialog;
+    private TextView mCurrentLocationHeader;
+    private SwitchCompat mBranchAtmToggle;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -58,6 +65,15 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_atm_branch_locator, container, false);
+        mCurrentLocationHeader = (TextView) rootView.findViewById(R.id.current_location);
+        mBranchAtmToggle = (SwitchCompat) rootView.findViewById(R.id.branch_atm_toggle);
+        mBranchAtmToggle.setHighlightColor(getResources().getColor(R.color.colorPrimary));
+        mBranchAtmToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                toggleList(isChecked ? BranchAtm.Type.ATM : BranchAtm.Type.BRANCH);
+            }
+        });
         Button tempMapButton = (Button) rootView.findViewById(R.id.temp_button);
         tempMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +86,14 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         setupRecyclerView(rootView);
 
         return rootView;
+    }
+
+    private void toggleList(BranchAtm.Type type) {
+        if (type == BranchAtm.Type.ATM) {
+            mAdapter.updateList(mAtmList);
+        } else {
+            mAdapter.updateList(mBranchList);
+        }
     }
 
     @Override
@@ -90,6 +114,7 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     private void onFabClick()
     {
         Intent mapIntent = new Intent(getActivity(), ATMBranchMapActivity.class);
+        mapIntent.putExtra("currentLocation", mCurrentLocation);
         mapIntent.putExtra(ATMBranchMapActivity.SINGLE_MAP_KEY, false);
         startActivity(mapIntent);
     }
@@ -99,8 +124,9 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         mSwipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
         mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh()
-            {
+            public void onRefresh() {
+                // get updated location every time user swipes
+                mCurrentLocation = null;
                 syncBranchAtms();
             }
         });
@@ -112,11 +138,22 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     private void setupRecyclerView(View rootView)
     {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
-        mBranchAtmList = PocketBankerDBHelper.getInstance().getAllBranchAtms(getActivity());
-        mAdapter = new BranchAtmAdapter(getActivity(), mBranchAtmList);
+        List<BranchAtm> listAll = PocketBankerDBHelper.getInstance().getAllBranchAtms(getActivity());
+        splitList(listAll);
+        mAdapter = new BranchAtmAdapter(getActivity(), mBranchList);
         mAdapter.setOnClickListener(this, this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
+    }
+
+    private void splitList(List<BranchAtm> listAll) {
+        for (BranchAtm branchAtm : listAll) {
+           if (branchAtm.getType() == BranchAtm.Type.ATM) {
+               mAtmList.add(branchAtm);
+           } else {
+               mBranchList.add(branchAtm);
+           }
+        }
     }
 
     private void syncBranchAtms()
@@ -151,6 +188,7 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     public void onMapButtonClick(int branchAtmID)
     {
         Intent mapIntent = new Intent(getActivity(), ATMBranchMapActivity.class);
+        mapIntent.putExtra("currentLocation", mCurrentLocation);
         mapIntent.putExtra(ATMBranchMapActivity.SINGLE_MAP_KEY, true);
         mapIntent.putExtra(ATMBranchMapActivity.SINGLE_BRANCH_ATM_KEY, branchAtmID);
         startActivity(mapIntent);
@@ -206,6 +244,7 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
             stopLocationProgressDialog();
             Toast.makeText(getActivity(), "Current location determined", Toast.LENGTH_SHORT).show();
             mCurrentLocation = location;
+            mCurrentLocationHeader.setText(mCurrentLocation.toString());
             syncBranchAtms();
         }
     }
