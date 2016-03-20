@@ -23,7 +23,7 @@ public class SecurityUtils {
 
     public static boolean isAccessAuthorized() {
         lastAccessTime = System.currentTimeMillis();
-        return false;
+        return true;
     }
 
     public static boolean isLoginDataStored() {
