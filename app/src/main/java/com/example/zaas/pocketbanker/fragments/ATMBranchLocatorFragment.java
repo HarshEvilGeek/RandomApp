@@ -5,9 +5,11 @@ import java.util.List;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -29,6 +31,7 @@ import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.activities.ATMBranchMapActivity;
 import com.example.zaas.pocketbanker.adapters.BranchAtmAdapter;
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
+import com.example.zaas.pocketbanker.interfaces.IFloatingButtonListener;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -39,7 +42,7 @@ import com.google.android.gms.location.LocationServices;
  */
 public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapter.OnClickListener,
         BranchAtmAdapter.OnMapButtonClickListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener
+        GoogleApiClient.OnConnectionFailedListener, IFloatingButtonListener
 {
     SwipeRefreshLayout mSwipeContainer;
     RecyclerView mRecyclerView;
@@ -76,13 +79,6 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         setClickListeners();
         setupSwipeContainer(rootView);
         setupRecyclerView(rootView);
-        Button tempMapButton = (Button) rootView.findViewById(R.id.temp_button);
-        tempMapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onFabClick();
-            }
-        });
 
         return rootView;
     }
@@ -94,16 +90,30 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
                 toggleList(isChecked ? BranchAtm.Type.ATM : BranchAtm.Type.BRANCH);
             }
         });
+        mAtm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBranchAtmToggle.setChecked(true);
+                toggleList(BranchAtm.Type.ATM);
+            }
+        });
+        mBranch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBranchAtmToggle.setChecked(false);
+                toggleList(BranchAtm.Type.BRANCH);
+            }
+        });
     }
 
     private void toggleList(BranchAtm.Type type) {
         if (type == BranchAtm.Type.ATM) {
             mAdapter.updateList(mAtmList);
             mAtm.setTextColor(getResources().getColor(R.color.colorPrimary));
-            mBranch.setTextColor(Color.DKGRAY);
+            mBranch.setTextColor(Color.GRAY);
         } else {
             mAdapter.updateList(mBranchList);
-            mAtm.setTextColor(Color.DKGRAY);
+            mAtm.setTextColor(Color.GRAY);
             mBranch.setTextColor(getResources().getColor(R.color.colorPrimary));
         }
     }
@@ -121,14 +131,6 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         stopLocationProgressDialog();
         dismissErrorDialog();
         super.onStop();
-    }
-
-    private void onFabClick()
-    {
-        Intent mapIntent = new Intent(getActivity(), ATMBranchMapActivity.class);
-        mapIntent.putExtra("currentLocation", mCurrentLocation);
-        mapIntent.putExtra(ATMBranchMapActivity.SINGLE_MAP_KEY, false);
-        startActivity(mapIntent);
     }
 
     private void setupSwipeContainer(View rootView)
@@ -319,5 +321,18 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
                 mErrorDialog = null;
             }
         }
+    }
+
+    @Override
+    public Drawable getFloatingButtonDrawable(Context context) {
+        return context.getResources().getDrawable(R.drawable.ic_fab_map);
+    }
+
+    @Override
+    public void onFloatingButtonPressed() {
+        Intent mapIntent = new Intent(getActivity(), ATMBranchMapActivity.class);
+        mapIntent.putExtra("currentLocation", mCurrentLocation);
+        mapIntent.putExtra(ATMBranchMapActivity.SINGLE_MAP_KEY, false);
+        startActivity(mapIntent);
     }
 }
