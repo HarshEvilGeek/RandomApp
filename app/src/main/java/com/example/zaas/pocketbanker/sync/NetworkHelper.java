@@ -1,10 +1,12 @@
 package com.example.zaas.pocketbanker.sync;
 
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import retrofit.RestAdapter;
+import retrofit.client.Response;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,7 +22,11 @@ import com.example.zaas.pocketbanker.models.network.LoanAccountSummary;
 import com.example.zaas.pocketbanker.models.network.LoanEMIDetails;
 import com.example.zaas.pocketbanker.models.network.LoanTransactionDetails;
 import com.example.zaas.pocketbanker.models.network.RegisteredPayees;
+import com.example.zaas.pocketbanker.models.network.RequestCode;
 import com.example.zaas.pocketbanker.models.network.Transactions;
+import com.google.gson.Gson;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * Created by zaraahmed on 3/18/16.
@@ -73,13 +79,47 @@ public class NetworkHelper
                     + "&accountno=" + accountNumber;
             Log.i(LOG_TAG, "Fetching account balance for : " + accountNumber + " and href : " + href);
 
-            BalanceEnquiry balanceEnquiry = methods.getBalanceEnquiry(href);
+            Response balanceEnquiryResponse = methods.getBalanceEnquiry(href);
 
-            if (balanceEnquiry != null) {
-                Log.i(LOG_TAG, "data : " + balanceEnquiry);
+            RequestCode requestCode = null;
+            BalanceEnquiry balanceEnquiry = null;
+            Gson gson = new Gson();
+
+            if(balanceEnquiryResponse != null) {
+                InputStream responseStream = balanceEnquiryResponse.getBody().in();
+                if(responseStream != null) {
+                    String responseString = IOUtils.toString(responseStream);
+                    if(!TextUtils.isEmpty(responseString) && responseString.startsWith("[") && responseString.endsWith("]")) {
+                        responseString = responseString.substring(1, responseString.length() - 1);
+                        String[] responseStringArray = responseString.split("\\},");
+                        if(responseStringArray != null) {
+                            //failure
+                            if(responseStringArray.length == 1) {
+
+                                requestCode = gson.fromJson(responseStringArray[0], RequestCode.class);
+
+                            }
+                            //success
+                            else if (responseStringArray.length == 2) {
+
+                                requestCode = gson.fromJson(responseStringArray[0] + "}", RequestCode.class);
+                                balanceEnquiry = gson.fromJson(responseStringArray[1], BalanceEnquiry.class);
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(requestCode != null) {
+                Log.e(LOG_TAG,"response code : " + requestCode);
+            }
+
+            if(balanceEnquiry != null) {
+                Log.e(LOG_TAG,"balanceEnquiry : " + balanceEnquiry);
+            }
 
             }
-        }
         catch (Exception e) {
             Log.e(LOG_TAG, "Exception while fetching balance enquiry", e);
         }
@@ -112,12 +152,47 @@ public class NetworkHelper
             }
             Log.i(LOG_TAG, "Fetching account summary for href : " + href);
 
-            AccountSummary accountSummary = methods.getAccountSummary(href);
+            Response accountSummaryResponse = methods.getAccountSummary(href);
 
-            if (accountSummary != null) {
-                Log.i(LOG_TAG, "data : " + accountSummary);
 
+            RequestCode requestCode = null;
+            AccountSummary accountSummary = null;
+            Gson gson = new Gson();
+
+            if(accountSummaryResponse != null) {
+                InputStream responseStream = accountSummaryResponse.getBody().in();
+                if(responseStream != null) {
+                    String responseString = IOUtils.toString(responseStream);
+                    if(!TextUtils.isEmpty(responseString) && responseString.startsWith("[") && responseString.endsWith("]")) {
+                        responseString = responseString.substring(1, responseString.length() - 1);
+                        String[] responseStringArray = responseString.split("\\},");
+                        if(responseStringArray != null) {
+                            //failure
+                            if(responseStringArray.length == 1) {
+
+                                requestCode = gson.fromJson(responseStringArray[0], RequestCode.class);
+
+                            }
+                            //success
+                            else if (responseStringArray.length == 2) {
+
+                                requestCode = gson.fromJson(responseStringArray[0] + "}", RequestCode.class);
+                                accountSummary = gson.fromJson(responseStringArray[1], AccountSummary.class);
+
+                            }
+                        }
+                    }
+                }
             }
+
+            if(requestCode != null) {
+                Log.e(LOG_TAG,"response code : " + requestCode);
+            }
+
+            if(accountSummary != null) {
+                Log.e(LOG_TAG,"accountSummary : " + accountSummary);
+            }
+
         }
         catch (Exception e) {
             Log.e(LOG_TAG, "Exception while fetching account summary", e);
@@ -137,12 +212,48 @@ public class NetworkHelper
                     + "&accountno=" + accountNumber + "&days=" + noOfDays;
             Log.i(LOG_TAG, "Fetching transaction history for href : " + href);
 
-            Transactions transactions = methods.getTransactions(href);
+            Response transactionsResponse = methods.getTransactions(href);
 
-            if (transactions != null) {
-                Log.i(LOG_TAG, "data : " + transactions);
 
+            RequestCode requestCode = null;
+            Transactions transactions = null;
+            Gson gson = new Gson();
+
+            if(transactionsResponse != null) {
+                InputStream responseStream = transactionsResponse.getBody().in();
+                if(responseStream != null) {
+                    String responseString = IOUtils.toString(responseStream);
+                    if(!TextUtils.isEmpty(responseString) && responseString.startsWith("[") && responseString.endsWith("]")) {
+                        responseString = responseString.substring(1, responseString.length() - 1);
+                        String[] responseStringArray = responseString.split("\\},");
+                        if(responseStringArray != null) {
+                            //failure
+                            if(responseStringArray.length == 1) {
+
+                                requestCode = gson.fromJson(responseStringArray[0], RequestCode.class);
+
+                            }
+                            //success
+                            else if (responseStringArray.length == 2) {
+
+                                requestCode = gson.fromJson(responseStringArray[0] + "}", RequestCode.class);
+                                transactions = gson.fromJson(responseStringArray[1], Transactions.class);
+
+                            }
+                        }
+                    }
+                }
             }
+
+            if(requestCode != null) {
+                Log.e(LOG_TAG,"response code : " + requestCode);
+            }
+
+            if(transactions != null) {
+                Log.e(LOG_TAG,"transactions : " + transactions);
+            }
+
+
         }
         catch (Exception e) {
             Log.e(LOG_TAG, "Exception while fetching transactions", e);
@@ -166,12 +277,47 @@ public class NetworkHelper
                     + df.format(endDate);
             Log.i(LOG_TAG, "Fetching transaction history for href : " + href);
 
-            Transactions transactions = methods.getTransactions(href);
+            Response transactionsResponse = methods.getTransactions(href);
 
-            if (transactions != null) {
-                Log.i(LOG_TAG, "data : " + transactions);
 
+            RequestCode requestCode = null;
+            Transactions transactions = null;
+            Gson gson = new Gson();
+
+            if(transactionsResponse != null) {
+                InputStream responseStream = transactionsResponse.getBody().in();
+                if(responseStream != null) {
+                    String responseString = IOUtils.toString(responseStream);
+                    if(!TextUtils.isEmpty(responseString) && responseString.startsWith("[") && responseString.endsWith("]")) {
+                        responseString = responseString.substring(1, responseString.length() - 1);
+                        String[] responseStringArray = responseString.split("\\},");
+                        if(responseStringArray != null) {
+                            //failure
+                            if(responseStringArray.length == 1) {
+
+                                requestCode = gson.fromJson(responseStringArray[0], RequestCode.class);
+
+                            }
+                            //success
+                            else if (responseStringArray.length == 2) {
+
+                                requestCode = gson.fromJson(responseStringArray[0] + "}", RequestCode.class);
+                                transactions = gson.fromJson(responseStringArray[1], Transactions.class);
+
+                            }
+                        }
+                    }
+                }
             }
+
+            if(requestCode != null) {
+                Log.e(LOG_TAG,"response code : " + requestCode);
+            }
+
+            if(transactions != null) {
+                Log.e(LOG_TAG, "transactions : " + transactions);
+            }
+
         }
         catch (Exception e) {
             Log.e(LOG_TAG, "Exception while fetching transactions", e);
@@ -191,12 +337,46 @@ public class NetworkHelper
                     + "&accountno=" + accountNumber;
             Log.i(LOG_TAG, "Fetching behaviour score for href : " + href);
 
-            BehaviorScore behaviour = methods.getBehaviorScore(href);
+            Response behaviourResponse = methods.getBehaviorScore(href);
 
-            if (behaviour != null) {
-                Log.i(LOG_TAG, "data : " + behaviour);
+            RequestCode requestCode = null;
+            BehaviorScore behaviorScore = null;
+            Gson gson = new Gson();
 
+            if(behaviourResponse != null) {
+                InputStream responseStream = behaviourResponse.getBody().in();
+                if(responseStream != null) {
+                    String responseString = IOUtils.toString(responseStream);
+                    if(!TextUtils.isEmpty(responseString) && responseString.startsWith("[") && responseString.endsWith("]")) {
+                        responseString = responseString.substring(1, responseString.length() - 1);
+                        String[] responseStringArray = responseString.split("\\},");
+                        if(responseStringArray != null) {
+                            //failure
+                            if(responseStringArray.length == 1) {
+
+                                requestCode = gson.fromJson(responseStringArray[0], RequestCode.class);
+
+                            }
+                            //success
+                            else if (responseStringArray.length == 2) {
+
+                                requestCode = gson.fromJson(responseStringArray[0] + "}", RequestCode.class);
+                                behaviorScore = gson.fromJson(responseStringArray[1], BehaviorScore.class);
+
+                            }
+                        }
+                    }
+                }
             }
+
+            if(requestCode != null) {
+                Log.e(LOG_TAG,"response code : " + requestCode);
+            }
+
+            if(behaviorScore != null) {
+                Log.e(LOG_TAG, "behaviorScore : " + behaviorScore);
+            }
+
         }
         catch (Exception e) {
             Log.e(LOG_TAG, "Exception while fetching bevahiour score", e);

@@ -31,7 +31,7 @@ public class AccountSummaryFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        // testAccountSummary();
+        testAccountSummary();
     }
 
     @Nullable
@@ -63,7 +63,13 @@ public class AccountSummaryFragment extends Fragment
             @Override
             public void run()
             {
-                new NetworkHelper().fetchAccountBalance("5555666677770949");
+                NetworkHelper nh = new NetworkHelper();
+                // new NetworkHelper().fetchAccountBalance("5555666677770949");
+               nh.fetchAccountSummary("5555666677770949", "88881949");
+                nh.fetchAccountSummary("5555666677770949", null);
+                nh.fetchAccountSummary(null, "88881949");
+                nh.fetchTransactionHistoryForDays("5555666677770949", 5);
+                nh.fetchBehaviorScore("5555666677770949");
             }
         }).start();
     }

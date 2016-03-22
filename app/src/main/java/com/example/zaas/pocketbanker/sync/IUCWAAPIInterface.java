@@ -7,7 +7,6 @@ import retrofit.http.Path;
 
 import com.example.zaas.pocketbanker.models.network.AccountSummary;
 import com.example.zaas.pocketbanker.models.network.AuthToken;
-import com.example.zaas.pocketbanker.models.network.BalanceEnquiry;
 import com.example.zaas.pocketbanker.models.network.BehaviorScore;
 import com.example.zaas.pocketbanker.models.network.BranchAtmLocations;
 import com.example.zaas.pocketbanker.models.network.CardAccDetailsResponse;
@@ -28,16 +27,16 @@ public interface IUCWAAPIInterface
     AuthToken getToken(@Path ("tokenUrl") String tokenUrl);
 
     @GET ("/{balanceEnquiryUrl}")
-    BalanceEnquiry getBalanceEnquiry(@Path (value = "balanceEnquiryUrl", encode = false) String balanceEnquiryUrl);
+    Response getBalanceEnquiry(@Path (value = "balanceEnquiryUrl", encode = false) String balanceEnquiryUrl);
 
     @GET ("/{accountSummaryUrl}")
-    AccountSummary getAccountSummary(@Path (value = "accountSummaryUrl", encode = false) String accountSummaryUrl);
+    Response getAccountSummary(@Path (value = "accountSummaryUrl", encode = false) String accountSummaryUrl);
 
     @GET ("/{transactionsUrl}")
-    Transactions getTransactions(@Path (value = "transactionsUrl", encode = false) String transactionsUrl);
+    Response getTransactions(@Path (value = "transactionsUrl", encode = false) String transactionsUrl);
 
     @GET ("/{behaviorScoreUrl}")
-    BehaviorScore getBehaviorScore(@Path (value = "behaviorScoreUrl", encode = false) String behaviorScoreUrl);
+    Response getBehaviorScore(@Path (value = "behaviorScoreUrl", encode = false) String behaviorScoreUrl);
 
     @GET ("/{registeredPayeesUrl}")
     RegisteredPayees getRegisteredPayees(@Path (value = "registeredPayeesUrl", encode = false) String registeredPayeesUrl);
