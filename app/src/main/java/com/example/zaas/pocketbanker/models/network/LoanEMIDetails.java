@@ -8,6 +8,10 @@ import com.google.gson.annotations.SerializedName;
 public class LoanEMIDetails
 {
 
+    private String errorCode;
+
+    private String errorDescripttion;
+
     @SerializedName ("no_of_EMIs")
     String noOfEmis;
 
@@ -96,11 +100,32 @@ public class LoanEMIDetails
         this.statement = statement;
     }
 
+    public String getErrorCode()
+    {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode)
+    {
+        this.errorCode = errorCode;
+    }
+
+    public String getErrorDescripttion()
+    {
+        return errorDescripttion;
+    }
+
+    public void setErrorDescripttion(String errorDescripttion)
+    {
+        this.errorDescripttion = errorDescripttion;
+    }
+
     @Override
     public String toString()
     {
-        return "LoanEMIDetails{" + "noOfEmis='" + noOfEmis + '\'' + ", emiDates='" + emiDates + '\''
-                + ", lastThreeEmis='" + lastThreeEmis + '\'' + ", code=" + code + ", message='" + message + '\''
-                + ", bankTransId='" + bankTransId + '\'' + ", statement='" + statement + '\'' + '}';
+        return "LoanEMIDetails{" + "errorCode='" + errorCode + '\'' + ", errorDescripttion='" + errorDescripttion
+                + '\'' + ", noOfEmis='" + noOfEmis + '\'' + ", emiDates='" + emiDates + '\'' + ", lastThreeEmis='"
+                + lastThreeEmis + '\'' + ", code=" + code + ", message='" + message + '\'' + ", bankTransId='"
+                + bankTransId + '\'' + ", statement='" + statement + '\'' + '}';
     }
 }

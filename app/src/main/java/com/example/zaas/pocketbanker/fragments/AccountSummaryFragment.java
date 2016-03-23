@@ -1,6 +1,9 @@
 package com.example.zaas.pocketbanker.fragments;
 
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Fragment;
@@ -65,11 +68,26 @@ public class AccountSummaryFragment extends Fragment
             {
                 NetworkHelper nh = new NetworkHelper();
                 // new NetworkHelper().fetchAccountBalance("5555666677770949");
-               nh.fetchAccountSummary("5555666677770949", "88881949");
-                nh.fetchAccountSummary("5555666677770949", null);
-                nh.fetchAccountSummary(null, "88881949");
-                nh.fetchTransactionHistoryForDays("5555666677770949", 5);
-                nh.fetchBehaviorScore("5555666677770949");
+               // nh.fetchAccountSummary("5555666677770949", "88881949");
+                // nh.fetchAccountSummary("5555666677770949", null);
+                // nh.fetchAccountSummary(null, "88881949");
+                //nh.fetchTransactionHistoryForDays("5555666677770949", 5);
+                //nh.fetchTransactionHistoryForPeriod("5555666677770949",new Date(System.currentTimeMillis() - (24 * 60 * 60 * 1000)), new Date(System.currentTimeMillis()));
+                // nh.fetchBehaviorScore("5555666677770949");
+
+                // nh.getRegisteredPayees("88881949");
+
+                try {
+                    String testDesc = URLEncoder.encode("test description", "UTF-8");
+                    nh.transferFunds("88881949", "5555666677770950", "5555666677770949", 10000, testDesc, 1, "PMR");
+                    //nh.getBranchAtmLocations("ATM", 72.9376984, 19.1445007);
+                    nh.getLoanAccountSummary("88881949");
+                    nh.getLoanEMIDetails("LBMUM11112220949");
+                    nh.getLoanTransactionDetails("LBMUM11112220949");
+                    // nh.getCardAccountDetails("88881949");
+                }catch (Exception e) {
+
+                }
             }
         }).start();
     }

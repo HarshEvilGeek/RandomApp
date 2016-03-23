@@ -3,7 +3,11 @@ package com.example.zaas.pocketbanker.sync;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.io.IOUtils;
 
 import retrofit.RestAdapter;
 import retrofit.client.Response;
@@ -25,8 +29,6 @@ import com.example.zaas.pocketbanker.models.network.RegisteredPayees;
 import com.example.zaas.pocketbanker.models.network.RequestCode;
 import com.example.zaas.pocketbanker.models.network.Transactions;
 import com.google.gson.Gson;
-
-import org.apache.commons.io.IOUtils;
 
 /**
  * Created by zaraahmed on 3/18/16.
@@ -216,7 +218,7 @@ public class NetworkHelper
 
 
             RequestCode requestCode = null;
-            Transactions transactions = null;
+            List<Transactions> transactions = new ArrayList<>();
             Gson gson = new Gson();
 
             if(transactionsResponse != null) {
@@ -234,10 +236,24 @@ public class NetworkHelper
 
                             }
                             //success
-                            else if (responseStringArray.length == 2) {
+                            else if (responseStringArray.length > 1) {
+
+
+                                for(int i = 1; i < responseStringArray.length; i ++) {
+                                    Transactions transaction = null;
+                                    if(i != (responseStringArray.length - 1) ){
+                                        transaction =  gson.fromJson(responseStringArray[i] + "}", Transactions.class);
+                                    }
+                                    else {
+                                        transaction = gson.fromJson(responseStringArray[i] , Transactions.class);
+                                    }
+
+                                    if(transaction != null) {
+                                        transactions.add(transaction);
+                                    }
+                                }
 
                                 requestCode = gson.fromJson(responseStringArray[0] + "}", RequestCode.class);
-                                transactions = gson.fromJson(responseStringArray[1], Transactions.class);
 
                             }
                         }
@@ -250,7 +266,10 @@ public class NetworkHelper
             }
 
             if(transactions != null) {
-                Log.e(LOG_TAG,"transactions : " + transactions);
+                Log.e(LOG_TAG, "no of branch atm locations" + transactions.size());
+                for(Transactions transaction : transactions) {
+                    Log.e(LOG_TAG," branch atm location : " + transaction);
+                }
             }
 
 
@@ -281,7 +300,7 @@ public class NetworkHelper
 
 
             RequestCode requestCode = null;
-            Transactions transactions = null;
+            List<Transactions> transactions = new ArrayList<>();
             Gson gson = new Gson();
 
             if(transactionsResponse != null) {
@@ -299,10 +318,24 @@ public class NetworkHelper
 
                             }
                             //success
-                            else if (responseStringArray.length == 2) {
+                            else if (responseStringArray.length > 1) {
+
+
+                                for(int i = 1; i < responseStringArray.length; i ++) {
+                                    Transactions transaction = null;
+                                    if(i != (responseStringArray.length - 1) ){
+                                        transaction =  gson.fromJson(responseStringArray[i] + "}", Transactions.class);
+                                    }
+                                    else {
+                                        transaction = gson.fromJson(responseStringArray[i] , Transactions.class);
+                                    }
+
+                                    if(transaction != null) {
+                                        transactions.add(transaction);
+                                    }
+                                }
 
                                 requestCode = gson.fromJson(responseStringArray[0] + "}", RequestCode.class);
-                                transactions = gson.fromJson(responseStringArray[1], Transactions.class);
 
                             }
                         }
@@ -315,7 +348,10 @@ public class NetworkHelper
             }
 
             if(transactions != null) {
-                Log.e(LOG_TAG, "transactions : " + transactions);
+                Log.e(LOG_TAG, "no of branch atm locations" + transactions.size());
+                for(Transactions transaction : transactions) {
+                    Log.e(LOG_TAG," branch atm location : " + transaction);
+                }
             }
 
         }
@@ -396,12 +432,64 @@ public class NetworkHelper
                     + "&custid=" + customerId;
             Log.i(LOG_TAG, "Fetching registered payees for href : " + href);
 
-            RegisteredPayees registeredPayees = methods.getRegisteredPayees(href);
+            Response registeredPayeeResponse = methods.getRegisteredPayees(href);
 
-            if (registeredPayees != null) {
-                Log.i(LOG_TAG, "data : " + registeredPayees);
 
+            RequestCode requestCode = null;
+            List<RegisteredPayees> registeredPayeesList = new ArrayList<>();
+            Gson gson = new Gson();
+
+            if(registeredPayeeResponse != null) {
+                InputStream responseStream = registeredPayeeResponse.getBody().in();
+                if(responseStream != null) {
+                    String responseString = IOUtils.toString(responseStream);
+                    if(!TextUtils.isEmpty(responseString) && responseString.startsWith("[") && responseString.endsWith("]")) {
+                        responseString = responseString.substring(1, responseString.length() - 1);
+                        String[] responseStringArray = responseString.split("\\},");
+                        if(responseStringArray != null) {
+                            //failure
+                            if(responseStringArray.length == 1) {
+
+                                requestCode = gson.fromJson(responseStringArray[0], RequestCode.class);
+
+                            }
+                            //success
+                            else if (responseStringArray.length > 1) {
+
+
+                                for(int i = 1; i < responseStringArray.length; i ++) {
+                                    RegisteredPayees registeredPayee = null;
+                                    if(i != (responseStringArray.length - 1) ){
+                                        registeredPayee =  gson.fromJson(responseStringArray[i] + "}", RegisteredPayees.class);
+                                    }
+                                    else {
+                                        registeredPayee = gson.fromJson(responseStringArray[i] , RegisteredPayees.class);
+                                    }
+
+                                    if(registeredPayee != null) {
+                                        registeredPayeesList.add(registeredPayee);
+                                    }
+                                }
+
+                                requestCode = gson.fromJson(responseStringArray[0] + "}", RequestCode.class);
+
+                            }
+                        }
+                    }
+                }
             }
+
+            if(requestCode != null) {
+                Log.e(LOG_TAG,"response code : " + requestCode);
+            }
+
+            if(registeredPayeesList != null) {
+                Log.e(LOG_TAG, "No of registered payees : " + registeredPayeesList.size());
+                for(RegisteredPayees regPayee : registeredPayeesList) {
+                    Log.e(LOG_TAG,"\n regostered payee : : " + regPayee);
+                }
+            }
+
         }
         catch (Exception e) {
             Log.e(LOG_TAG, "Exception while fetching registeredPayees", e);
@@ -409,7 +497,7 @@ public class NetworkHelper
 
     }
 
-    public void getBranchAtmLocations(String type, long latitude, long longitude)
+    public void getBranchAtmLocations(String type, double latitude, double longitude)
     {
         try {
 
@@ -421,12 +509,65 @@ public class NetworkHelper
                     + "&locate=" + type + "&lat=" + latitude + "&long=" + longitude;
             Log.i(LOG_TAG, "Fetching branch atm locations for href : " + href);
 
-            BranchAtmLocations branchAtmLocations = methods.getBranchAtmLocations(href);
+            Response branchAtmLocationsResponse = methods.getBranchAtmLocations(href);
 
-            if (branchAtmLocations != null) {
-                Log.i(LOG_TAG, "data : " + branchAtmLocations);
+            RequestCode requestCode = null;
+            List<BranchAtmLocations> branchAtmLocations = new ArrayList<>();
+            Gson gson = new Gson();
 
+            if(branchAtmLocationsResponse != null) {
+                InputStream responseStream = branchAtmLocationsResponse.getBody().in();
+                if(responseStream != null) {
+                    String responseString = IOUtils.toString(responseStream);
+                    if(!TextUtils.isEmpty(responseString) && responseString.startsWith("[") && responseString.endsWith("]")) {
+                        responseString = responseString.substring(1, responseString.length() - 1);
+                        String[] responseStringArray = responseString.split("\\},");
+                        if(responseStringArray != null) {
+                            //failure
+                            if(responseStringArray.length == 1) {
+
+                                requestCode = gson.fromJson(responseStringArray[0], RequestCode.class);
+
+                            }
+
+                            //success
+                            else if (responseStringArray.length > 1) {
+
+
+                                for(int i = 1; i < responseStringArray.length; i ++) {
+                                    BranchAtmLocations branchAtmLocation = null;
+                                    if(i != (responseStringArray.length - 1) ){
+                                        branchAtmLocation =  gson.fromJson(responseStringArray[i] + "}", BranchAtmLocations.class);
+                                    }
+                                    else {
+                                        branchAtmLocation = gson.fromJson(responseStringArray[i] , BranchAtmLocations.class);
+                                    }
+
+                                    if(branchAtmLocation != null) {
+                                        branchAtmLocations.add(branchAtmLocation);
+                                    }
+                                }
+
+                                requestCode = gson.fromJson(responseStringArray[0] + "}", RequestCode.class);
+
+                            }
+
+                        }
+                    }
+                }
             }
+
+            if(requestCode != null) {
+                Log.e(LOG_TAG,"response code : " + requestCode);
+            }
+
+            if(branchAtmLocations != null) {
+                Log.e(LOG_TAG, "no of branch atm locations" + branchAtmLocations.size());
+                for(BranchAtmLocations batmLocations : branchAtmLocations) {
+                    Log.e(LOG_TAG," branch atm location : " + batmLocations);
+                }
+            }
+
         }
         catch (Exception e) {
             Log.e(LOG_TAG, "Exception while fetching branchAtmLocations", e);
@@ -512,12 +653,46 @@ public class NetworkHelper
 
             Log.i(LOG_TAG, "transferring funds for href : " + href);
 
-            FundTransfer fundTransfer = methods.makeTransaction(href);
+            Response fundTransferResponse = methods.makeTransaction(href);
 
-            if (fundTransfer != null) {
-                Log.i(LOG_TAG, "data : " + fundTransfer);
+            RequestCode requestCode = null;
+            FundTransfer fundTransfer = null;
+            Gson gson = new Gson();
 
+            if(fundTransferResponse != null) {
+                InputStream responseStream = fundTransferResponse.getBody().in();
+                if(responseStream != null) {
+                    String responseString = IOUtils.toString(responseStream);
+                    if(!TextUtils.isEmpty(responseString) && responseString.startsWith("[") && responseString.endsWith("]")) {
+                        responseString = responseString.substring(1, responseString.length() - 1);
+                        String[] responseStringArray = responseString.split("\\},");
+                        if(responseStringArray != null) {
+                            //failure
+                            if(responseStringArray.length == 1) {
+
+                                requestCode = gson.fromJson(responseStringArray[0], RequestCode.class);
+
+                            }
+                            //success
+                            else if (responseStringArray.length == 2) {
+
+                                requestCode = gson.fromJson(responseStringArray[0] + "}", RequestCode.class);
+                                fundTransfer = gson.fromJson(responseStringArray[1], FundTransfer.class);
+
+                            }
+                        }
+                    }
+                }
             }
+
+            if(requestCode != null) {
+                Log.e(LOG_TAG,"response code : " + requestCode);
+            }
+
+            if(fundTransfer != null) {
+                Log.e(LOG_TAG, "fundTransfer : " + fundTransfer);
+            }
+
         }
         catch (Exception e) {
             Log.e(LOG_TAG, "Exception while making transaction", e);

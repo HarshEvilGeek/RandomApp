@@ -39,13 +39,13 @@ public interface IUCWAAPIInterface
     Response getBehaviorScore(@Path (value = "behaviorScoreUrl", encode = false) String behaviorScoreUrl);
 
     @GET ("/{registeredPayeesUrl}")
-    RegisteredPayees getRegisteredPayees(@Path (value = "registeredPayeesUrl", encode = false) String registeredPayeesUrl);
+    Response getRegisteredPayees(@Path (value = "registeredPayeesUrl", encode = false) String registeredPayeesUrl);
 
-    @POST("/{makeTransactionUrl}")
-    FundTransfer makeTransaction(@Path (value = "makeTransactionUrl", encode = false) String makeTransactionUrl);
+    @GET("/{makeTransactionUrl}")
+    Response makeTransaction(@Path (value = "makeTransactionUrl", encode = false) String makeTransactionUrl);
 
     @GET ("/{branchAtmLocationUrl}")
-    BranchAtmLocations getBranchAtmLocations(@Path (value = "branchAtmLocationUrl", encode = false) String branchAtmLocationUrl);
+    Response getBranchAtmLocations(@Path (value = "branchAtmLocationUrl", encode = false) String branchAtmLocationUrl);
 
     @GET ("/{loanAccountSummaryUrl}")
     LoanAccountSummary getLoanAccountSummary(@Path (value = "loanAccountSummaryUrl", encode = false) String loanAccountSummaryUrl);

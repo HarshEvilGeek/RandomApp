@@ -14,9 +14,9 @@ public class LoanTransactionDetails
     @SerializedName ("payment_mode")
     String paymentMode;
 
-    int code;
+    private String errorCode;
 
-    String message;
+    private String errorDescripttion;
 
     @SerializedName ("bank_txn_id")
     String bankTransId;
@@ -43,26 +43,6 @@ public class LoanTransactionDetails
         this.paymentMode = paymentMode;
     }
 
-    public int getCode()
-    {
-        return code;
-    }
-
-    public void setCode(int code)
-    {
-        this.code = code;
-    }
-
-    public String getMessage()
-    {
-        return message;
-    }
-
-    public void setMessage(String message)
-    {
-        this.message = message;
-    }
-
     public String getBankTransId()
     {
         return bankTransId;
@@ -83,11 +63,31 @@ public class LoanTransactionDetails
         this.statement = statement;
     }
 
+    public String getErrorCode()
+    {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode)
+    {
+        this.errorCode = errorCode;
+    }
+
+    public String getErrorDescripttion()
+    {
+        return errorDescripttion;
+    }
+
+    public void setErrorDescripttion(String errorDescripttion)
+    {
+        this.errorDescripttion = errorDescripttion;
+    }
+
     @Override
     public String toString()
     {
         return "LoanTransactionDetails{" + "lastPaymentMade=" + lastPaymentMade + ", paymentMode='" + paymentMode
-                + '\'' + ", code=" + code + ", message='" + message + '\'' + ", bankTransId='" + bankTransId + '\''
-                + ", statement='" + statement + '\'' + '}';
+                + '\'' + ", errorCode='" + errorCode + '\'' + ", errorDescripttion='" + errorDescripttion + '\''
+                + ", bankTransId='" + bankTransId + '\'' + ", statement='" + statement + '\'' + '}';
     }
 }
