@@ -104,5 +104,6 @@ public class PinOrFingerprintFragment extends Fragment {
     private void goToMainActivity() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         getActivity().startActivity(intent);
+        getActivity().finish();
     }
 }
