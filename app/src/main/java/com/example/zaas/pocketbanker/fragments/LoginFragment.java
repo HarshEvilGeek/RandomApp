@@ -39,7 +39,7 @@ public class LoginFragment extends Fragment {
                 String custId = custIdField.getText().toString();
                 String password = passwordField.getText().toString();
                 if (!TextUtils.isEmpty(custId) && !TextUtils.isEmpty(password)) {
-                    ((AuthorizationActivity)getActivity()).login(custId, password);
+                    ((AuthorizationActivity)getActivity()).login(custId, password, v);
                 } else{
                     Toast.makeText(getActivity(), "Must enter customer ID and password", Toast.LENGTH_LONG).show();
                 }

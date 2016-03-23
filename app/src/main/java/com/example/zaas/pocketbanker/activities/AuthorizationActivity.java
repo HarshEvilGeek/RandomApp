@@ -1,10 +1,13 @@
 package com.example.zaas.pocketbanker.activities;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.fragments.LoginFragment;
@@ -48,8 +51,10 @@ public class AuthorizationActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void login(String custId, String pass) {
+    public void login(String custId, String pass, View view) {
         if (loginInProgress) return;
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         userName = custId;
         password = pass;
         loginInProgress = true;
@@ -72,8 +77,9 @@ public class AuthorizationActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             if ("SUCCESS".equals(s)) {
                 loginInProgress = false;
+                SecurityUtils.setAccessToken("AccessToken");
                 Bundle args = new Bundle();
-                args.putBoolean(PinOrFingerprintFragment.CREATE_PIN_KEY, false);
+                args.putBoolean(PinOrFingerprintFragment.CREATE_PIN_KEY, true);
                 args.putString(PinOrFingerprintFragment.USER_NAME_KEY, userName);
                 args.putString(PinOrFingerprintFragment.PASSWORD_KEY, password);
                 goToFragment(FRAGMENT_PIN, args);
