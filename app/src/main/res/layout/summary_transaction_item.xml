@@ -8,8 +8,6 @@
     android:layout_marginLeft="@dimen/card_margin"
     android:layout_marginRight="@dimen/card_margin"
     android:layout_marginTop="@dimen/card_margin_small"
-    android:padding="5dp"
-    card_view:cardElevation="5dp"
     card_view:cardCornerRadius="4dp">
 
     <LinearLayout
@@ -24,19 +22,20 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:paddingLeft="10dp"
             android:gravity="center" />
 
-  <!--      <View
-            android:layout_width="0.3dp"
-            android:layout_height="match_parent"
-            android:background="#000000" /> -->
+        <!--      <View
+                  android:layout_width="0.3dp"
+                  android:layout_height="match_parent"
+                  android:background="#000000" /> -->
 
         <TextView
             android:id="@+id/summary_balance_tv"
             style="@style/Base.TextAppearance.AppCompat.Small"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="50dp"
+            android:paddingLeft="50dp"
             android:layout_weight="1"
             android:gravity="center_vertical" />
 

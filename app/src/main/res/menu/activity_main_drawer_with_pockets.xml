@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/account_summary"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Account Summary" />
+        <item
+            android:id="@+id/transactions"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Transactions" />
+        <item
+            android:id="@+id/transfer_funds"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Transfer Funds" />
+        <item
+            android:id="@+id/atm_branch_locator"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="ATM/Branch Locator" />
+        <item
+            android:id="@+id/analytics"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Analytics" />
+        <item
+            android:id="@+id/recommendations"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Recommendations" />
+    </group>
+
+    <item android:title="Pockets">
+        <menu>
+            <item
+                android:id="@+id/pockets_home"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Home" />
+            <item
+                android:id="@+id/pockets_add_money"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Add Money" />
+            <item
+                android:id="@+id/pockets_buy_item"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Buy Item" />
+            <item
+                android:id="@+id/pockets_friends"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Friends" />
+        </menu>
+    </item>
+
+    <item android:title="Help">
+        <menu>
+            <item
+                android:id="@+id/chat_bot"
+                android:icon="@drawable/ic_menu_share"
+                android:title="ICICI Bot" />
+
+            <item
+                android:id="@+id/contact_us"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Contact Us" />
+        </menu>
+    </item>
+
+    <item android:title="Settings">
+        <menu>
+            <item
+                android:id="@+id/notifications"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Notifications" />
+
+            <item
+                android:id="@+id/log_out"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Log Out" />
+        </menu>
+    </item>
+
+
+</menu>

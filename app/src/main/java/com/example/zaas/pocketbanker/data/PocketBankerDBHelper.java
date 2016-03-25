@@ -20,6 +20,7 @@ import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.example.zaas.pocketbanker.models.local.DbModel;
 import com.example.zaas.pocketbanker.models.local.Payee;
+import com.example.zaas.pocketbanker.models.local.Recommendation;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.local.TransactionCategory;
 
@@ -102,6 +103,29 @@ public class PocketBankerDBHelper
             }
         }
         return payeeList;
+    }
+
+    public List<Recommendation> getAllRecommendations()
+    {
+        Cursor c = null;
+        List<Recommendation> recommendationList = new ArrayList<>();
+        try {
+            c = context.getContentResolver().query(PocketBankerProvider.CONTENT_URI_RECOMMEDATIONS, null, null, null,
+                    null);
+            if (c != null) {
+                while (c.moveToNext()) {
+                    Recommendation recommendation = new Recommendation();
+                    recommendation.instantiateFromCursor(c);
+                    recommendationList.add(recommendation);
+                }
+            }
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return recommendationList;
     }
 
     public List<Transaction> getAllTransactions()

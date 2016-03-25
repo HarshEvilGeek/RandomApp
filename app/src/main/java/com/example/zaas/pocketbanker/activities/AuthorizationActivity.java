@@ -1,6 +1,7 @@
 package com.example.zaas.pocketbanker.activities;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ public class AuthorizationActivity extends AppCompatActivity {
     String userName;
     String password;
 
+    ProgressDialog loginInProgressDialog;
     boolean loginInProgress = false;
 
     @Override
@@ -58,6 +60,9 @@ public class AuthorizationActivity extends AppCompatActivity {
         userName = custId;
         password = pass;
         loginInProgress = true;
+        loginInProgressDialog = new ProgressDialog(this);
+        loginInProgressDialog.setMessage("Logging in...");
+        loginInProgressDialog.show();
         new LoginTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, userName, password);
     }
 
@@ -75,8 +80,9 @@ public class AuthorizationActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
+            loginInProgressDialog.dismiss();
+            loginInProgress = false;
             if ("SUCCESS".equals(s)) {
-                loginInProgress = false;
                 SecurityUtils.setAccessToken("AccessToken");
                 Bundle args = new Bundle();
                 args.putBoolean(PinOrFingerprintFragment.CREATE_PIN_KEY, true);

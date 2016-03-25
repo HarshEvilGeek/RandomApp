@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.zaas.pocketbanker.interfaces.IDataChangeListener;
@@ -43,6 +44,8 @@ public class PocketBankerProvider extends ContentProvider
             + PocketBankerOpenHelper.Tables.CARDS);
     public static final Uri CONTENT_URI_TRANSACTION_CATEGORIES = Uri.parse("content://"
             + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.TRANSACTION_CATEGORIES);
+    public static final Uri CONTENT_URI_RECOMMEDATIONS = Uri.parse("content://"
+            + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.RECOMMENDATIONS);
 
     private static final String TAG = "PocketBankerProvider";
 
@@ -63,6 +66,9 @@ public class PocketBankerProvider extends ContentProvider
     private static final int BRANCH_ATMS_ALL_ROWS = 15;
     private static final int BRANCH_ATM = 16;
     private static final int TRANSACTION_CATEGORIES_ALL_ROWS = 17;
+    private static final int TRANSACTION_CATEGORY = 18;
+    private static final int RECOMMENDATIONS_ALL_ROWS = 19;
+    private static final int RECOMMENDATION = 20;
 
     private static final UriMatcher uriMatcher;
 
@@ -97,6 +103,12 @@ public class PocketBankerProvider extends ContentProvider
         uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.CARDS + "/#", CARD);
         uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.TRANSACTION_CATEGORIES,
                 TRANSACTION_CATEGORIES_ALL_ROWS);
+        uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.TRANSACTION_CATEGORIES
+                + "/#", TRANSACTION_CATEGORY);
+        uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.RECOMMENDATIONS,
+                RECOMMENDATIONS_ALL_ROWS);
+        uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.RECOMMENDATIONS + "/#",
+                RECOMMENDATION);
     }
 
     private PocketBankerOpenHelper pocketBankerOpenHelper;
@@ -143,7 +155,11 @@ public class PocketBankerProvider extends ContentProvider
         case CARD:
             return PocketBankerOpenHelper.Tables.CARDS;
         case TRANSACTION_CATEGORIES_ALL_ROWS:
+        case TRANSACTION_CATEGORY:
             return PocketBankerOpenHelper.Tables.TRANSACTION_CATEGORIES;
+        case RECOMMENDATIONS_ALL_ROWS:
+        case RECOMMENDATION:
+            return PocketBankerOpenHelper.Tables.RECOMMENDATIONS;
         }
         return null;
     }
@@ -161,13 +177,14 @@ public class PocketBankerProvider extends ContentProvider
         case EMI:
         case LOAN_TRANSACTION:
         case CARD:
+        case TRANSACTION_CATEGORY:
+        case RECOMMENDATION:
             where = PocketBankerContract.BaseColumns._ID + "=" + uri.getPathSegments().get(1);
         }
-
         if (selection == null) {
             selection = where;
         }
-        else {
+        else if (!TextUtils.isEmpty(where)) {
             selection = where + " AND (" + selection + ")";
         }
         return selection;
@@ -198,6 +215,9 @@ public class PocketBankerProvider extends ContentProvider
         case CARDS_ALL_ROWS:
         case CARD:
         case TRANSACTION_CATEGORIES_ALL_ROWS:
+        case TRANSACTION_CATEGORY:
+        case RECOMMENDATIONS_ALL_ROWS:
+        case RECOMMENDATION:
             qb.setTables(getTableName(uri));
             break;
 
@@ -249,6 +269,9 @@ public class PocketBankerProvider extends ContentProvider
         case TRANSACTION_CATEGORIES_ALL_ROWS:
             id = db.insertOrThrow(PocketBankerOpenHelper.Tables.TRANSACTION_CATEGORIES, null, values);
             break;
+        case RECOMMENDATIONS_ALL_ROWS:
+            id = db.insertOrThrow(PocketBankerOpenHelper.Tables.RECOMMENDATIONS, null, values);
+            break;
 
         default:
             throw new IllegalArgumentException("Unsupported URI: " + uri);
@@ -284,6 +307,9 @@ public class PocketBankerProvider extends ContentProvider
         case CARDS_ALL_ROWS:
         case CARD:
         case TRANSACTION_CATEGORIES_ALL_ROWS:
+        case TRANSACTION_CATEGORY:
+        case RECOMMENDATIONS_ALL_ROWS:
+        case RECOMMENDATION:
             count = db.delete(getTableName(uri), getSelection(uri, selection), selectionArgs);
             break;
 
@@ -319,6 +345,9 @@ public class PocketBankerProvider extends ContentProvider
         case CARDS_ALL_ROWS:
         case CARD:
         case TRANSACTION_CATEGORIES_ALL_ROWS:
+        case TRANSACTION_CATEGORY:
+        case RECOMMENDATIONS_ALL_ROWS:
+        case RECOMMENDATION:
             count = db.update(getTableName(uri), values, getSelection(uri, selection), selectionArgs);
             break;
 
@@ -384,6 +413,9 @@ public class PocketBankerProvider extends ContentProvider
             break;
         case TRANSACTION_CATEGORIES_ALL_ROWS:
             table = PocketBankerOpenHelper.Tables.TRANSACTION_CATEGORIES;
+            break;
+        case RECOMMENDATIONS_ALL_ROWS:
+            table = PocketBankerOpenHelper.Tables.RECOMMENDATIONS;
             break;
         default:
             throw new IllegalArgumentException("Unsupported URI: " + uri);
