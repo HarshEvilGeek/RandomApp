@@ -27,7 +27,7 @@ public class AuthorizationActivity extends AppCompatActivity {
     String password;
 
     ProgressDialog loginInProgressDialog;
-    boolean loginInProgress = false;
+    boolean loginInProgress = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
