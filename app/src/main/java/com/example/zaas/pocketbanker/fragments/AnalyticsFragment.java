@@ -22,6 +22,8 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.SimpleDateFormat;
@@ -33,7 +35,7 @@ import java.util.List;
 /**
  * Created by zaas on 3/17/16.
  */
-public class AnalyticsFragment extends Fragment{
+public class AnalyticsFragment extends Fragment implements OnChartValueSelectedListener{
     private static final int FROM_DATE_PICKER_ID = 1000;
     private static final int TO_DATE_PICKER_ID = 1001;
 
@@ -59,7 +61,6 @@ public class AnalyticsFragment extends Fragment{
         mOriginalTransactionList = PocketBankerDBHelper.getInstance().getAllTransactions();
         mAllTransactions = mOriginalTransactionList;
         categorizeTransactionAmounts();
-
         updatePieDataset();
     }
 
@@ -74,6 +75,15 @@ public class AnalyticsFragment extends Fragment{
         setPieData();
 
         return rootView;
+    }
+
+    @Override
+    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+    }
+
+    @Override
+    public void onNothingSelected() {
+
     }
 
     private void setDatePickers() {
@@ -99,13 +109,13 @@ public class AnalyticsFragment extends Fragment{
         switch (id) {
             case FROM_DATE_PICKER_ID:
                 initialDate.set(mFromDateValue);
-                return new DatePickerDialog(getActivity(), fromdatePickerListener
+                return new DatePickerDialog(getActivity(), R.style.DatePickerTheme, fromdatePickerListener
                         , initialDate.year
                         , initialDate.month
                         , initialDate.monthDay);
             case TO_DATE_PICKER_ID:
                 initialDate.set(mToDateValue);
-                return new DatePickerDialog(getActivity(), todatePickerListener
+                return new DatePickerDialog(getActivity(), R.style.DatePickerTheme, todatePickerListener
                         , initialDate.year
                         , initialDate.month
                         , initialDate.monthDay);
