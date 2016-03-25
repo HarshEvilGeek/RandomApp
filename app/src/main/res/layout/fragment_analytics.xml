@@ -4,12 +4,10 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/chart"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal" >
-    </LinearLayout>
+        android:layout_margin="@dimen/card_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
