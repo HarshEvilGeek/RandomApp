@@ -268,15 +268,23 @@ public class PocketBankerProvider extends ContentProvider
         switch (uriMatcher.match(uri))
         {
         case ACCOUNTS_ALL_ROWS:
+        case ACCOUNT:
         case TRANSACTIONS_ALL_ROWS:
+        case TRANSACTION:
         case PAYEES_ALL_ROWS:
+        case PAYEE:
         case BRANCH_ATMS_ALL_ROWS:
+        case BRANCH_ATM:
         case LOANS_ALL_ROWS:
+        case LOAN:
         case EMIS_ALL_ROWS:
+        case EMI:
         case LOAN_TRANSACTIONS_ALL_ROWS:
+        case LOAN_TRANSACTION:
         case CARDS_ALL_ROWS:
+        case CARD:
         case TRANSACTION_CATEGORIES_ALL_ROWS:
-            count = db.delete(getTableName(uri), selection, selectionArgs);
+            count = db.delete(getTableName(uri), getSelection(uri, selection), selectionArgs);
             break;
 
         default:
@@ -295,15 +303,23 @@ public class PocketBankerProvider extends ContentProvider
         switch (uriMatcher.match(uri))
         {
         case ACCOUNTS_ALL_ROWS:
+        case ACCOUNT:
         case TRANSACTIONS_ALL_ROWS:
+        case TRANSACTION:
         case PAYEES_ALL_ROWS:
+        case PAYEE:
         case BRANCH_ATMS_ALL_ROWS:
+        case BRANCH_ATM:
         case LOANS_ALL_ROWS:
+        case LOAN:
         case EMIS_ALL_ROWS:
+        case EMI:
         case LOAN_TRANSACTIONS_ALL_ROWS:
+        case LOAN_TRANSACTION:
         case CARDS_ALL_ROWS:
+        case CARD:
         case TRANSACTION_CATEGORIES_ALL_ROWS:
-            count = db.update(getTableName(uri), values, selection, selectionArgs);
+            count = db.update(getTableName(uri), values, getSelection(uri, selection), selectionArgs);
             break;
 
         default:

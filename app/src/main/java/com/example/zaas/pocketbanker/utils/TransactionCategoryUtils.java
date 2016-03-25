@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.content.ContentValues;
 import android.text.TextUtils;
 
+import com.example.zaas.pocketbanker.data.PocketBankerContract;
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.local.TransactionCategory;
@@ -25,12 +27,34 @@ public class TransactionCategoryUtils
 
     public static Category getCategoryForMerchant(String merchantName)
     {
+        if (TextUtils.isEmpty(merchantName)) {
+            return Category.UNKNOWN;
+        }
+
         merchantName = merchantName.toLowerCase().replaceAll(" ", "").replaceAll("'", "");
-        if (sTransactionCategoryMap != null && TextUtils.isEmpty(merchantName)
-                && sTransactionCategoryMap.containsKey(merchantName)) {
+        if (sTransactionCategoryMap != null && sTransactionCategoryMap.containsKey(merchantName)) {
             return sTransactionCategoryMap.get(merchantName);
         }
         return Category.UNKNOWN;
+    }
+
+    public static void updateCategoryForTransaction(Transaction transaction, Category category)
+    {
+        String merchantName = transaction.getMerchantName();
+        if (TextUtils.isEmpty(merchantName) || category == Category.UNKNOWN) {
+            return;
+        }
+
+        merchantName = merchantName.toLowerCase().replaceAll(" ", "").replaceAll("'", "");
+        if (sTransactionCategoryMap != null) {
+            sTransactionCategoryMap.put(merchantName, category);
+        }
+
+        PocketBankerDBHelper.getInstance().insertTransactionCategory(new TransactionCategory(merchantName, category));
+
+        ContentValues cv = new ContentValues();
+        cv.put(PocketBankerContract.Transactions.CATEGORY, category.ordinal());
+        PocketBankerDBHelper.getInstance().updateTransaction(transaction.getId(), cv);
     }
 
     public static List<TransactionCategory> getInitialTransactionCategories()

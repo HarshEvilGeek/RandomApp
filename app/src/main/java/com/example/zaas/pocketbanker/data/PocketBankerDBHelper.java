@@ -127,6 +127,18 @@ public class PocketBankerDBHelper
         return transactionList;
     }
 
+    public void updateTransaction(int id, ContentValues contentValues)
+    {
+        try {
+            context.getContentResolver().update(
+                    ContentUris.withAppendedId(PocketBankerProvider.CONTENT_URI_TRANSACTIONS, id), contentValues, null,
+                    null);
+        }
+        catch (Exception e) {
+            // Do nothing
+        }
+    }
+
     public List<TransactionCategory> getAllTransactionCategories()
     {
         Cursor c = null;
@@ -148,6 +160,17 @@ public class PocketBankerDBHelper
             }
         }
         return transactionCategoryList;
+    }
+
+    public void insertTransactionCategory(TransactionCategory transactionCategory)
+    {
+        try {
+            context.getContentResolver().insert(PocketBankerProvider.CONTENT_URI_TRANSACTION_CATEGORIES,
+                    transactionCategory.toContentValues());
+        }
+        catch (Exception e) {
+            // Do nothing
+        }
     }
 
     public Payee getPayeeForLocalId(int id)
