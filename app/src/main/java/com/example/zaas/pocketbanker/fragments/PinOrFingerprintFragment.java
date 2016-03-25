@@ -33,6 +33,7 @@ public class PinOrFingerprintFragment extends Fragment {
     TextView pinText;
     TextView skipPin;
 
+    String expectedPin;
     boolean isFirstCreate;
 
     String currentPin = "";
@@ -43,6 +44,9 @@ public class PinOrFingerprintFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_pin_fingerprint, container,false);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        if (getArguments() != null && getArguments().getBoolean(CREATE_PIN_KEY, false)) {
+            isFirstCreate = true;
+        }
         numButtons = new TextView[10];
         int num = 0;
         pinText = (TextView) rootView.findViewById(R.id.pin_text);
@@ -115,10 +119,28 @@ public class PinOrFingerprintFragment extends Fragment {
         pinText.setText(currentPin);
 
         if (currentPin.length() == PIN_LENGTH) {
-            if (getArguments().getBoolean(CREATE_PIN_KEY, false)) {
-                goToMainActivity();
+            if (getArguments() != null && getArguments().getBoolean(CREATE_PIN_KEY, false)) {
+                if (isFirstCreate) {
+                    expectedPin = currentPin;
+                    pinText.setText("");
+                    currentPin = "";
+                    pinPrompt.setText("Reenter pin");
+                    isFirstCreate = false;
+                } else {
+                    if (currentPin.equals(expectedPin)) {
+                        SecurityUtils.savePinCode(expectedPin);
+                        goToMainActivity();
+                    } else {
+                        isFirstCreate = true;
+                        currentPin = "";
+                        expectedPin = "";
+                        pinText.setText("");
+                        pinPrompt.setText("Pins didn't match. Please retry.");
+                    }
+                }
             }
             else if (SecurityUtils.isValidPin(currentPin)) {
+                goToMainActivity();
             }
         }
     }

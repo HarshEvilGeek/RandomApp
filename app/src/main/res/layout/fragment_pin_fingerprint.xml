@@ -12,16 +12,16 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:textSize="28sp" />
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/pin_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginTop="15dp"
-        android:maxLength="6"
+        android:gravity="center"
         android:letterSpacing="0.3"
+        android:maxLength="6"
         android:textColor="@android:color/white"
         android:textSize="32sp" />
 
@@ -40,7 +40,7 @@
             android:gravity="center"
             android:text="1"
             android:textColor="@android:color/white"
-            android:textSize="28sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/button_two"
@@ -49,7 +49,7 @@
             android:gravity="center"
             android:text="2"
             android:textColor="@android:color/white"
-            android:textSize="28sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/button_three"
@@ -58,7 +58,7 @@
             android:gravity="center"
             android:text="3"
             android:textColor="@android:color/white"
-            android:textSize="28sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/button_four"
@@ -67,7 +67,7 @@
             android:gravity="center"
             android:text="4"
             android:textColor="@android:color/white"
-            android:textSize="28sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/button_five"
@@ -76,7 +76,7 @@
             android:gravity="center"
             android:text="5"
             android:textColor="@android:color/white"
-            android:textSize="28sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/button_six"
@@ -85,7 +85,7 @@
             android:gravity="center"
             android:text="6"
             android:textColor="@android:color/white"
-            android:textSize="28sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/button_seven"
@@ -94,7 +94,7 @@
             android:gravity="center"
             android:text="7"
             android:textColor="@android:color/white"
-            android:textSize="28sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/button_eight"
@@ -103,7 +103,7 @@
             android:gravity="center"
             android:text="8"
             android:textColor="@android:color/white"
-            android:textSize="28sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/button_nine"
@@ -112,13 +112,20 @@
             android:gravity="center"
             android:text="9"
             android:textColor="@android:color/white"
-            android:textSize="28sp" />
+            android:textSize="30sp" />
 
-        <ImageView
-            android:id="@+id/button_cancel"
+        <LinearLayout
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:src="@mipmap/delete" />
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/button_cancel"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/delete" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/button_zero"
@@ -127,13 +134,20 @@
             android:gravity="center"
             android:text="0"
             android:textColor="@android:color/white"
-            android:textSize="28sp" />
+            android:textSize="30sp" />
 
-        <ImageView
-            android:id="@+id/button_delete"
+        <LinearLayout
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:src="@mipmap/backspace"/>
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/button_delete"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/backspace" />
+        </LinearLayout>
     </GridLayout>
 
 
