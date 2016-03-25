@@ -19,6 +19,7 @@ public class BaseRestrictedActivity extends AppCompatActivity {
         if (!SecurityUtils.isAccessAuthorized()) {
             Intent intent = new Intent(this, AuthorizationActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -28,6 +29,7 @@ public class BaseRestrictedActivity extends AppCompatActivity {
         if (!SecurityUtils.isAccessAuthorized()) {
             Intent intent = new Intent(this, AuthorizationActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -37,6 +39,7 @@ public class BaseRestrictedActivity extends AppCompatActivity {
         if (!SecurityUtils.isAccessAuthorized()) {
             Intent intent = new Intent(this, AuthorizationActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 }

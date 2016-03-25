@@ -57,6 +57,8 @@ public class MainActivity extends BaseRestrictedActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        goToFragment(new AccountSummaryFragment());
     }
 
     @Override
