@@ -143,34 +143,37 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
     private void insertDummyTransactionData(SQLiteDatabase db)
     {
         Transaction transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 12000, 1200000, Transaction.Type.DEBIT,
-                "House Rent", System.currentTimeMillis() - 30 * ONE_DAY_IN_MILLIS, "House Rent");
+                "House Rent", System.currentTimeMillis() - 30 * ONE_DAY_IN_MILLIS, "House Rent",
+                TransactionCategoryUtils.Category.UNKNOWN);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 800, 1200000, Transaction.Type.DEBIT, "Conveyance",
-                System.currentTimeMillis() - 20 * ONE_DAY_IN_MILLIS, "Uber");
+                System.currentTimeMillis() - 20 * ONE_DAY_IN_MILLIS, "Uber", TransactionCategoryUtils.Category.TRAVEL);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3000, 1200000, Transaction.Type.DEBIT, "Shopping",
-                System.currentTimeMillis() - 15 * ONE_DAY_IN_MILLIS, "Puma");
+                System.currentTimeMillis() - 15 * ONE_DAY_IN_MILLIS, "Puma", TransactionCategoryUtils.Category.SHOPPING);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 900, 1200000, Transaction.Type.DEBIT, "Movies",
-                System.currentTimeMillis() - 12 * ONE_DAY_IN_MILLIS, "PVR");
+                System.currentTimeMillis() - 12 * ONE_DAY_IN_MILLIS, "PVR", TransactionCategoryUtils.Category.MOVIES);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 2600, 1200000, Transaction.Type.DEBIT, "Dinner",
-                System.currentTimeMillis() - 10 * ONE_DAY_IN_MILLIS, "Pizza Hut");
+                System.currentTimeMillis() - 10 * ONE_DAY_IN_MILLIS, "Pizza Hut",
+                TransactionCategoryUtils.Category.FOOD);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1350, 1200000, Transaction.Type.DEBIT, "Lunch",
-                System.currentTimeMillis() - 7 * ONE_DAY_IN_MILLIS, "Taco Bell");
+                System.currentTimeMillis() - 7 * ONE_DAY_IN_MILLIS, "Taco Bell", TransactionCategoryUtils.Category.FOOD);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 25000, 1200000, Transaction.Type.CREDIT,
-                "Debt Settlement", System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS, "");
+                "Debt Settlement", System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS, "",
+                TransactionCategoryUtils.Category.UNKNOWN);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 450, 1200000, Transaction.Type.DEBIT, "Taxi",
-                System.currentTimeMillis() - 3 * ONE_DAY_IN_MILLIS, "Ola");
+                System.currentTimeMillis() - 3 * ONE_DAY_IN_MILLIS, "Ola", TransactionCategoryUtils.Category.TRAVEL);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1000, 1200000, Transaction.Type.DEBIT, "Doctor",
-                System.currentTimeMillis() - ONE_DAY_IN_MILLIS, "Fortis");
+                System.currentTimeMillis() - ONE_DAY_IN_MILLIS, "Fortis", TransactionCategoryUtils.Category.HEALTH);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3500, 1200000, Transaction.Type.DEBIT, "Gift",
-                System.currentTimeMillis(), "Archies");
+                System.currentTimeMillis(), "Archies", TransactionCategoryUtils.Category.UNKNOWN);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
     }
 

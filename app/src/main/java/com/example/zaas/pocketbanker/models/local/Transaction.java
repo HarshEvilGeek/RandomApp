@@ -33,7 +33,7 @@ public class Transaction extends DbModel
     }
 
     public Transaction(String accountNumber, double amount, double balance, Type type, String remark, long time,
-            String merchantName)
+            String merchantName, TransactionCategoryUtils.Category category)
     {
         this.transactionId = Long.toString(time);
         this.accountNumber = accountNumber;
@@ -44,7 +44,7 @@ public class Transaction extends DbModel
         this.time = time;
         this.merchantId = "xyz";
         this.merchantName = merchantName;
-        this.category = TransactionCategoryUtils.getCategoryForMerchant(merchantName);
+        this.category = category;
     }
 
     public int getId()
