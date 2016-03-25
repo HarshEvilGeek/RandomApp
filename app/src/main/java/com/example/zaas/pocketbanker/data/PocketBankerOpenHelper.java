@@ -151,9 +151,11 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
 
         String CREATE_TABLE_TRANSACTIONS_QUERY = "CREATE table " + TRANSACTIONS + " ("
                 + PocketBankerContract.Transactions._ID + " integer primary key autoincrement, "
+                + PocketBankerContract.Transactions.TRANSACTION_ID + " text, "
                 +
                 PocketBankerContract.Transactions.ACCOUNT_NUMBER + " text, " +
-                PocketBankerContract.Transactions.AMOUNT + " integer, " +
+ PocketBankerContract.Transactions.AMOUNT + " real, "
+                +
                 PocketBankerContract.Transactions.CREDIT_OR_DEBIT + " integer, " +
                 PocketBankerContract.Transactions.BALANCE + " real, " +
                 PocketBankerContract.Transactions.REMARK + " text, " +

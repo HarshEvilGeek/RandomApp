@@ -22,6 +22,7 @@ public class PocketBankerContract {
     }
 
     interface TransactionColumns {
+        String TRANSACTION_ID = "transaction_id";
         String AMOUNT = "amount";
         String CREDIT_OR_DEBIT = "credit_or_debit";
         String REMARK = "remark";
