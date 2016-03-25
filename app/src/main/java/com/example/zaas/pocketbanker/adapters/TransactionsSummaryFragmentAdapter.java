@@ -5,7 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.zaas.pocketbanker.R;
+import com.example.zaas.pocketbanker.fragments.AccountSummaryDetailFragment;
+import com.example.zaas.pocketbanker.fragments.TransactionsListFragment;
 import com.example.zaas.pocketbanker.models.local.TransactionSummaryUIItem;
 import com.example.zaas.pocketbanker.utils.Constants;
 
@@ -53,7 +58,7 @@ public class TransactionsSummaryFragmentAdapter extends ArrayAdapter
 
         View view = null;
 
-        TransactionSummaryUIItem uiItem = mUiItems.get(i);
+        final TransactionSummaryUIItem uiItem = mUiItems.get(i);
 
         if (uiItem != null) {
 
@@ -84,6 +89,19 @@ public class TransactionsSummaryFragmentAdapter extends ArrayAdapter
 
                 TextView transactionDateTV = (TextView) view.findViewById(R.id.transaction_date_tv);
                 transactionDateTV.setText(dateString);
+
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        TransactionsListFragment fragment = new TransactionsListFragment();
+                        Bundle args = new Bundle();
+                        args.putString(Constants.SUMMARY_DETAIL_FRAGMENT_HEADER_TYPE, uiItem.getHeaderType());
+                        args.putString(Constants.SUMMARY_DETAIL_FRAGMENT_ACCOUNT_NUMBER, uiItem.getTitle());
+                        fragment.setArguments(args);
+                        FragmentManager fragmentManager = ((Activity) mContext).getFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                    }
+                });
 
             }
 

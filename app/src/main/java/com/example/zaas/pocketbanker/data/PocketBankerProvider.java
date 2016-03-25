@@ -41,6 +41,8 @@ public class PocketBankerProvider extends ContentProvider
             + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.LOAN_TRANSACTIONS);
     public static final Uri CONTENT_URI_CARDS = Uri.parse("content://" + PocketBankerContract.CONTENT_AUTHORITY + "/"
             + PocketBankerOpenHelper.Tables.CARDS);
+    public static final Uri CONTENT_URI_TRANSACTION_CATEGORIES = Uri.parse("content://"
+            + PocketBankerContract.CONTENT_AUTHORITY + "/" + PocketBankerOpenHelper.Tables.TRANSACTION_CATEGORIES);
 
     private static final String TAG = "PocketBankerProvider";
 
@@ -60,6 +62,7 @@ public class PocketBankerProvider extends ContentProvider
     private static final int CARD = 14;
     private static final int BRANCH_ATMS_ALL_ROWS = 15;
     private static final int BRANCH_ATM = 16;
+    private static final int TRANSACTION_CATEGORIES_ALL_ROWS = 17;
 
     private static final UriMatcher uriMatcher;
 
@@ -92,6 +95,8 @@ public class PocketBankerProvider extends ContentProvider
                 + "/#", LOAN_TRANSACTION);
         uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.CARDS, CARDS_ALL_ROWS);
         uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.CARDS + "/#", CARD);
+        uriMatcher.addURI(PocketBankerContract.CONTENT_AUTHORITY, PocketBankerOpenHelper.Tables.TRANSACTION_CATEGORIES,
+                TRANSACTION_CATEGORIES_ALL_ROWS);
     }
 
     private PocketBankerOpenHelper pocketBankerOpenHelper;
@@ -137,6 +142,8 @@ public class PocketBankerProvider extends ContentProvider
         case CARDS_ALL_ROWS:
         case CARD:
             return PocketBankerOpenHelper.Tables.CARDS;
+        case TRANSACTION_CATEGORIES_ALL_ROWS:
+            return PocketBankerOpenHelper.Tables.TRANSACTION_CATEGORIES;
         }
         return null;
     }
@@ -190,6 +197,7 @@ public class PocketBankerProvider extends ContentProvider
         case LOAN_TRANSACTION:
         case CARDS_ALL_ROWS:
         case CARD:
+        case TRANSACTION_CATEGORIES_ALL_ROWS:
             qb.setTables(getTableName(uri));
             break;
 
@@ -238,6 +246,9 @@ public class PocketBankerProvider extends ContentProvider
         case CARDS_ALL_ROWS:
             id = db.insertOrThrow(PocketBankerOpenHelper.Tables.CARDS, null, values);
             break;
+        case TRANSACTION_CATEGORIES_ALL_ROWS:
+            id = db.insertOrThrow(PocketBankerOpenHelper.Tables.TRANSACTION_CATEGORIES, null, values);
+            break;
 
         default:
             throw new IllegalArgumentException("Unsupported URI: " + uri);
@@ -257,14 +268,23 @@ public class PocketBankerProvider extends ContentProvider
         switch (uriMatcher.match(uri))
         {
         case ACCOUNTS_ALL_ROWS:
+        case ACCOUNT:
         case TRANSACTIONS_ALL_ROWS:
+        case TRANSACTION:
         case PAYEES_ALL_ROWS:
+        case PAYEE:
         case BRANCH_ATMS_ALL_ROWS:
+        case BRANCH_ATM:
         case LOANS_ALL_ROWS:
+        case LOAN:
         case EMIS_ALL_ROWS:
+        case EMI:
         case LOAN_TRANSACTIONS_ALL_ROWS:
+        case LOAN_TRANSACTION:
         case CARDS_ALL_ROWS:
-            count = db.delete(getTableName(uri), selection, selectionArgs);
+        case CARD:
+        case TRANSACTION_CATEGORIES_ALL_ROWS:
+            count = db.delete(getTableName(uri), getSelection(uri, selection), selectionArgs);
             break;
 
         default:
@@ -283,14 +303,23 @@ public class PocketBankerProvider extends ContentProvider
         switch (uriMatcher.match(uri))
         {
         case ACCOUNTS_ALL_ROWS:
+        case ACCOUNT:
         case TRANSACTIONS_ALL_ROWS:
+        case TRANSACTION:
         case PAYEES_ALL_ROWS:
+        case PAYEE:
         case BRANCH_ATMS_ALL_ROWS:
+        case BRANCH_ATM:
         case LOANS_ALL_ROWS:
+        case LOAN:
         case EMIS_ALL_ROWS:
+        case EMI:
         case LOAN_TRANSACTIONS_ALL_ROWS:
+        case LOAN_TRANSACTION:
         case CARDS_ALL_ROWS:
-            count = db.update(getTableName(uri), values, selection, selectionArgs);
+        case CARD:
+        case TRANSACTION_CATEGORIES_ALL_ROWS:
+            count = db.update(getTableName(uri), values, getSelection(uri, selection), selectionArgs);
             break;
 
         default:
@@ -352,6 +381,9 @@ public class PocketBankerProvider extends ContentProvider
             break;
         case CARDS_ALL_ROWS:
             table = PocketBankerOpenHelper.Tables.CARDS;
+            break;
+        case TRANSACTION_CATEGORIES_ALL_ROWS:
+            table = PocketBankerOpenHelper.Tables.TRANSACTION_CATEGORIES;
             break;
         default:
             throw new IllegalArgumentException("Unsupported URI: " + uri);

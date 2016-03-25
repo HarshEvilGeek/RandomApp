@@ -12,15 +12,17 @@ public class TransactionSummaryUIItem
     private long transactionDate;
     // credit/debit
     private String transactionType;
+    private String headerType;
 
     public TransactionSummaryUIItem(int itemType, String title, double transactionAmount, long transactionDate,
-            String transactionType)
+            String transactionType, String headerType)
     {
         this.itemType = itemType;
         this.title = title;
         this.transactionAmount = transactionAmount;
         this.transactionDate = transactionDate;
         this.transactionType = transactionType;
+        this.headerType = headerType;
 
     }
 
@@ -72,5 +74,15 @@ public class TransactionSummaryUIItem
     public void setTransactionType(String transactionType)
     {
         this.transactionType = transactionType;
+    }
+
+    public String getHeaderType()
+    {
+        return headerType;
+    }
+
+    public void setHeaderType(String headerType)
+    {
+        this.headerType = headerType;
     }
 }

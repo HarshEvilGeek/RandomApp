@@ -43,6 +43,7 @@ public class TransferFundsFragment extends Fragment implements PayeeAdapter.OnCl
     {
         View rootView = inflater.inflate(R.layout.fragment_transfer_funds, container, false);
 
+        getActivity().setTitle(R.string.action_transfer);
         setupSwipeContainer(rootView);
         setupRecyclerView(rootView);
 
@@ -67,7 +68,7 @@ public class TransferFundsFragment extends Fragment implements PayeeAdapter.OnCl
     private void setupRecyclerView(View rootView)
     {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
-        mAdapter = new PayeeAdapter(getActivity(), PocketBankerDBHelper.getInstance().getAllPayees(getActivity()));
+        mAdapter = new PayeeAdapter(getActivity(), PocketBankerDBHelper.getInstance().getAllPayees());
         mAdapter.setOnClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));

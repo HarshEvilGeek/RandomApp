@@ -22,9 +22,13 @@ public class PocketBankerContract {
     }
 
     interface TransactionColumns {
+        String TRANSACTION_ID = "transaction_id";
         String AMOUNT = "amount";
         String CREDIT_OR_DEBIT = "credit_or_debit";
         String REMARK = "remark";
+        String MERCHANT_ID = "merchant_id";
+        String MERCHANT_NAME = "merchant_name";
+        String CATEGORY = "category";
     }
 
     interface PayeeColumns {
@@ -88,6 +92,12 @@ public class PocketBankerContract {
         String AVAIL_LIMIT = "avail_limit";
     }
 
+    interface TransactionCategoryColumns
+    {
+        String MERCHANT_NAME = "merchant_name";
+        String CATEGORY = "category";
+    }
+
     public static class Account implements BaseColumns, AccountBaseColumns, AccountColumns {
 
     }
@@ -118,6 +128,11 @@ public class PocketBankerContract {
     }
 
     public static class CardAccount implements BaseColumns, CardColumns {
+
+    }
+
+    public static class TransactionCategories implements BaseColumns, TransactionCategoryColumns
+    {
 
     }
 }

@@ -81,7 +81,7 @@ public class Payee extends DbModel
 
     @Override
     public String getTable() {
-        return null;
+        return PocketBankerOpenHelper.Tables.PAYEES;
     }
 
     public int getId()

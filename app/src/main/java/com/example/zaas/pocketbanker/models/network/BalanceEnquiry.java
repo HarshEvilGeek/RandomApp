@@ -6,21 +6,10 @@ package com.example.zaas.pocketbanker.models.network;
 public class BalanceEnquiry
 {
 
-    private Integer code;
     private String balance;
     private String accountno;
     private String accounttype;
     private String balancetime;
-
-    public Integer getCode()
-    {
-        return code;
-    }
-
-    public void setCode(Integer code)
-    {
-        this.code = code;
-    }
 
     public String getBalance()
     {
@@ -65,7 +54,7 @@ public class BalanceEnquiry
     @Override
     public String toString()
     {
-        return "BalanceEnquiry{" + "code=" + code + ", balance='" + balance + '\'' + ", accountno='" + accountno + '\''
+        return "BalanceEnquiry{" + ", balance='" + balance + '\'' + ", accountno='" + accountno + '\''
                 + ", accounttype='" + accounttype + '\'' + ", balancetime='" + balancetime + '\'' + '}';
     }
 }

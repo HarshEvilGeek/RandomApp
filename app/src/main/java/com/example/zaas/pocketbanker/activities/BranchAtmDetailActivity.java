@@ -39,9 +39,11 @@ public class BranchAtmDetailActivity extends AppCompatActivity {
             return;
         }
         int id = extras.getInt(BranchAtmMapActivity.SINGLE_BRANCH_ATM_KEY);
-        mCurrentLocation = (LatLng) extras.get(BranchAtmMapActivity.CURRENT_LOCATION_KEY);
-
-        mBranchAtm = PocketBankerDBHelper.getInstance().getBranchAtmForLocalId(this, id);
+        Location loc = (Location) extras.get(BranchAtmMapActivity.CURRENT_LOCATION_KEY);
+        if (loc != null) {
+            mCurrentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
+        }
+        mBranchAtm = PocketBankerDBHelper.getInstance().getBranchAtmForLocalId(id);
 
         ActionBar ab = getSupportActionBar();
         if (ab != null) {

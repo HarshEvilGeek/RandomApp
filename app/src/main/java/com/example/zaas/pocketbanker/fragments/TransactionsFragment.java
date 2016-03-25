@@ -54,15 +54,15 @@ public class TransactionsFragment extends Fragment {
         @Override
         protected List<TransactionSummaryUIItem> doInBackground(Void... voids)
         {
-            TransactionSummaryUIItem uiItem1 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER,"Bank Account",-1, -1, null);
-            TransactionSummaryUIItem uiItem2 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,"0000012243547123",10000.00, System.currentTimeMillis(), Constants.TRANSACTION_TYPE_CREDIT);
-            TransactionSummaryUIItem uiItem3 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,"0000012246547123",5000.00, (System.currentTimeMillis() + 10000000), Constants.TRANSACTION_TYPE_DEBIT);
-            TransactionSummaryUIItem uiItem4 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER,"Card",-1, -1, null);
-            TransactionSummaryUIItem uiItem5 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,"0000012143547234",356.98, System.currentTimeMillis(), Constants.TRANSACTION_TYPE_DEBIT);
-            TransactionSummaryUIItem uiItem6 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,"0020012243547456",2000.00, System.currentTimeMillis(), Constants.TRANSACTION_TYPE_DEBIT);
-            TransactionSummaryUIItem uiItem7 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER,"Loan Account",-1, -1, null);
-            TransactionSummaryUIItem uiItem8 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,"0030012243547678",10000.00, System.currentTimeMillis(), Constants.TRANSACTION_TYPE_CREDIT);
-            TransactionSummaryUIItem uiItem9 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,"0007012243547789",10000.00, System.currentTimeMillis() + 10000000, Constants.TRANSACTION_TYPE_CREDIT);
+            TransactionSummaryUIItem uiItem1 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER,"Bank Account",-1, -1, null, null);
+            TransactionSummaryUIItem uiItem2 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,"0000012243547123",10000.00, System.currentTimeMillis(), Constants.TRANSACTION_TYPE_CREDIT, Constants.HEADER_TYPE_BANKACCOUNT);
+            TransactionSummaryUIItem uiItem3 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,"0000012246547123",5000.00, (System.currentTimeMillis() + 10000000), Constants.TRANSACTION_TYPE_DEBIT, Constants.HEADER_TYPE_BANKACCOUNT);
+            TransactionSummaryUIItem uiItem4 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER,"Card",-1, -1, null, null);
+            TransactionSummaryUIItem uiItem5 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,"0000012143547234",356.98, System.currentTimeMillis(), Constants.TRANSACTION_TYPE_DEBIT, Constants.HEADER_TYPE_CARD);
+            TransactionSummaryUIItem uiItem6 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,"0020012243547456",2000.00, System.currentTimeMillis(), Constants.TRANSACTION_TYPE_DEBIT, Constants.HEADER_TYPE_CARD);
+            TransactionSummaryUIItem uiItem7 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER,"Loan Account",-1, -1, null, null);
+            TransactionSummaryUIItem uiItem8 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,"0030012243547678",10000.00, System.currentTimeMillis(), Constants.TRANSACTION_TYPE_CREDIT, Constants.HEADER_TYPE_LOANACCOUNT);
+            TransactionSummaryUIItem uiItem9 = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,"0007012243547789",10000.00, System.currentTimeMillis() + 10000000, Constants.TRANSACTION_TYPE_CREDIT, Constants.HEADER_TYPE_LOANACCOUNT);
 
             List<TransactionSummaryUIItem> uiItems = new ArrayList<>();
             uiItems.add(uiItem1);
