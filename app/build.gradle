@@ -29,4 +29,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-base:6.5.87'
     compile 'com.google.android.gms:play-services-maps:6.5.87'
     compile 'com.google.android.gms:play-services-location:6.5.87'
+    compile 'com.github.bumptech.glide:glide:3.6.1'
 }

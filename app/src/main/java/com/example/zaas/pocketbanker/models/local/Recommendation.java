@@ -19,6 +19,22 @@ public class Recommendation extends DbModel
     private String message;
     private String url;
     private TransactionCategoryUtils.Category category;
+    private String reason;
+
+    public Recommendation()
+    {
+
+    }
+
+    public Recommendation(String recommendationId, String message, String url,
+            TransactionCategoryUtils.Category category, String reason)
+    {
+        this.recommendationId = recommendationId;
+        this.message = message;
+        this.url = url;
+        this.category = category;
+        this.reason = reason;
+    }
 
     public int getId()
     {
@@ -70,6 +86,16 @@ public class Recommendation extends DbModel
         this.category = category;
     }
 
+    public String getReason()
+    {
+        return reason;
+    }
+
+    public void setReason(String reason)
+    {
+        this.reason = reason;
+    }
+
     @Override
     public void instantiateFromCursor(Cursor cursor)
     {
@@ -81,6 +107,7 @@ public class Recommendation extends DbModel
             setUrl(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Recommendations.URL)));
             setCategory(TransactionCategoryUtils.Category.values()[cursor.getInt(cursor
                     .getColumnIndex(PocketBankerContract.Recommendations.CATEGORY))]);
+            setReason(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Recommendations.REASON)));
         }
     }
 
@@ -111,7 +138,8 @@ public class Recommendation extends DbModel
         cv.put(PocketBankerContract.Recommendations.MESSAGE, message);
         cv.put(PocketBankerContract.Recommendations.URL, url);
         cv.put(PocketBankerContract.Recommendations.CATEGORY, category.ordinal());
-        return null;
+        cv.put(PocketBankerContract.Recommendations.REASON, reason);
+        return cv;
     }
 
     @Override

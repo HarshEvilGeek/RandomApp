@@ -104,6 +104,7 @@ public class PocketBankerContract {
         String MESSAGE = "message";
         String URL = "url";
         String CATEGORY = "category";
+        String REASON = "reason";
     }
 
     public static class Account implements BaseColumns, AccountBaseColumns, AccountColumns
