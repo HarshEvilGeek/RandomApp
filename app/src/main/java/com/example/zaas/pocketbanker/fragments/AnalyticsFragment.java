@@ -26,10 +26,9 @@ import java.util.List;
  */
 public class AnalyticsFragment extends Fragment{
 
-    //private int[] mColors;
-            //new int[] { Color.GREEN, Color.BLUE, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.RED  };
+    //private int[] mColors = new int[] { Color.GREEN, Color.BLUE, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.RED  };
 
-    private static String[] CATEGORY_LABELS = Arrays.toString(TransactionCategoryUtils.Category.values()).replaceAll("^.|.$", "").split(", ");
+    //private static String[] CATEGORY_LABELS = Arrays.toString(TransactionCategoryUtils.Category.values()).replaceAll("^.|.$", "").split(", ");
 
     private HashMap<String, Double> mAmountPerCategory = new HashMap<>();
     private PieDataSet mDataset;
@@ -38,7 +37,6 @@ public class AnalyticsFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializeAmounts();
 
         List<Transaction> allTransactions = PocketBankerDBHelper.getInstance().getAllTransactions();
         categorizeTransactionAmounts(allTransactions);
@@ -62,7 +60,12 @@ public class AnalyticsFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_analytics, container, false);
         mPieChart = (PieChart) rootView.findViewById(R.id.chart);
-        mPieChart.setData(new PieData(CATEGORY_LABELS, mDataset));
+        String[] labels = new String[mAmountPerCategory.size()];
+        int k = 0;
+        for (String label : mAmountPerCategory.keySet()) {
+            labels[k++] = label;
+        }
+        mPieChart.setData(new PieData(labels, mDataset));
         updateChartUI();
 
         return rootView;
@@ -79,10 +82,20 @@ public class AnalyticsFragment extends Fragment{
 
     private void categorizeTransactionAmounts(List<Transaction> allTransactions) {
         double amount;
+        Double existingAmount;
         for (Transaction currentTransaction : allTransactions) {
-            amount = mAmountPerCategory.get(currentTransaction.getCategory().name()).doubleValue();
-            amount = Double.valueOf(amount + currentTransaction.getAmount());
-            mAmountPerCategory.put(currentTransaction.getCategory().name(), amount);
+            existingAmount = mAmountPerCategory.get(currentTransaction.getCategory().name());
+            amount = currentTransaction.getAmount();
+
+            if (existingAmount == null) {
+                if (amount > 0) {
+                    mAmountPerCategory.put(currentTransaction.getCategory().name()
+                            , Double.valueOf(amount));
+                }
+            } else {
+                mAmountPerCategory.put(currentTransaction.getCategory().name()
+                        , Double.valueOf(existingAmount.doubleValue() + amount));
+            }
         }
     }
 
@@ -100,11 +113,5 @@ public class AnalyticsFragment extends Fragment{
 
         colors.add(ColorTemplate.getHoloBlue());
         return colors;
-    }
-
-    private void initializeAmounts() {
-        for (String categoryString : CATEGORY_LABELS) {
-            mAmountPerCategory.put(categoryString, Double.valueOf(0));
-        }
     }
 }
