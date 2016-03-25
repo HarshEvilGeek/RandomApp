@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.adapters.AccountSummaryDetailFragmentAdapter;
+import com.example.zaas.pocketbanker.data.PocketBankerContract;
 import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.AccountSummaryDetailHeaderUIITem;
 import com.example.zaas.pocketbanker.models.local.AccountSummaryDetailItem;
@@ -154,7 +155,7 @@ public class AccountSummaryDetailFragment extends Fragment
 
                 uiItems.add(headerItem);
 
-                List<Transaction> accountTransactions = Transaction.getLatestNTransactions(5, accountNo);
+                List<Transaction> accountTransactions = Transaction.getLatestNTransactions(5, accountNo, PocketBankerContract.Transactions.TIME + " DESC ");
                 if (accountTransactions != null && accountTransactions.size() > 0) {
                     for (Transaction transaction : accountTransactions) {
                         TransactionDataUIItem transactionUiItem = new TransactionDataUIItem(transaction.getAmount(),

@@ -250,7 +250,7 @@ public class Transaction extends DbModel
         }
     }
 
-    public static List<Transaction> getLatestNTransactions(int number, String accNumber)
+    public static List<Transaction> getLatestNTransactions(int number, String accNumber, String sortOrder)
     {
         List<Transaction> transactions = new ArrayList<>();
         String where = PocketBankerContract.Transactions.ACCOUNT_NUMBER + " = ? " ;
@@ -260,7 +260,7 @@ public class Transaction extends DbModel
                     .getApplication()
                     .getApplicationContext()
                     .getContentResolver()
-                    .query(PocketBankerProvider.CONTENT_URI_TRANSACTIONS, null, where, new String[] { accNumber }, null);
+                    .query(PocketBankerProvider.CONTENT_URI_TRANSACTIONS, null, where, new String[] { accNumber }, sortOrder);
             if (c != null) {
                 while (c.moveToNext() && number != 0) {
                     Transaction transaction = new Transaction();
