@@ -15,9 +15,11 @@ import retrofit.client.Response;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.CardAccount;
 import com.example.zaas.pocketbanker.models.local.LoanAccount;
+import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.network.AccountSummary;
 import com.example.zaas.pocketbanker.models.network.BalanceEnquiry;
 import com.example.zaas.pocketbanker.models.network.BehaviorScore;
@@ -290,10 +292,18 @@ public class NetworkHelper
             }
 
             if (transactions != null) {
-                Log.e(LOG_TAG, "no of branch atm locations" + transactions.size());
+                Log.e(LOG_TAG, "transactions" + transactions.size());
+                List<Transaction> receivedTransactions = new ArrayList<>();
                 for (Transactions transaction : transactions) {
                     Log.e(LOG_TAG, " branch atm location : " + transaction);
+                    DateFormat transactionDF = new SimpleDateFormat(Transaction.TRANSACTION_DATE_FORMAT);
+                    Transaction dbTransaction = new Transaction(transaction.getAccountno(),
+                            transaction.getTransactionamount(), transaction.getClosingbalance(),
+                            Transaction.Type.getEnumFromNetworkType(transaction.getCreditdebitflag()),
+                            transaction.getRemark(), transactionDF.parse(transaction.getTransactiondate()).getTime());
+                    receivedTransactions.add(dbTransaction);
                 }
+                PocketBankerDBHelper.getInstance().insertUpdateAndDeleteDbModelTable(receivedTransactions);
             }
 
         }
@@ -370,10 +380,18 @@ public class NetworkHelper
             }
 
             if (transactions != null) {
-                Log.e(LOG_TAG, "no of branch atm locations" + transactions.size());
+                Log.e(LOG_TAG, "transactions" + transactions.size());
+                List<Transaction> receivedTransactions = new ArrayList<>();
                 for (Transactions transaction : transactions) {
                     Log.e(LOG_TAG, " branch atm location : " + transaction);
+                    DateFormat transactionDF = new SimpleDateFormat(Transaction.TRANSACTION_DATE_FORMAT);
+                    Transaction dbTransaction = new Transaction(transaction.getAccountno(),
+                            transaction.getTransactionamount(), transaction.getClosingbalance(),
+                            Transaction.Type.getEnumFromNetworkType(transaction.getCreditdebitflag()),
+                            transaction.getRemark(), transactionDF.parse(transaction.getTransactiondate()).getTime());
+                    receivedTransactions.add(dbTransaction);
                 }
+                PocketBankerDBHelper.getInstance().insertUpdateAndDeleteDbModelTable(receivedTransactions);
             }
 
         }
