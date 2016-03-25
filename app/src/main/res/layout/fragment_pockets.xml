@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/pockets_logo"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
         android:layout_centerInParent="true"
-        android:text="Pockets"
+        android:text="Recharge, Send Money, Shop Anywhere and a lot more!"
         android:textStyle="bold"
         android:textSize="20sp"/>
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/pockets_get_started"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="20sp"
+        android:text="GET STARTED"
+        android:textColor="@android:color/white"
+        android:background="@android:color/holo_blue_dark"/>
+
+    <TextView
+        android:id="@+id/pockets_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Already have an account? Login"
+        android:padding="10dp"
+        android:textColor="@android:color/holo_red_light"/>
+
+</LinearLayout>

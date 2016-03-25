@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,10 +24,18 @@ import com.example.zaas.pocketbanker.fragments.PocketsAddMoneyFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsBuyItemFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsFriendsFragment;
+import com.example.zaas.pocketbanker.fragments.PocketsHomeFragment;
 import com.example.zaas.pocketbanker.fragments.RecommendationsFragment;
 import com.example.zaas.pocketbanker.fragments.TransactionsFragment;
 import com.example.zaas.pocketbanker.fragments.TransferFundsFragment;
 import com.example.zaas.pocketbanker.interfaces.IFloatingButtonListener;
+import com.example.zaas.pocketbanker.utils.SecurityUtils;
+
+/**
+ * Base class which contains the navigation drawer
+ *
+ * created by akhil on 3/25/16.
+ */
 
 public class MainActivity extends BaseRestrictedActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,9 +68,11 @@ public class MainActivity extends BaseRestrictedActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (SecurityUtils.getPocketsAccount() != null) {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.activity_main_drawer_with_pockets);
+        }
         navigationView.setNavigationItemSelectedListener(this);
-
-        goToFragment(new AccountSummaryFragment());
     }
 
     @Override
@@ -110,6 +121,8 @@ public class MainActivity extends BaseRestrictedActivity
             fragment = new RecommendationsFragment();
         } else if (id == R.id.pockets) {
             fragment = new PocketsFragment();
+        } else if (id == R.id.pockets_home) {
+            fragment = new PocketsHomeFragment();
         } else if (id == R.id.pockets_add_money) {
             fragment = new PocketsAddMoneyFragment();
         } else if (id == R.id.pockets_buy_item) {
