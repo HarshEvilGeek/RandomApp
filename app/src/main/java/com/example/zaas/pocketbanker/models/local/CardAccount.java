@@ -13,6 +13,7 @@ import com.example.zaas.pocketbanker.data.PocketBankerContract;
 import com.example.zaas.pocketbanker.data.PocketBankerOpenHelper;
 import com.example.zaas.pocketbanker.data.PocketBankerProvider;
 import com.example.zaas.pocketbanker.models.network.CardDetails;
+import com.example.zaas.pocketbanker.utils.Constants;
 
 /**
  * Created by zaraahmed on 3/25/16.
@@ -22,19 +23,20 @@ public class CardAccount extends DbModel
 
     private static final String LOG_TAG = CardAccount.class.getSimpleName();
 
+    private long id = -1;
     private String type;
     private String status;
     private double balance;
     private String dateOfEnrollment;
     private String monthDelinquency;
-    private String cardAccNumber;
+    private String cardAccNumber = "3688747898";
     private String expiryDate;
     private double availLimit;
 
     public static CardAccount getCardAccount(CardDetails cardDetails)
     {
         return new CardAccount(cardDetails.getCardType(), cardDetails.getCardStatus(), cardDetails.getCurrentBalance(),
-                cardDetails.getDateOfEnrollment(), cardDetails.getMonthDelinquency(), cardDetails.getCardAccNumber(),
+                cardDetails.getDateOfEnrollment(), cardDetails.getMonthDelinquency(), cardDetails.getCustId(),
                 cardDetails.getExpiryDate(), cardDetails.getAvailLmt());
 
     }
@@ -110,7 +112,7 @@ public class CardAccount extends DbModel
 
     public String getCardAccNumber()
     {
-        return cardAccNumber;
+        return id + cardAccNumber;
     }
 
     public void setCardAccNumber(String cardAccNumber)
@@ -138,6 +140,14 @@ public class CardAccount extends DbModel
         this.availLimit = availLimit;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public void instantiateFromCursor(Cursor cursor)
     {
@@ -154,6 +164,7 @@ public class CardAccount extends DbModel
             this.cardAccNumber = cursor.getString(cursor
                     .getColumnIndex(PocketBankerContract.CardAccount.CARD_ACC_NUMBER));
             this.expiryDate = cursor.getString(cursor.getColumnIndex(PocketBankerContract.CardAccount.EXPIRY_DATE));
+            this.id = cursor.getLong(cursor.getColumnIndex(PocketBankerContract.CardAccount._ID));
         }
 
     }
@@ -220,7 +231,7 @@ public class CardAccount extends DbModel
         return cardAccountList;
     }
 
-    public static CardAccount getCardAccount(String cardAccountNo)
+    public static CardAccount getCardAccount(String accNumber)
     {
         CardAccount cardAccount = null;
         Cursor c = null;
@@ -230,7 +241,7 @@ public class CardAccount extends DbModel
                     .getApplicationContext()
                     .getContentResolver()
                     .query(PocketBankerProvider.CONTENT_URI_CARDS, null,
-                            PocketBankerContract.CardAccount.CARD_ACC_NUMBER + " = ? ", new String[] { cardAccountNo },
+                            PocketBankerContract.CardAccount.CARD_ACC_NUMBER + " = ? ", new String[] { accNumber },
                             null);
             if (c != null && c.moveToNext()) {
                 cardAccount = new CardAccount();
