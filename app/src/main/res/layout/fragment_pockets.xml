@@ -23,7 +23,7 @@
         android:textSize="20sp"/>
 
     <Button
-        android:id="@+id/get_started_button"
+        android:id="@+id/pockets_get_started"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -33,5 +33,13 @@
         android:text="GET STARTED"
         android:textColor="@android:color/white"
         android:background="@android:color/holo_blue_dark"/>
+
+    <TextView
+        android:id="@+id/pockets_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Already have an account? Login"
+        android:padding="10dp"
+        android:textColor="@android:color/holo_red_light"/>
 
 </LinearLayout>
