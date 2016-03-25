@@ -7,6 +7,8 @@ import android.text.TextUtils;
 
 import com.example.zaas.pocketbanker.application.PocketBankerApplication;
 import com.example.zaas.pocketbanker.fragments.PinOrFingerprintFragment;
+import com.example.zaas.pocketbanker.models.local.PocketAccount;
+import com.google.gson.Gson;
 
 import org.w3c.dom.Text;
 
@@ -17,12 +19,15 @@ public class SecurityUtils {
 
     private static final String DEFAULT_SHARED_PREF = "user";
 
+    private static final String POCKET_ACCOUNT_KEY = "POCKET_ACCOUNT_KEY";
     private static final String PIN_CODE_KEY = "PIN_CODE_KEY";
     private static final String ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY";
     private static final String LAST_ACCESS_KEY = "LAST_ACCESS_KEY";
 
     private static final long ACCESS_TOKEN_EXPIRY = 60l * 24l * 60l * 60l * 1000l; // 60 days
     private static final long SESSION_EXPIRY = 5 * 60 * 1000; // 2 minutes
+
+    private static PocketAccount pocketAccount;
 
     private static SharedPreferences preferences;
 
@@ -115,5 +120,20 @@ public class SecurityUtils {
 
     public static boolean isLoginDataStored() {
         return !TextUtils.isEmpty(getPinCode());
+    }
+
+    public static PocketAccount getPocketsAccount() {
+        if (pocketAccount == null) {
+            String jsonString = getPreferences().getString(POCKET_ACCOUNT_KEY, "");
+            if (!TextUtils.isEmpty(jsonString)) {
+                pocketAccount = new Gson().fromJson(jsonString, PocketAccount.class);
+            }
+        }
+        return pocketAccount;
+    }
+
+    public static void savePocketsAccount(PocketAccount pocketAccount) {
+        SecurityUtils.pocketAccount = pocketAccount;
+        getPreferences().edit().putString(POCKET_ACCOUNT_KEY, new Gson().toJson(pocketAccount)).apply();
     }
 }

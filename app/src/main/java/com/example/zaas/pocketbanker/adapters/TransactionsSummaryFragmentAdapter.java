@@ -154,7 +154,7 @@ public class TransactionsSummaryFragmentAdapter extends RecyclerView.Adapter<Rec
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.content_frame, fragment);
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            ft.addToBackStack(null);
+            // ft.addToBackStack(null);
             ft.commit();
         }
     }

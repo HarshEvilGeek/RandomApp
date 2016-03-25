@@ -137,7 +137,7 @@ public class AccountSummaryFragmentAdapter extends RecyclerView.Adapter<Recycler
             FragmentManager fragmentManager = ((Activity) mContext).getFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.content_frame, fragment);
-            ft.addToBackStack(null);
+            // ft.addToBackStack(null);
             ft.commit();
         }
     }
