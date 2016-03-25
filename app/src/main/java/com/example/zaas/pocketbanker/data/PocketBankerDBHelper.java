@@ -271,16 +271,23 @@ public class PocketBankerDBHelper
             return getAllBranchAtms();
         case PocketBankerOpenHelper.Tables.PAYEES:
             return getAllPayees();
+        case PocketBankerOpenHelper.Tables.TRANSACTIONS:
+            return getAllTransactions();
         }
         return null;
     }
 
     private void insertOrUpdateDbModelTable(List<? extends DbModel> newDbModels)
     {
+        if (newDbModels == null || newDbModels.isEmpty()) {
+            // TODO delete all entries for passed table
+            return;
+        }
+        
         List<DbModel> modelsToUpdate = new ArrayList<>();
         List<DbModel> modelsToAdd = new ArrayList<>();
 
-        List<? extends DbModel> currentDbModels = getAllAccounts();
+        List<? extends DbModel> currentDbModels = getAllDbModels(newDbModels.get(0).getTable());
 
         for (DbModel newModel : newDbModels) {
             boolean found = false;
@@ -299,13 +306,17 @@ public class PocketBankerDBHelper
         batchUpdateDbModels(modelsToUpdate);
     }
 
-    private void insertUpdateAndDeleteDbModelTable(List<? extends DbModel> newDbModels)
+    public void insertUpdateAndDeleteDbModelTable(List<? extends DbModel> newDbModels)
     {
+        if (newDbModels == null || newDbModels.isEmpty()) {
+            // TODO delete all entries for passed table
+            return;
+        }
         List<DbModel> modelsToDelete = new ArrayList<>();
         List<DbModel> modelsToUpdate = new ArrayList<>();
         List<DbModel> modelsToAdd = new ArrayList<>();
 
-        List<? extends DbModel> currentDbModels = getAllAccounts();
+        List<? extends DbModel> currentDbModels = getAllDbModels(newDbModels.get(0).getTable());
 
         for (DbModel localModel : currentDbModels) {
             boolean found = false;
