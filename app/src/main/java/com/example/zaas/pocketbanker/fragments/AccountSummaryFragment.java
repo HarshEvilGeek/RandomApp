@@ -18,7 +18,10 @@ import android.view.ViewGroup;
 
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.adapters.AccountSummaryFragmentAdapter;
+import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Account;
+import com.example.zaas.pocketbanker.models.local.CardAccount;
+import com.example.zaas.pocketbanker.models.local.LoanAccount;
 import com.example.zaas.pocketbanker.models.local.SummaryUIItem;
 import com.example.zaas.pocketbanker.sync.NetworkHelper;
 import com.example.zaas.pocketbanker.utils.Constants;
@@ -76,28 +79,28 @@ public class AccountSummaryFragment extends Fragment
 
     private void disablePullToRefresh()
     {
-        if(mAccountSummarySwipeRefresh != null) {
+        if (mAccountSummarySwipeRefresh != null) {
             mAccountSummarySwipeRefresh.setEnabled(false);
         }
     }
 
     private void enablePullToRefresh()
     {
-        if(mAccountSummarySwipeRefresh != null) {
+        if (mAccountSummarySwipeRefresh != null) {
             mAccountSummarySwipeRefresh.setEnabled(true);
         }
     }
 
     private void stopProgressInPullToRefresh()
     {
-        if(mAccountSummarySwipeRefresh != null) {
+        if (mAccountSummarySwipeRefresh != null) {
             mAccountSummarySwipeRefresh.setRefreshing(false);
         }
     }
 
     private void startProgressInPullToRefresh()
     {
-        if(mAccountSummarySwipeRefresh != null) {
+        if (mAccountSummarySwipeRefresh != null) {
             mAccountSummarySwipeRefresh.setRefreshing(true);
         }
     }
@@ -151,35 +154,67 @@ public class AccountSummaryFragment extends Fragment
         {
             this.doNetworkCall = doNetworkCall;
         }
+
         @Override
         protected List<SummaryUIItem> doInBackground(Void... voids)
         {
-            SummaryUIItem uiItem1 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Bank Account", -1, null);
-            SummaryUIItem uiItem4 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Card", -1, null);
-            SummaryUIItem uiItem7 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Loan Account", -1, null);
-            SummaryUIItem uiItem2 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012243547123", 2345687.00,
-                    Constants.HEADER_TYPE_BANKACCOUNT);
-            SummaryUIItem uiItem3 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012246547123", 100000.00,
-                    Constants.HEADER_TYPE_BANKACCOUNT);
-            SummaryUIItem uiItem5 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012143547234", 50000.00,
-                    Constants.HEADER_TYPE_CARD);
-            SummaryUIItem uiItem6 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0020012243547456", 60000.00,
-                    Constants.HEADER_TYPE_CARD);
-            SummaryUIItem uiItem8 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0030012243547678", 789.00,
-                    Constants.HEADER_TYPE_LOANACCOUNT);
-            SummaryUIItem uiItem9 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0007012243547789", 60975.00,
-                    Constants.HEADER_TYPE_LOANACCOUNT);
-
+            PocketBankerDBHelper dbHelper = PocketBankerDBHelper.getInstance();
             List<SummaryUIItem> uiItems = new ArrayList<>();
-            uiItems.add(uiItem1);
-            uiItems.add(uiItem2);
-            uiItems.add(uiItem3);
-            uiItems.add(uiItem4);
-            uiItems.add(uiItem5);
-            uiItems.add(uiItem6);
-            uiItems.add(uiItem7);
-            uiItems.add(uiItem8);
-            uiItems.add(uiItem9);
+            List<Account> bankAccounts = dbHelper.getAllAccounts();
+
+            if (bankAccounts != null && !bankAccounts.isEmpty()) {
+                SummaryUIItem header1 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Bank Account", -1, null);
+
+                uiItems.add(header1);
+                for (Account bankAccount : bankAccounts) {
+                    SummaryUIItem bankAccountUIItem = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,
+                            bankAccount.getAccountNumber(), bankAccount.getBalance(), Constants.HEADER_TYPE_BANKACCOUNT);
+                    uiItems.add(bankAccountUIItem);
+                }
+            }
+
+            List<LoanAccount> loanAccounts = LoanAccount.getAllLoanAccounts();
+            if (loanAccounts != null && !loanAccounts.isEmpty()) {
+                SummaryUIItem header2 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Loan Account", -1, null);
+                uiItems.add(header2);
+                for (LoanAccount loanAccount : loanAccounts) {
+                    SummaryUIItem loanAccountUIItem = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,
+                            loanAccount.getLoanAccountNo(), loanAccount.getOutstandingPrinciple(),
+                            Constants.HEADER_TYPE_LOANACCOUNT);
+                    uiItems.add(loanAccountUIItem);
+                }
+            }
+
+            List<CardAccount> cardAccounts = CardAccount.getAllCardAccounts();
+            if (cardAccounts != null && !cardAccounts.isEmpty()) {
+                SummaryUIItem header3 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Card", -1, null);
+                uiItems.add(header3);
+                for (CardAccount cardAccount : cardAccounts) {
+                    SummaryUIItem cardAccountUIItem = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,
+                            cardAccount.getCardAccNumber(), cardAccount.getBalance(), Constants.HEADER_TYPE_CARD);
+                    uiItems.add(cardAccountUIItem);
+                }
+            }
+
+            /**
+             * SummaryUIItem uiItem4 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Card", -1, null);
+             * SummaryUIItem uiItem7 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Loan Account", -1, null);
+             * SummaryUIItem uiItem2 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012243547123",
+             * 2345687.00, Constants.HEADER_TYPE_BANKACCOUNT); SummaryUIItem uiItem3 = new
+             * SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012246547123", 100000.00,
+             * Constants.HEADER_TYPE_BANKACCOUNT); SummaryUIItem uiItem5 = new
+             * SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012143547234", 50000.00,
+             * Constants.HEADER_TYPE_CARD); SummaryUIItem uiItem6 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,
+             * "0020012243547456", 60000.00, Constants.HEADER_TYPE_CARD); SummaryUIItem uiItem8 = new
+             * SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0030012243547678", 789.00,
+             * Constants.HEADER_TYPE_LOANACCOUNT); SummaryUIItem uiItem9 = new
+             * SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0007012243547789", 60975.00,
+             * Constants.HEADER_TYPE_LOANACCOUNT);
+             * 
+             * uiItems.add(uiItem1); uiItems.add(uiItem2); uiItems.add(uiItem3); uiItems.add(uiItem4);
+             * uiItems.add(uiItem5); uiItems.add(uiItem6); uiItems.add(uiItem7); uiItems.add(uiItem8);
+             * uiItems.add(uiItem9);
+             **/
 
             return uiItems;
         }
@@ -199,7 +234,7 @@ public class AccountSummaryFragment extends Fragment
                 mAdapter.notifyDataSetChanged();
             }
 
-            if(doNetworkCall) {
+            if (doNetworkCall) {
                 fetchNetworkData();
             }
         }
@@ -219,24 +254,14 @@ public class AccountSummaryFragment extends Fragment
         protected Void doInBackground(Void... voids)
         {
             NetworkHelper networkHelper = new NetworkHelper();
-            List<Account> customerAccounts = null;
 
-            // TODO : here call dbhelper method
-            customerAccounts = new ArrayList<>();
+            // TODO : get from wherever
+            String custId = Constants.CUST_ID;
+            networkHelper.fetchAccountSummary(null, custId);
 
-            if (customerAccounts != null) {
-                // TODO get from where ?
-                String custId = "88881949";
+            networkHelper.getLoanAccountSummary(custId);
 
-                String accountNumber = "5555666677770949";
-                networkHelper.fetchAccountSummary(accountNumber, custId);
-
-                // more calls here depending on number of accounts
-
-                networkHelper.getLoanAccountSummary(custId);
-
-                networkHelper.getCardAccountDetails(custId);
-            }
+            networkHelper.getCardAccountDetails(custId);
 
             return null;
         }

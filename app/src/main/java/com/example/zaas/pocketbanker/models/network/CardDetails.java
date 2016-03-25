@@ -14,7 +14,7 @@ public class CardDetails
     private String monthDelinquency;
 
     @SerializedName ("current_balance")
-    private String currentBalance;
+    private double currentBalance;
 
     @SerializedName ("expiry_date")
     private String expiryDate;
@@ -25,7 +25,7 @@ public class CardDetails
     private String cardType;
 
     @SerializedName ("avail_lmt")
-    private String availLmt;
+    private double availLmt;
 
     private String cardStatus;
 
@@ -50,16 +50,6 @@ public class CardDetails
     public void setMonthDelinquency(String monthDelinquency)
     {
         this.monthDelinquency = monthDelinquency;
-    }
-
-    public String getCurrentBalance()
-    {
-        return currentBalance;
-    }
-
-    public void setCurrentBalance(String currentBalance)
-    {
-        this.currentBalance = currentBalance;
     }
 
     public String getExpiryDate()
@@ -92,16 +82,6 @@ public class CardDetails
         this.cardType = cardType;
     }
 
-    public String getAvailLmt()
-    {
-        return availLmt;
-    }
-
-    public void setAvailLmt(String availLmt)
-    {
-        this.availLmt = availLmt;
-    }
-
     public String getCardStatus()
     {
         return cardStatus;
@@ -120,6 +100,26 @@ public class CardDetails
     public void setCardAccNumber(String cardAccNumber)
     {
         this.cardAccNumber = cardAccNumber;
+    }
+
+    public double getCurrentBalance()
+    {
+        return currentBalance;
+    }
+
+    public void setCurrentBalance(double currentBalance)
+    {
+        this.currentBalance = currentBalance;
+    }
+
+    public double getAvailLmt()
+    {
+        return availLmt;
+    }
+
+    public void setAvailLmt(double availLmt)
+    {
+        this.availLmt = availLmt;
     }
 
     @Override

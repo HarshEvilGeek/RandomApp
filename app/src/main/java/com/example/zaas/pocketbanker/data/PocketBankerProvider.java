@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.zaas.pocketbanker.interfaces.IDataChangeListener;
@@ -163,11 +164,10 @@ public class PocketBankerProvider extends ContentProvider
         case CARD:
             where = PocketBankerContract.BaseColumns._ID + "=" + uri.getPathSegments().get(1);
         }
-
         if (selection == null) {
             selection = where;
         }
-        else {
+        else if (!TextUtils.isEmpty(where)) {
             selection = where + " AND (" + selection + ")";
         }
         return selection;
