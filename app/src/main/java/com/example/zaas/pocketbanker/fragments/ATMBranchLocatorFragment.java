@@ -27,11 +27,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.zaas.pocketbanker.R;
-import com.example.zaas.pocketbanker.activities.BranchAtmMapActivity;
 import com.example.zaas.pocketbanker.activities.BranchAtmDetailActivity;
+import com.example.zaas.pocketbanker.activities.BranchAtmMapActivity;
 import com.example.zaas.pocketbanker.adapters.BranchAtmAdapter;
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.interfaces.IFloatingButtonListener;
@@ -156,7 +155,7 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     private void setupRecyclerView(View rootView)
     {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
-        List<BranchAtm> listAll = PocketBankerDBHelper.getInstance().getAllBranchAtms(getActivity());
+        List<BranchAtm> listAll = PocketBankerDBHelper.getInstance().getAllBranchAtms();
         splitList(listAll);
         mAdapter = new BranchAtmAdapter(getActivity(), mBranchList);
         mAdapter.setOnClickListener(this);
@@ -266,25 +265,6 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         getActivity().startService(intent);
     }
 
-    @SuppressLint("ParcelCreator")
-    class AddressResultReceiver extends ResultReceiver {
-        public AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-            stopLocationProgressDialog();
-
-            if (resultCode == FetchAddressIntentService.SUCCESS_RESULT) {
-                String name = resultData.getString(FetchAddressIntentService.RESULT_DATA_KEY);
-                mCurrentLocationHeader.setText(name);
-            } else {
-                showErrorDialog();
-            }
-        }
-    }
-
     private void showLocationProgressDialog()
     {
         try {
@@ -346,7 +326,8 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     }
 
     @Override
-    public Drawable getFloatingButtonDrawable(Context context) {
+    public Drawable getFloatingButtonDrawable(Context context)
+    {
         return context.getResources().getDrawable(R.drawable.ic_fab_map);
     }
 
@@ -356,5 +337,28 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         mapIntent.putExtra(BranchAtmMapActivity.CURRENT_LOCATION_KEY, mCurrentLocation);
         mapIntent.putExtra(BranchAtmMapActivity.SINGLE_MAP_KEY, false);
         startActivity(mapIntent);
+    }
+
+    @SuppressLint ("ParcelCreator")
+    class AddressResultReceiver extends ResultReceiver
+    {
+        public AddressResultReceiver(Handler handler)
+        {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData)
+        {
+            stopLocationProgressDialog();
+
+            if (resultCode == FetchAddressIntentService.SUCCESS_RESULT) {
+                String name = resultData.getString(FetchAddressIntentService.RESULT_DATA_KEY);
+                mCurrentLocationHeader.setText(name);
+            }
+            else {
+                showErrorDialog();
+            }
+        }
     }
 }

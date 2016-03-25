@@ -2,7 +2,6 @@ package com.example.zaas.pocketbanker.activities;
 
 import java.util.List;
 
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -51,7 +50,7 @@ public class BranchAtmMapActivity extends AppCompatActivity implements OnMapRead
             ab.setHomeButtonEnabled(true);
             ab.setDisplayHomeAsUpEnabled(true);
         }
-        mBranchATMs = PocketBankerDBHelper.getInstance().getAllBranchAtms(this);
+        mBranchATMs = PocketBankerDBHelper.getInstance().getAllBranchAtms();
         mIsSingleMode = extras.getBoolean(SINGLE_MAP_KEY);
         handleExtras(extras);
         setContentView(R.layout.activity_atm_branch_map);

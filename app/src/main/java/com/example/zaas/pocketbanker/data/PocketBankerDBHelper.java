@@ -15,11 +15,13 @@ import android.net.Uri;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.example.zaas.pocketbanker.application.PocketBankerApplication;
 import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.example.zaas.pocketbanker.models.local.DbModel;
 import com.example.zaas.pocketbanker.models.local.Payee;
 import com.example.zaas.pocketbanker.models.local.Transaction;
+import com.example.zaas.pocketbanker.models.local.TransactionCategory;
 
 /**
  * Created by akhil on 3/19/16.
@@ -29,7 +31,6 @@ public class PocketBankerDBHelper
     private static final String TAG = "PocketBankerDBHelper";
 
     private static PocketBankerDBHelper instance;
-
     private static Map<String, Uri> tableToUriMap = new HashMap<>();
 
     static {
@@ -44,8 +45,11 @@ public class PocketBankerDBHelper
         tableToUriMap.put(PocketBankerOpenHelper.Tables.CARDS, PocketBankerProvider.CONTENT_URI_CARDS);
     }
 
+    private Context context;
+
     private PocketBankerDBHelper()
     {
+        context = PocketBankerApplication.getApplication().getApplicationContext();
     }
 
     public static PocketBankerDBHelper getInstance()
@@ -56,7 +60,7 @@ public class PocketBankerDBHelper
         return instance;
     }
 
-    public List<Account> getAllAccounts(Context context)
+    public List<Account> getAllAccounts()
     {
         Cursor c = null;
         List<Account> accountList = new ArrayList<>();
@@ -78,7 +82,7 @@ public class PocketBankerDBHelper
         return accountList;
     }
 
-    public List<Payee> getAllPayees(Context context)
+    public List<Payee> getAllPayees()
     {
         Cursor c = null;
         List<Payee> payeeList = new ArrayList<>();
@@ -100,7 +104,7 @@ public class PocketBankerDBHelper
         return payeeList;
     }
 
-    public List<Transaction> getAllTransactions(Context context)
+    public List<Transaction> getAllTransactions()
     {
         Cursor c = null;
         List<Transaction> transactionList = new ArrayList<>();
@@ -123,7 +127,30 @@ public class PocketBankerDBHelper
         return transactionList;
     }
 
-    public Payee getPayeeForLocalId(Context context, int id)
+    public List<TransactionCategory> getAllTransactionCategories()
+    {
+        Cursor c = null;
+        List<TransactionCategory> transactionCategoryList = new ArrayList<>();
+        try {
+            c = context.getContentResolver().query(PocketBankerProvider.CONTENT_URI_TRANSACTION_CATEGORIES, null, null,
+                    null, null);
+            if (c != null) {
+                while (c.moveToNext()) {
+                    TransactionCategory transactionCategory = new TransactionCategory();
+                    transactionCategory.instantiateFromCursor(c);
+                    transactionCategoryList.add(transactionCategory);
+                }
+            }
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return transactionCategoryList;
+    }
+
+    public Payee getPayeeForLocalId(int id)
     {
         Cursor c = null;
         Payee payee = null;
@@ -143,7 +170,7 @@ public class PocketBankerDBHelper
         return payee;
     }
 
-    public List<BranchAtm> getAllBranchAtms(Context context)
+    public List<BranchAtm> getAllBranchAtms()
     {
         Cursor c = null;
         List<BranchAtm> branchAtmList = new ArrayList<>();
@@ -166,7 +193,7 @@ public class PocketBankerDBHelper
         return branchAtmList;
     }
 
-    public BranchAtm getBranchAtmForLocalId(Context context, int id)
+    public BranchAtm getBranchAtmForLocalId(int id)
     {
         Cursor c = null;
         BranchAtm branchAtm = null;
@@ -187,26 +214,26 @@ public class PocketBankerDBHelper
         return branchAtm;
     }
 
-    public List<? extends DbModel> getAllDbModels(Context context, String table)
+    public List<? extends DbModel> getAllDbModels(String table)
     {
         switch (table)
         {
         case PocketBankerOpenHelper.Tables.ACCOUNTS:
-            return getAllAccounts(context);
+            return getAllAccounts();
         case PocketBankerOpenHelper.Tables.BRANCH_ATMS:
-            return getAllBranchAtms(context);
+            return getAllBranchAtms();
         case PocketBankerOpenHelper.Tables.PAYEES:
-            return getAllPayees(context);
+            return getAllPayees();
         }
         return null;
     }
 
-    private void insertOrUpdateDbModelTable(Context context, List<? extends DbModel> newDbModels)
+    private void insertOrUpdateDbModelTable(List<? extends DbModel> newDbModels)
     {
         List<DbModel> modelsToUpdate = new ArrayList<>();
         List<DbModel> modelsToAdd = new ArrayList<>();
 
-        List<? extends DbModel> currentDbModels = getAllAccounts(context);
+        List<? extends DbModel> currentDbModels = getAllAccounts();
 
         for (DbModel newModel : newDbModels) {
             boolean found = false;
@@ -221,17 +248,17 @@ public class PocketBankerDBHelper
             }
         }
 
-        bulkInsertDbModels(context, modelsToAdd);
-        batchUpdateDbModels(context, modelsToUpdate);
+        bulkInsertDbModels(modelsToAdd);
+        batchUpdateDbModels(modelsToUpdate);
     }
 
-    private void insertUpdateAndDeleteDbModelTable(Context context, List<? extends DbModel> newDbModels)
+    private void insertUpdateAndDeleteDbModelTable(List<? extends DbModel> newDbModels)
     {
         List<DbModel> modelsToDelete = new ArrayList<>();
         List<DbModel> modelsToUpdate = new ArrayList<>();
         List<DbModel> modelsToAdd = new ArrayList<>();
 
-        List<? extends DbModel> currentDbModels = getAllAccounts(context);
+        List<? extends DbModel> currentDbModels = getAllAccounts();
 
         for (DbModel localModel : currentDbModels) {
             boolean found = false;
@@ -258,12 +285,12 @@ public class PocketBankerDBHelper
             }
         }
 
-        bulkInsertDbModels(context, modelsToAdd);
-        batchUpdateDbModels(context, modelsToUpdate);
-        batchDeleteDbModels(context, modelsToDelete);
+        bulkInsertDbModels(modelsToAdd);
+        batchUpdateDbModels(modelsToUpdate);
+        batchDeleteDbModels(modelsToDelete);
     }
 
-    private void bulkInsertDbModels(Context context, List<DbModel> dbModelsToInsert)
+    private void bulkInsertDbModels(List<DbModel> dbModelsToInsert)
     {
         if (dbModelsToInsert == null || dbModelsToInsert.isEmpty()) {
             return;
@@ -276,7 +303,7 @@ public class PocketBankerDBHelper
         context.getContentResolver().bulkInsert(contentUri, values);
     }
 
-    private void batchUpdateDbModels(Context context, List<DbModel> dbModelsToUpdate)
+    private void batchUpdateDbModels(List<DbModel> dbModelsToUpdate)
     {
         if (dbModelsToUpdate == null || dbModelsToUpdate.isEmpty()) {
             return;
@@ -300,7 +327,7 @@ public class PocketBankerDBHelper
         }
     }
 
-    private void batchDeleteDbModels(Context context, List<DbModel> dbModelsToDelete)
+    private void batchDeleteDbModels(List<DbModel> dbModelsToDelete)
     {
         if (dbModelsToDelete == null || dbModelsToDelete.isEmpty()) {
             return;

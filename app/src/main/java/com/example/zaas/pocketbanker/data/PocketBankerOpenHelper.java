@@ -155,10 +155,10 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
                 System.currentTimeMillis() - 12 * ONE_DAY_IN_MILLIS, "PVR");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 2600, 1200000, Transaction.Type.DEBIT, "Dinner",
-                System.currentTimeMillis() - 10 * ONE_DAY_IN_MILLIS, "Cafe Mezzuna");
+                System.currentTimeMillis() - 10 * ONE_DAY_IN_MILLIS, "Pizza Hut");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1350, 1200000, Transaction.Type.DEBIT, "Lunch",
-                System.currentTimeMillis() - 7 * ONE_DAY_IN_MILLIS, "Apex Restuarant");
+                System.currentTimeMillis() - 7 * ONE_DAY_IN_MILLIS, "Taco Bell");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 25000, 1200000, Transaction.Type.CREDIT,
                 "Debt Settlement", System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS, "");
@@ -167,7 +167,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
                 System.currentTimeMillis() - 3 * ONE_DAY_IN_MILLIS, "Ola");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1000, 1200000, Transaction.Type.DEBIT, "Doctor",
-                System.currentTimeMillis() - ONE_DAY_IN_MILLIS, "Dental clinic");
+                System.currentTimeMillis() - ONE_DAY_IN_MILLIS, "Fortis");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3500, 1200000, Transaction.Type.DEBIT, "Gift",
                 System.currentTimeMillis(), "Archies");

@@ -1,8 +1,11 @@
 package com.example.zaas.pocketbanker.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.local.TransactionCategory;
 
@@ -11,13 +14,19 @@ import com.example.zaas.pocketbanker.models.local.TransactionCategory;
  */
 public class TransactionCategoryUtils
 {
-    public static Category getCategoryForMerchant(String merchantName)
-    {
-        return Category.UNKNOWN;
-    }
+    private static Map<String, Category> sTransactionCategoryMap;
 
     public static Category getCategoryForTransaction(Transaction transaction)
     {
+        return getCategoryForMerchant(transaction.getMerchantName());
+    }
+
+    public static Category getCategoryForMerchant(String merchantName)
+    {
+        merchantName = merchantName.toLowerCase().replaceAll(" ", "").replaceAll("'", "");
+        if (sTransactionCategoryMap != null && sTransactionCategoryMap.containsKey(merchantName)) {
+            return sTransactionCategoryMap.get(merchantName);
+        }
         return Category.UNKNOWN;
     }
 
@@ -91,6 +100,16 @@ public class TransactionCategoryUtils
         list.add(new TransactionCategory("fame", Category.HEALTH));
 
         return list;
+    }
+
+    public static void populateTransactionCategoryMap()
+    {
+        sTransactionCategoryMap = new HashMap<>();
+        List<TransactionCategory> transactionCategoryList = PocketBankerDBHelper.getInstance()
+                .getAllTransactionCategories();
+        for (TransactionCategory transactionCategory : transactionCategoryList) {
+            sTransactionCategoryMap.put(transactionCategory.getMerchantName(), transactionCategory.getCategory());
+        }
     }
 
     public enum Category

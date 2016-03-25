@@ -67,7 +67,7 @@ public class TransferFundsFragment extends Fragment implements PayeeAdapter.OnCl
     private void setupRecyclerView(View rootView)
     {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
-        mAdapter = new PayeeAdapter(getActivity(), PocketBankerDBHelper.getInstance().getAllPayees(getActivity()));
+        mAdapter = new PayeeAdapter(getActivity(), PocketBankerDBHelper.getInstance().getAllPayees());
         mAdapter.setOnClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));

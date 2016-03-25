@@ -64,8 +64,8 @@ public class TransferFundsToPayeeActivity extends AppCompatActivity
             return;
         }
 
-        mPayee = PocketBankerDBHelper.getInstance().getPayeeForLocalId(this, payeeLocalId);
-        mAccounts = PocketBankerDBHelper.getInstance().getAllAccounts(this);
+        mPayee = PocketBankerDBHelper.getInstance().getPayeeForLocalId(payeeLocalId);
+        mAccounts = PocketBankerDBHelper.getInstance().getAllAccounts();
         if (mPayee == null || mAccounts.size() == 0) {
             finish();
             return;
