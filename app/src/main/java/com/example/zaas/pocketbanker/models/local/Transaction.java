@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import com.example.zaas.pocketbanker.data.PocketBankerContract;
 import com.example.zaas.pocketbanker.data.PocketBankerOpenHelper;
+import com.example.zaas.pocketbanker.utils.TransactionCategoryUtils;
 
 /**
  * DB model for transactions
@@ -21,13 +22,18 @@ public class Transaction extends DbModel
     private Type type;
     private String remark;
     private long time;
+    private String merchantId;
+    private String merchantName;
+    private TransactionCategoryUtils.Category category;
 
     public Transaction()
     {
-
+        type = Type.DEBIT;
+        category = TransactionCategoryUtils.Category.UNKNOWN;
     }
 
-    public Transaction(String accountNumber, double amount, double balance, Type type, String remark, long time)
+    public Transaction(String accountNumber, double amount, double balance, Type type, String remark, long time,
+            String merchantName)
     {
         this.transactionId = Long.toString(time);
         this.accountNumber = accountNumber;
@@ -36,6 +42,9 @@ public class Transaction extends DbModel
         this.type = type;
         this.remark = remark;
         this.time = time;
+        this.merchantId = "xyz";
+        this.merchantName = merchantName;
+        this.category = TransactionCategoryUtils.getCategoryForMerchant(merchantName);
     }
 
     public int getId()
@@ -116,7 +125,38 @@ public class Transaction extends DbModel
     public void setTime(long time)
     {
         this.time = time;
-        setTransactionId(Long.toString(time));
+        this.transactionId = Long.toString(time);
+    }
+
+    public String getMerchantId()
+    {
+        return merchantId;
+    }
+
+    public void setMerchantId(String merchantId)
+    {
+        this.merchantId = merchantId;
+    }
+
+    public String getMerchantName()
+    {
+        return merchantName;
+    }
+
+    public void setMerchantName(String merchantName)
+    {
+        this.merchantName = merchantName;
+        this.category = TransactionCategoryUtils.getCategoryForMerchant(merchantName);
+    }
+
+    public TransactionCategoryUtils.Category getCategory()
+    {
+        return category;
+    }
+
+    public void setCategory(TransactionCategoryUtils.Category category)
+    {
+        this.category = category;
     }
 
     @Override
@@ -132,6 +172,10 @@ public class Transaction extends DbModel
                     .getColumnIndex(PocketBankerContract.Transactions.CREDIT_OR_DEBIT))]);
             setRemark(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Transactions.REMARK)));
             setTime(cursor.getLong(cursor.getColumnIndex(PocketBankerContract.Transactions.TIME)));
+            setMerchantId(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Transactions.MERCHANT_ID)));
+            setMerchantName(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Transactions.MERCHANT_NAME)));
+            setCategory(TransactionCategoryUtils.Category.values()[cursor.getInt(cursor
+                    .getColumnIndex(PocketBankerContract.Transactions.CATEGORY))]);
         }
     }
 
@@ -164,6 +208,9 @@ public class Transaction extends DbModel
         contentValues.put(PocketBankerContract.Transactions.CREDIT_OR_DEBIT, type.ordinal());
         contentValues.put(PocketBankerContract.Transactions.REMARK, remark);
         contentValues.put(PocketBankerContract.Transactions.TIME, time);
+        contentValues.put(PocketBankerContract.Transactions.MERCHANT_ID, merchantId);
+        contentValues.put(PocketBankerContract.Transactions.MERCHANT_NAME, merchantName);
+        contentValues.put(PocketBankerContract.Transactions.CATEGORY, category.ordinal());
         return contentValues;
     }
 

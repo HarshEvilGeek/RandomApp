@@ -26,6 +26,9 @@ public class PocketBankerContract {
         String AMOUNT = "amount";
         String CREDIT_OR_DEBIT = "credit_or_debit";
         String REMARK = "remark";
+        String MERCHANT_ID = "merchant_id";
+        String MERCHANT_NAME = "merchant_name";
+        String CATEGORY = "category";
     }
 
     interface PayeeColumns {

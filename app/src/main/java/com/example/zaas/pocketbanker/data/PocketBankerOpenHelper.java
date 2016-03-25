@@ -128,34 +128,34 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
     private void insertDummyTransactionData(SQLiteDatabase db)
     {
         Transaction transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 12000, 1200000, Transaction.Type.DEBIT,
-                "House Rent", System.currentTimeMillis() - 30 * ONE_DAY_IN_MILLIS);
+                "House Rent", System.currentTimeMillis() - 30 * ONE_DAY_IN_MILLIS, "House Rent");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 800, 1200000, Transaction.Type.DEBIT, "Conveyance",
-                System.currentTimeMillis() - 20 * ONE_DAY_IN_MILLIS);
+                System.currentTimeMillis() - 20 * ONE_DAY_IN_MILLIS, "Uber");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3000, 1200000, Transaction.Type.DEBIT, "Shopping",
-                System.currentTimeMillis() - 15 * ONE_DAY_IN_MILLIS);
+                System.currentTimeMillis() - 15 * ONE_DAY_IN_MILLIS, "Puma");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 900, 1200000, Transaction.Type.DEBIT, "Movies",
-                System.currentTimeMillis() - 12 * ONE_DAY_IN_MILLIS);
+                System.currentTimeMillis() - 12 * ONE_DAY_IN_MILLIS, "PVR");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 2600, 1200000, Transaction.Type.DEBIT, "Dinner",
-                System.currentTimeMillis() - 10 * ONE_DAY_IN_MILLIS);
+                System.currentTimeMillis() - 10 * ONE_DAY_IN_MILLIS, "Cafe Mezzuna");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1350, 1200000, Transaction.Type.DEBIT, "Lunch",
-                System.currentTimeMillis() - 7 * ONE_DAY_IN_MILLIS);
+                System.currentTimeMillis() - 7 * ONE_DAY_IN_MILLIS, "Apex Restuarant");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 25000, 1200000, Transaction.Type.CREDIT,
-                "Debt Settlement", System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS);
+                "Debt Settlement", System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS, "");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 450, 1200000, Transaction.Type.DEBIT, "Taxi",
-                System.currentTimeMillis() - 3 * ONE_DAY_IN_MILLIS);
+                System.currentTimeMillis() - 3 * ONE_DAY_IN_MILLIS, "Ola");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1000, 1200000, Transaction.Type.DEBIT, "Doctor",
-                System.currentTimeMillis() - ONE_DAY_IN_MILLIS);
+                System.currentTimeMillis() - ONE_DAY_IN_MILLIS, "Dental clinic");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3500, 1200000, Transaction.Type.DEBIT, "Gift",
-                System.currentTimeMillis());
+                System.currentTimeMillis(), "Archies");
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
     }
 
@@ -198,7 +198,10 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
                 + PocketBankerContract.Transactions.AMOUNT + " real, "
                 + PocketBankerContract.Transactions.CREDIT_OR_DEBIT + " integer, "
                 + PocketBankerContract.Transactions.BALANCE + " real, " + PocketBankerContract.Transactions.REMARK
-                + " text, " + PocketBankerContract.Transactions.TIME + " integer);";
+                + " text, " + PocketBankerContract.Transactions.TIME + " integer, "
+                + PocketBankerContract.Transactions.MERCHANT_ID + " text, "
+                + PocketBankerContract.Transactions.MERCHANT_NAME + " text, "
+                + PocketBankerContract.Transactions.CATEGORY + " integer);";
 
         String CREATE_TABLE_PAYEES_QUERY = "CREATE table " + PAYEES + " (" + PocketBankerContract.Payees._ID
                 + " integer primary key autoincrement, " + PocketBankerContract.Payees.PAYEE_ID + " text, "
