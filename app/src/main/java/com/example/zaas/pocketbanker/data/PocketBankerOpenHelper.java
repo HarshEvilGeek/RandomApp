@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.example.zaas.pocketbanker.models.local.Payee;
+import com.example.zaas.pocketbanker.models.local.Recommendation;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.local.TransactionCategory;
 import com.example.zaas.pocketbanker.utils.TransactionCategoryUtils;
@@ -47,8 +48,10 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
         db.execSQL(Tables.CREATE_TABLE_EMIS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_LOAN_TRANSACTIONS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_TRANSACTION_CATEGORIES_QUERY);
+        db.execSQL(Tables.CREATE_TABLE_RECOMMENDATIONS_QUERY);
 
         insertInitialTransactionCategories(db);
+        insertRecommendations(db);
 
         // Only for testing
         insertDummyData(db);
@@ -66,6 +69,18 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
         for (TransactionCategory transactionCategory : transactionCategoryList) {
             db.insert(Tables.TRANSACTION_CATEGORIES, null, transactionCategory.toContentValues());
         }
+    }
+
+    private void insertRecommendations(SQLiteDatabase db)
+    {
+        Recommendation recommendation = new Recommendation("1", "Avail 15% off on movie tickets on BookMyShow",
+                "http://www.afaqs.com/all/news/images/news_story_grfx/2013/12/39336/Bookmyshow-new-logo.jpg",
+                TransactionCategoryUtils.Category.MOVIES, "Shown because of your interest in movies");
+        db.insert(Tables.RECOMMENDATIONS, null, recommendation.toContentValues());
+        recommendation = new Recommendation("2", "Buy 1 Get 1 in McDonald's",
+                "http://2.bp.blogspot.com/-4hgRPCvosa0/VCoWtmcTfLI/AAAAAAAABZE/YPap5ES5_o0/s1600/mcd-logo.png",
+                TransactionCategoryUtils.Category.FOOD, "Based on your interest in restaurants");
+        db.insert(Tables.RECOMMENDATIONS, null, recommendation.toContentValues());
     }
 
     private void insertDummyData(SQLiteDatabase db)
@@ -206,6 +221,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
         String LOAN_TRANSACTIONS = "LoanTransactions";
         String CARDS = "Cards";
         String TRANSACTION_CATEGORIES = "TransactionCategories";
+        String RECOMMENDATIONS = "Recommendations";
 
         String CREATE_TABLE_ACCOUNTS_QUERY = "CREATE table " + ACCOUNTS + " (" + PocketBankerContract.Account._ID
                 + " integer primary key autoincrement, " + PocketBankerContract.Account.ACCOUNT_NUMBER + " text, "
@@ -273,5 +289,12 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
                 + PocketBankerContract.TransactionCategories._ID + " integer primary key autoincrement, "
                 + PocketBankerContract.TransactionCategories.MERCHANT_NAME + " text unique, "
                 + PocketBankerContract.TransactionCategories.CATEGORY + " integer);";
+
+        String CREATE_TABLE_RECOMMENDATIONS_QUERY = "CREATE table " + RECOMMENDATIONS + " ("
+                + PocketBankerContract.Recommendations._ID + " integer primary key autoincrement, "
+                + PocketBankerContract.Recommendations.RECOMMENDATION_ID + " text, "
+                + PocketBankerContract.Recommendations.MESSAGE + " text, " + PocketBankerContract.Recommendations.URL
+                + " text, " + PocketBankerContract.Recommendations.REASON + " text, "
+                + PocketBankerContract.Recommendations.CATEGORY + " integer);";
     }
 }
