@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.activities.AddPayeeNFCActivity;
@@ -44,10 +45,18 @@ public class TransferFundsFragment extends Fragment implements PayeeAdapter.OnCl
         View rootView = inflater.inflate(R.layout.fragment_transfer_funds, container, false);
 
         getActivity().setTitle(R.string.action_transfer);
+
+        setupHeaderView(rootView);
         setupSwipeContainer(rootView);
         setupRecyclerView(rootView);
 
         return rootView;
+    }
+
+    private void setupHeaderView(View rootView)
+    {
+        TextView headerTv = (TextView) rootView.findViewById(R.id.header_tv);
+        headerTv.setText(R.string.registered_payees);
     }
 
     private void setupSwipeContainer(View rootView)
