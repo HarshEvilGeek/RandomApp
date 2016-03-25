@@ -29,12 +29,15 @@ public class CreatePocketsActivity extends BaseRestrictedActivity {
     EditText firstName;
     EditText lastName;
     EditText phoneNumber;
+<<<<<<< HEAD
     EditText email;
 
     ProgressDialog createProgressDialog;
     boolean createInProgress = false;
 
     Button createOrLogin;
+=======
+>>>>>>> 1c811ae89dcb244251dd95651d4a866c084b3289
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

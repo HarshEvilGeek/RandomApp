@@ -157,7 +157,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
 
     private void insertDummyTransactionData(SQLiteDatabase db)
     {
-        Transaction transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 12000, 1200000, Transaction.Type.DEBIT,
+        Transaction transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1200, 1200000, Transaction.Type.DEBIT,
                 "House Rent", System.currentTimeMillis() - 30 * ONE_DAY_IN_MILLIS, "House Rent",
                 TransactionCategoryUtils.Category.UNKNOWN);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
@@ -177,7 +177,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1350, 1200000, Transaction.Type.DEBIT, "Lunch",
                 System.currentTimeMillis() - 7 * ONE_DAY_IN_MILLIS, "Taco Bell", TransactionCategoryUtils.Category.FOOD);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
-        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 25000, 1200000, Transaction.Type.CREDIT,
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 250, 1200000, Transaction.Type.CREDIT,
                 "Debt Settlement", System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS, "",
                 TransactionCategoryUtils.Category.UNKNOWN);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
