@@ -18,7 +18,6 @@ public class CreatePocketsActivity extends BaseRestrictedActivity {
     EditText firstName;
     EditText lastName;
     EditText phoneNumber;
-    EditText firstName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
