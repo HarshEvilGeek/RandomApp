@@ -1,5 +1,7 @@
 package com.example.zaas.pocketbanker.data;
 
+import java.util.List;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -9,6 +11,8 @@ import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.example.zaas.pocketbanker.models.local.Payee;
 import com.example.zaas.pocketbanker.models.local.Transaction;
+import com.example.zaas.pocketbanker.models.local.TransactionCategory;
+import com.example.zaas.pocketbanker.utils.TransactionCategoryUtils;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -42,6 +46,9 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
         db.execSQL(Tables.CREATE_TABLE_LOANS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_EMIS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_LOAN_TRANSACTIONS_QUERY);
+        db.execSQL(Tables.CREATE_TABLE_TRANSACTION_CATEGORIES_QUERY);
+
+        insertInitialTransactionCategories(db);
 
         // Only for testing
         insertDummyData(db);
@@ -51,6 +58,14 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
 
+    }
+
+    private void insertInitialTransactionCategories(SQLiteDatabase db)
+    {
+        List<TransactionCategory> transactionCategoryList = TransactionCategoryUtils.getInitialTransactionCategories();
+        for (TransactionCategory transactionCategory : transactionCategoryList) {
+            db.insert(Tables.TRANSACTION_CATEGORIES, null, transactionCategory.toContentValues());
+        }
     }
 
     private void insertDummyData(SQLiteDatabase db)
@@ -170,9 +185,11 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
         int loanCount = db.delete(Tables.LOANS, "1", null);
         int emiCount = db.delete(Tables.EMIS, "1", null);
         int loanTransactionCount = db.delete(Tables.LOAN_TRANSACTIONS, "1", null);
+        int transactionCategoriesCount = db.delete(Tables.TRANSACTION_CATEGORIES, "1", null);
         Log.i(TAG, "Deleted " + accountCount + " accounts, " + transactionCount + " transactions, " + payeeCount
                 + " payees, " + branchAtmCount + " branches/ATMs, " + cardCount + " cards, " + loanCount
-                + " loan details, " + emiCount + " emis and " + loanTransactionCount + " loan transactions.");
+                + " loan details, " + emiCount + " emis, " + loanTransactionCount + " loan transactions and "
+                + transactionCategoriesCount + " transaction categories.");
     }
 
     public interface Tables
@@ -185,6 +202,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
         String EMIS = "Emis";
         String LOAN_TRANSACTIONS = "LoanTransactions";
         String CARDS = "Cards";
+        String TRANSACTION_CATEGORIES = "TransactionCategories";
 
         String CREATE_TABLE_ACCOUNTS_QUERY = "CREATE table " + ACCOUNTS + " (" + PocketBankerContract.Account._ID
                 + " integer primary key autoincrement, " + PocketBankerContract.Account.ACCOUNT_NUMBER + " text, "
@@ -247,5 +265,10 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
                 + PocketBankerContract.CardAccount.MONTH_DELINQUENCY + " text, "
                 + PocketBankerContract.CardAccount.EXPIRY_DATE + " integer, "
                 + PocketBankerContract.CardAccount.AVAIL_LIMIT + " integer);";
+
+        String CREATE_TABLE_TRANSACTION_CATEGORIES_QUERY = "CREATE table " + TRANSACTION_CATEGORIES + " ("
+                + PocketBankerContract.TransactionCategories._ID + " integer primary key autoincrement, "
+                + PocketBankerContract.TransactionCategories.MERCHANT_NAME + " text unique, "
+                + PocketBankerContract.TransactionCategories.CATEGORY + " integer);";
     }
 }
