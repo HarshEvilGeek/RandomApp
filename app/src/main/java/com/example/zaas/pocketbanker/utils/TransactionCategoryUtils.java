@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.text.TextUtils;
+
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.local.TransactionCategory;
@@ -24,7 +26,8 @@ public class TransactionCategoryUtils
     public static Category getCategoryForMerchant(String merchantName)
     {
         merchantName = merchantName.toLowerCase().replaceAll(" ", "").replaceAll("'", "");
-        if (sTransactionCategoryMap != null && sTransactionCategoryMap.containsKey(merchantName)) {
+        if (sTransactionCategoryMap != null && TextUtils.isEmpty(merchantName)
+                && sTransactionCategoryMap.containsKey(merchantName)) {
             return sTransactionCategoryMap.get(merchantName);
         }
         return Category.UNKNOWN;
