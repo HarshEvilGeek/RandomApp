@@ -8,25 +8,32 @@ import android.util.Log;
 import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.example.zaas.pocketbanker.models.local.Payee;
+import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by akhil on 3/19/16.
  */
-public class PocketBankerOpenHelper extends SQLiteOpenHelper {
+public class PocketBankerOpenHelper extends SQLiteOpenHelper
+{
 
     private static final String TAG = "PocketBankerOpenHelper";
 
     private static final String DATABASE_NAME = "pocketbanker.db";
     private static final int DATABASE_VERSION_1 = 1; // Version 1 released April 2016
     private static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
+    private static final String DUMMY_ACCOUNT_NUMBER_1 = "120938029383";
+    private static final String DUMMY_ACCOUNT_NUMBER_2 = "512398120938";
+    private static final String DUMMY_ACCOUNT_NUMBER_3 = "904850982322";
 
-    public PocketBankerOpenHelper(Context context) {
+    public PocketBankerOpenHelper(Context context)
+    {
         super(context, DATABASE_NAME, null, DATABASE_VERSION_1);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(SQLiteDatabase db)
+    {
         db.execSQL(Tables.CREATE_TABLE_ACCOUNTS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_TRANSACTIONS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_PAYEES_QUERY);
@@ -41,31 +48,33 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+    {
 
     }
 
-    public void insertDummyData(SQLiteDatabase db)
+    private void insertDummyData(SQLiteDatabase db)
     {
         insertDummyAccountData(db);
         insertDummyPayeeData(db);
         insertDummyBranchAtmData(db);
+        insertDummyTransactionData(db);
     }
 
-    public void insertDummyAccountData(SQLiteDatabase db)
+    private void insertDummyAccountData(SQLiteDatabase db)
     {
         Account account = new Account();
-        account.setAccountNumber("120938029383");
-        account.setBalance(203000);
+        account.setAccountNumber(DUMMY_ACCOUNT_NUMBER_1);
+        account.setBalance(1230500);
         account.setType("Savings");
         account.setLastUpdateTime(System.currentTimeMillis());
         db.insert(Tables.ACCOUNTS, null, account.toContentValues());
-        account.setAccountNumber("12398120938");
+        account.setAccountNumber(DUMMY_ACCOUNT_NUMBER_2);
         account.setBalance(3243000);
         account.setType("Current");
         account.setLastUpdateTime(System.currentTimeMillis());
         db.insert(Tables.ACCOUNTS, null, account.toContentValues());
-        account.setAccountNumber("90485098232");
+        account.setAccountNumber(DUMMY_ACCOUNT_NUMBER_3);
         account.setBalance(4905832);
         account.setType("Savings");
         account.setLastUpdateTime(System.currentTimeMillis());
@@ -116,7 +125,42 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
         db.insert(Tables.BRANCH_ATMS, null, branchAtm.toContentValues());
     }
 
-    public void deleteTables() {
+    private void insertDummyTransactionData(SQLiteDatabase db)
+    {
+        Transaction transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 12000, 1200000, Transaction.Type.DEBIT,
+                "House Rent", System.currentTimeMillis() - 30 * ONE_DAY_IN_MILLIS);
+        db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 800, 1200000, Transaction.Type.DEBIT, "Conveyance",
+                System.currentTimeMillis() - 20 * ONE_DAY_IN_MILLIS);
+        db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3000, 1200000, Transaction.Type.DEBIT, "Shopping",
+                System.currentTimeMillis() - 15 * ONE_DAY_IN_MILLIS);
+        db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 900, 1200000, Transaction.Type.DEBIT, "Movies",
+                System.currentTimeMillis() - 12 * ONE_DAY_IN_MILLIS);
+        db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 2600, 1200000, Transaction.Type.DEBIT, "Dinner",
+                System.currentTimeMillis() - 10 * ONE_DAY_IN_MILLIS);
+        db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1350, 1200000, Transaction.Type.DEBIT, "Lunch",
+                System.currentTimeMillis() - 7 * ONE_DAY_IN_MILLIS);
+        db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 25000, 1200000, Transaction.Type.CREDIT,
+                "Debt Settlement", System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS);
+        db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 450, 1200000, Transaction.Type.DEBIT, "Taxi",
+                System.currentTimeMillis() - 3 * ONE_DAY_IN_MILLIS);
+        db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1000, 1200000, Transaction.Type.DEBIT, "Doctor",
+                System.currentTimeMillis() - ONE_DAY_IN_MILLIS);
+        db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3500, 1200000, Transaction.Type.DEBIT, "Gift",
+                System.currentTimeMillis());
+        db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
+    }
+
+    public void deleteTables()
+    {
         SQLiteDatabase db = getWritableDatabase();
         int accountCount = db.delete(Tables.ACCOUNTS, "1", null);
         int transactionCount = db.delete(Tables.TRANSACTIONS, "1", null);
@@ -131,7 +175,8 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
                 + " loan details, " + emiCount + " emis and " + loanTransactionCount + " loan transactions.");
     }
 
-    public interface Tables {
+    public interface Tables
+    {
         String ACCOUNTS = "Accounts";
         String TRANSACTIONS = "Transactions";
         String PAYEES = "Payees";
@@ -141,34 +186,25 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
         String LOAN_TRANSACTIONS = "LoanTransactions";
         String CARDS = "Cards";
 
-        String CREATE_TABLE_ACCOUNTS_QUERY = "CREATE table " + ACCOUNTS + " (" +
- PocketBankerContract.Account._ID
-                + " integer primary key autoincrement, " +
-                PocketBankerContract.Account.ACCOUNT_NUMBER + " text, " +
-                PocketBankerContract.Account.ACCOUNT_TYPE + " text, " +
-                PocketBankerContract.Account.BALANCE + " real, " +
-                PocketBankerContract.Account.TIME + " integer);";
+        String CREATE_TABLE_ACCOUNTS_QUERY = "CREATE table " + ACCOUNTS + " (" + PocketBankerContract.Account._ID
+                + " integer primary key autoincrement, " + PocketBankerContract.Account.ACCOUNT_NUMBER + " text, "
+                + PocketBankerContract.Account.ACCOUNT_TYPE + " text, " + PocketBankerContract.Account.BALANCE
+                + " real, " + PocketBankerContract.Account.TIME + " integer);";
 
         String CREATE_TABLE_TRANSACTIONS_QUERY = "CREATE table " + TRANSACTIONS + " ("
                 + PocketBankerContract.Transactions._ID + " integer primary key autoincrement, "
                 + PocketBankerContract.Transactions.TRANSACTION_ID + " text, "
-                +
-                PocketBankerContract.Transactions.ACCOUNT_NUMBER + " text, " +
- PocketBankerContract.Transactions.AMOUNT + " real, "
-                +
-                PocketBankerContract.Transactions.CREDIT_OR_DEBIT + " integer, " +
-                PocketBankerContract.Transactions.BALANCE + " real, " +
-                PocketBankerContract.Transactions.REMARK + " text, " +
-                PocketBankerContract.Transactions.TIME + " integer);";
+                + PocketBankerContract.Transactions.ACCOUNT_NUMBER + " text, "
+                + PocketBankerContract.Transactions.AMOUNT + " real, "
+                + PocketBankerContract.Transactions.CREDIT_OR_DEBIT + " integer, "
+                + PocketBankerContract.Transactions.BALANCE + " real, " + PocketBankerContract.Transactions.REMARK
+                + " text, " + PocketBankerContract.Transactions.TIME + " integer);";
 
         String CREATE_TABLE_PAYEES_QUERY = "CREATE table " + PAYEES + " (" + PocketBankerContract.Payees._ID
-                + " integer primary key autoincrement, " +
-                PocketBankerContract.Payees.PAYEE_ID + " text, " +
-                PocketBankerContract.Payees.ACCOUNT_NUMBER + " text, " +
-                PocketBankerContract.Payees.PAYEE_NAME + " text, " +
-                PocketBankerContract.Payees.CUST_ID + " text, " +
-                PocketBankerContract.Payees.SHORT_NAME + " text, " +
- PocketBankerContract.Payees.CREATION_DATE + " integer);";
+                + " integer primary key autoincrement, " + PocketBankerContract.Payees.PAYEE_ID + " text, "
+                + PocketBankerContract.Payees.ACCOUNT_NUMBER + " text, " + PocketBankerContract.Payees.PAYEE_NAME
+                + " text, " + PocketBankerContract.Payees.CUST_ID + " text, " + PocketBankerContract.Payees.SHORT_NAME
+                + " text, " + PocketBankerContract.Payees.CREATION_DATE + " integer);";
 
         String CREATE_TABLE_BRANCH_ATMS_QUERY = "CREATE table " + BRANCH_ATMS + " ("
                 + PocketBankerContract.BranchAtms._ID + " integer primary key autoincrement, "
@@ -181,42 +217,32 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper {
                 + PocketBankerContract.BranchAtms.BRANCH_NAME + " text);";
 
         String CREATE_TABLE_LOANS_QUERY = "CREATE table " + LOANS + " (" + PocketBankerContract.Loans._ID
-                + " integer primary key autoincrement, " +
-                PocketBankerContract.Loans.LOAN_ACCOUNT_NUMBER + " text, " +
-                PocketBankerContract.Loans.AMOUNT + " integer, " +
-                PocketBankerContract.Loans.CUST_NAME + " text, " +
-                PocketBankerContract.Loans.CUST_ID + " text, " +
-                PocketBankerContract.Loans.POSITION + " text, " +
-                PocketBankerContract.Loans.OUTSTANDING_PRINCIPAL + " integer, " +
-                PocketBankerContract.Loans.TYPE + " text, " +
-                PocketBankerContract.Loans.ROI + " integer, " +
-                PocketBankerContract.Loans.MONTH_DELINQUENCY + " text, " +
-                PocketBankerContract.Loans.DATE_OF_LOAN + " integer);";
+                + " integer primary key autoincrement, " + PocketBankerContract.Loans.LOAN_ACCOUNT_NUMBER + " text, "
+                + PocketBankerContract.Loans.AMOUNT + " integer, " + PocketBankerContract.Loans.CUST_NAME + " text, "
+                + PocketBankerContract.Loans.CUST_ID + " text, " + PocketBankerContract.Loans.POSITION + " text, "
+                + PocketBankerContract.Loans.OUTSTANDING_PRINCIPAL + " integer, " + PocketBankerContract.Loans.TYPE
+                + " text, " + PocketBankerContract.Loans.ROI + " integer, "
+                + PocketBankerContract.Loans.MONTH_DELINQUENCY + " text, " + PocketBankerContract.Loans.DATE_OF_LOAN
+                + " integer);";
 
         String CREATE_TABLE_EMIS_QUERY = "CREATE table " + EMIS + " (" + PocketBankerContract.Emis._ID
-                + " integer primary key autoincrement, " +
-                PocketBankerContract.Emis.LOAN_ACCOUNT_NUMBER + " text, " +
-                PocketBankerContract.Emis.NO_OF_EMI + " integer, " +
-                PocketBankerContract.Emis.EMI_DATES + " text, " +
-                PocketBankerContract.Emis.EMI_LAST_THREE + " text);";
+                + " integer primary key autoincrement, " + PocketBankerContract.Emis.LOAN_ACCOUNT_NUMBER + " text, "
+                + PocketBankerContract.Emis.NO_OF_EMI + " integer, " + PocketBankerContract.Emis.EMI_DATES + " text, "
+                + PocketBankerContract.Emis.EMI_LAST_THREE + " text);";
 
         String CREATE_TABLE_LOAN_TRANSACTIONS_QUERY = "CREATE table " + LOAN_TRANSACTIONS + " ("
                 + PocketBankerContract.LoanTransactions._ID + " integer primary key autoincrement, "
-                +
-                PocketBankerContract.LoanTransactions.LOAN_ACCOUNT_NUMBER + " text, " +
-                PocketBankerContract.LoanTransactions.LAST_PAYMENT_MADE + " real, " +
-                PocketBankerContract.LoanTransactions.PAYMENT_MODE + " text);";
+                + PocketBankerContract.LoanTransactions.LOAN_ACCOUNT_NUMBER + " text, "
+                + PocketBankerContract.LoanTransactions.LAST_PAYMENT_MADE + " real, "
+                + PocketBankerContract.LoanTransactions.PAYMENT_MODE + " text);";
 
-        String CREATE_TABLE_CARDS_QUERY = "CREATE table " + CARDS + " (" +
- PocketBankerContract.CardAccount._ID
-                + " integer primary key autoincrement, " +
-                PocketBankerContract.CardAccount.CARD_ACC_NUMBER + " text, " +
-                PocketBankerContract.CardAccount.TYPE + " text, " +
-                PocketBankerContract.CardAccount.STATUS + " text, " +
-                PocketBankerContract.CardAccount.BALANCE + " integer, " +
-                PocketBankerContract.CardAccount.DATE_OF_ENROLLMENT + " integer, " +
-                PocketBankerContract.CardAccount.MONTH_DELINQUENCY + " text, " +
-                PocketBankerContract.CardAccount.EXPIRY_DATE + " integer, " +
-                PocketBankerContract.CardAccount.AVAIL_LIMIT + " integer);";
+        String CREATE_TABLE_CARDS_QUERY = "CREATE table " + CARDS + " (" + PocketBankerContract.CardAccount._ID
+                + " integer primary key autoincrement, " + PocketBankerContract.CardAccount.CARD_ACC_NUMBER + " text, "
+                + PocketBankerContract.CardAccount.TYPE + " text, " + PocketBankerContract.CardAccount.STATUS
+                + " text, " + PocketBankerContract.CardAccount.BALANCE + " integer, "
+                + PocketBankerContract.CardAccount.DATE_OF_ENROLLMENT + " integer, "
+                + PocketBankerContract.CardAccount.MONTH_DELINQUENCY + " text, "
+                + PocketBankerContract.CardAccount.EXPIRY_DATE + " integer, "
+                + PocketBankerContract.CardAccount.AVAIL_LIMIT + " integer);";
     }
 }

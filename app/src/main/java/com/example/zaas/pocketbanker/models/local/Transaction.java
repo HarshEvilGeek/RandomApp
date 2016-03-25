@@ -22,6 +22,22 @@ public class Transaction extends DbModel
     private String remark;
     private long time;
 
+    public Transaction()
+    {
+
+    }
+
+    public Transaction(String accountNumber, double amount, double balance, Type type, String remark, long time)
+    {
+        this.transactionId = Long.toString(time);
+        this.accountNumber = accountNumber;
+        this.amount = amount;
+        this.balance = balance;
+        this.type = type;
+        this.remark = remark;
+        this.time = time;
+    }
+
     public int getId()
     {
         return id;

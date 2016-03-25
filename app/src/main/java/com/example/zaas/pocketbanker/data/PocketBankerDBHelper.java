@@ -19,6 +19,7 @@ import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.example.zaas.pocketbanker.models.local.DbModel;
 import com.example.zaas.pocketbanker.models.local.Payee;
+import com.example.zaas.pocketbanker.models.local.Transaction;
 
 /**
  * Created by akhil on 3/19/16.
@@ -97,6 +98,29 @@ public class PocketBankerDBHelper
             }
         }
         return payeeList;
+    }
+
+    public List<Transaction> getAllTransactions(Context context)
+    {
+        Cursor c = null;
+        List<Transaction> transactionList = new ArrayList<>();
+        try {
+            c = context.getContentResolver().query(PocketBankerProvider.CONTENT_URI_TRANSACTIONS, null, null, null,
+                    null);
+            if (c != null) {
+                while (c.moveToNext()) {
+                    Transaction transaction = new Transaction();
+                    transaction.instantiateFromCursor(c);
+                    transactionList.add(transaction);
+                }
+            }
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return transactionList;
     }
 
     public Payee getPayeeForLocalId(Context context, int id)
