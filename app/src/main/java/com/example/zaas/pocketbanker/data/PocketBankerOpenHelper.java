@@ -47,6 +47,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
         db.execSQL(Tables.CREATE_TABLE_EMIS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_LOAN_TRANSACTIONS_QUERY);
         db.execSQL(Tables.CREATE_TABLE_TRANSACTION_CATEGORIES_QUERY);
+        db.execSQL(Tables.CREATE_TABLE_RECOMMENDATIONS_QUERY);
 
         insertInitialTransactionCategories(db);
 
@@ -206,6 +207,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
         String LOAN_TRANSACTIONS = "LoanTransactions";
         String CARDS = "Cards";
         String TRANSACTION_CATEGORIES = "TransactionCategories";
+        String RECOMMENDATIONS = "Recommendations";
 
         String CREATE_TABLE_ACCOUNTS_QUERY = "CREATE table " + ACCOUNTS + " (" + PocketBankerContract.Account._ID
                 + " integer primary key autoincrement, " + PocketBankerContract.Account.ACCOUNT_NUMBER + " text, "
@@ -273,5 +275,11 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
                 + PocketBankerContract.TransactionCategories._ID + " integer primary key autoincrement, "
                 + PocketBankerContract.TransactionCategories.MERCHANT_NAME + " text unique, "
                 + PocketBankerContract.TransactionCategories.CATEGORY + " integer);";
+
+        String CREATE_TABLE_RECOMMENDATIONS_QUERY = "CREATE table " + RECOMMENDATIONS + " ("
+                + PocketBankerContract.Recommendations._ID + " integer primary key autoincrement, "
+                + PocketBankerContract.Recommendations.RECOMMENDATION_ID + " text, "
+                + PocketBankerContract.Recommendations.MESSAGE + " text, " + PocketBankerContract.Recommendations.URL
+                + " text, " + PocketBankerContract.Recommendations.CATEGORY + " integer);";
     }
 }

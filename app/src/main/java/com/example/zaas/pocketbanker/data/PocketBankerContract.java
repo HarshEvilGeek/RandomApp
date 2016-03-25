@@ -98,15 +98,26 @@ public class PocketBankerContract {
         String CATEGORY = "category";
     }
 
-    public static class Account implements BaseColumns, AccountBaseColumns, AccountColumns {
+    interface RecommendationColumns
+    {
+        String RECOMMENDATION_ID = "recommendation_id";
+        String MESSAGE = "message";
+        String URL = "url";
+        String CATEGORY = "category";
+    }
+
+    public static class Account implements BaseColumns, AccountBaseColumns, AccountColumns
+    {
 
     }
 
-    public static class Transactions implements BaseColumns, AccountBaseColumns, TransactionColumns {
+    public static class Transactions implements BaseColumns, AccountBaseColumns, TransactionColumns
+    {
 
     }
 
-    public static class Payees implements BaseColumns, PayeeColumns {
+    public static class Payees implements BaseColumns, PayeeColumns
+    {
 
     }
 
@@ -115,23 +126,32 @@ public class PocketBankerContract {
 
     }
 
-    public static class Loans implements BaseColumns, LoanBaseColumns, LoanColumns {
+    public static class Loans implements BaseColumns, LoanBaseColumns, LoanColumns
+    {
 
     }
 
-    public static class Emis implements BaseColumns, LoanBaseColumns, EmiColumns {
+    public static class Emis implements BaseColumns, LoanBaseColumns, EmiColumns
+    {
 
     }
 
-    public static class LoanTransactions implements BaseColumns, LoanBaseColumns, LoanTransactionColumns {
+    public static class LoanTransactions implements BaseColumns, LoanBaseColumns, LoanTransactionColumns
+    {
 
     }
 
-    public static class CardAccount implements BaseColumns, CardColumns {
+    public static class CardAccount implements BaseColumns, CardColumns
+    {
 
     }
 
     public static class TransactionCategories implements BaseColumns, TransactionCategoryColumns
+    {
+
+    }
+
+    public static class Recommendations implements BaseColumns, RecommendationColumns
     {
 
     }
