@@ -74,6 +74,8 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_atm_branch_locator, container, false);
+
+        getActivity().setTitle(R.string.action_locator);
         mCurrentLocationHeader = (TextView) rootView.findViewById(R.id.current_location);
         mBranchAtmToggle = (SwitchCompat) rootView.findViewById(R.id.branch_atm_toggle);
         mAtm = (TextView) rootView.findViewById(R.id.atm);
