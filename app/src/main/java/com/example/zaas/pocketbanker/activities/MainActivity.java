@@ -19,7 +19,10 @@ import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.fragments.ATMBranchLocatorFragment;
 import com.example.zaas.pocketbanker.fragments.AccountSummaryFragment;
 import com.example.zaas.pocketbanker.fragments.AnalyticsFragment;
+import com.example.zaas.pocketbanker.fragments.PocketsAddMoneyFragment;
+import com.example.zaas.pocketbanker.fragments.PocketsBuyItemFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsFragment;
+import com.example.zaas.pocketbanker.fragments.PocketsFriendsFragment;
 import com.example.zaas.pocketbanker.fragments.RecommendationsFragment;
 import com.example.zaas.pocketbanker.fragments.TransactionsFragment;
 import com.example.zaas.pocketbanker.fragments.TransferFundsFragment;
@@ -107,6 +110,12 @@ public class MainActivity extends BaseRestrictedActivity
             fragment = new RecommendationsFragment();
         } else if (id == R.id.pockets) {
             fragment = new PocketsFragment();
+        } else if (id == R.id.pockets_add_money) {
+            fragment = new PocketsAddMoneyFragment();
+        } else if (id == R.id.pockets_buy_item) {
+            fragment = new PocketsBuyItemFragment();
+        } else if (id == R.id.pockets_friends) {
+            fragment = new PocketsFriendsFragment();
         }
 
         goToFragment(fragment);

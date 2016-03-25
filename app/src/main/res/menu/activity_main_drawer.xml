@@ -34,6 +34,18 @@
                 android:id="@+id/pockets"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Pockets" />
+            <item
+                android:id="@+id/pockets_add_money"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Add Money" />
+            <item
+                android:id="@+id/pockets_buy_item"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Buy Item" />
+            <item
+                android:id="@+id/pockets_friends"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Friends" />
         </menu>
     </item>
 

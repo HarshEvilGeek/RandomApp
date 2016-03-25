@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.example.zaas.pocketbanker.application.PocketBankerApplication;
 import com.example.zaas.pocketbanker.fragments.PinOrFingerprintFragment;
+import com.example.zaas.pocketbanker.models.local.PocketAccount;
 
 import org.w3c.dom.Text;
 
@@ -115,5 +116,13 @@ public class SecurityUtils {
 
     public static boolean isLoginDataStored() {
         return !TextUtils.isEmpty(getPinCode());
+    }
+
+    public static PocketAccount getPocketsAccount() {
+        return null;
+    }
+
+    public static void savePocketsAccount() {
+
     }
 }
