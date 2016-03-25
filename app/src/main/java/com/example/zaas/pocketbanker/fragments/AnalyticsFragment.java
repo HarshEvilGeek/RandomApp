@@ -52,6 +52,7 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
     private long mFromDateValue = System.currentTimeMillis();
     private long mToDateValue = System.currentTimeMillis();
     private List<Transaction> mOriginalTransactionList;
+    private String[] mLabels;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
         setDefaultDates();
         setDatePickers();
         mPieChart = (PieChart) rootView.findViewById(R.id.chart);
+        mPieChart.setOnChartValueSelectedListener(this);
         setPieData();
 
         return rootView;
@@ -79,6 +81,7 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+        Toast.makeText(getActivity(), mLabels[e.getXIndex()], Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -198,10 +201,10 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
     }
 
     private void setPieData() {
-        String[] labels = new String[mAmountPerCategory.size()];
+        mLabels = new String[mAmountPerCategory.size()];
         int k = 0;
         for (String label : mAmountPerCategory.keySet()) {
-            labels[k++] = label;
+            mLabels[k++] = label;
         }
         mPieChart.getLegend().setEnabled(false);
         mPieChart.setCenterText("Transaction Analysis");
@@ -209,7 +212,7 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
         mPieChart.setCenterTextColor(getResources().getColor(R.color.colorPrimaryDark));
         mPieChart.setDescriptionTextSize(15f);
         mPieChart.animateY(1000);
-        mPieChart.setData(new PieData(labels, mDataset));
+        mPieChart.setData(new PieData(mLabels, mDataset));
 
         mPieChart.notifyDataSetChanged();
         mPieChart.invalidate();
