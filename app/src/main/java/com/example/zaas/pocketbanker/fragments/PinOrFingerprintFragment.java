@@ -33,6 +33,8 @@ public class PinOrFingerprintFragment extends Fragment {
     TextView pinText;
     TextView skipPin;
 
+    boolean isFirstCreate;
+
     String currentPin = "";
 
     @Nullable
@@ -50,6 +52,26 @@ public class PinOrFingerprintFragment extends Fragment {
         } else {
             pinPrompt.setText("Enter your pin");
         }
+        cancelButton = (ImageView) rootView.findViewById(R.id.button_cancel);
+        deleteButton = (ImageView) rootView.findViewById(R.id.button_delete);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pinText.setText("");
+                currentPin = "";
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPin.length() > 0) {
+                    currentPin = currentPin.substring(0, currentPin.length() - 1);
+                }
+                pinText.setText(currentPin);
+            }
+        });
         for (TextView tv : numButtons) {
             int id;
             final int digit = num;

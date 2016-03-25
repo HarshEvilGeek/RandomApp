@@ -27,7 +27,7 @@ public class AuthorizationActivity extends AppCompatActivity {
     String password;
 
     ProgressDialog loginInProgressDialog;
-    boolean loginInProgress = true;
+    boolean loginInProgress = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,8 +81,8 @@ public class AuthorizationActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             loginInProgressDialog.dismiss();
+            loginInProgress = false;
             if ("SUCCESS".equals(s)) {
-                loginInProgress = false;
                 SecurityUtils.setAccessToken("AccessToken");
                 Bundle args = new Bundle();
                 args.putBoolean(PinOrFingerprintFragment.CREATE_PIN_KEY, true);

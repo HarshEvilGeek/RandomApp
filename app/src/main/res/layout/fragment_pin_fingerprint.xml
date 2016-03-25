@@ -117,7 +117,8 @@
         <ImageView
             android:id="@+id/button_cancel"
             android:layout_columnWeight="1"
-            android:layout_rowWeight="1" />
+            android:layout_rowWeight="1"
+            android:src="@mipmap/delete" />
 
         <TextView
             android:id="@+id/button_zero"
@@ -131,7 +132,8 @@
         <ImageView
             android:id="@+id/button_delete"
             android:layout_columnWeight="1"
-            android:layout_rowWeight="1" />
+            android:layout_rowWeight="1"
+            android:src="@mipmap/backspace"/>
     </GridLayout>
 
 

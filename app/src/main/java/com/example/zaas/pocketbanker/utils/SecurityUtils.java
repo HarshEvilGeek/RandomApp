@@ -19,7 +19,7 @@ public class SecurityUtils {
     private static long accessTokenLastSet;
     private static long lastAccessTime;
 
-    private static boolean showLogin = true;
+    private static boolean showLogin = false;
 
     public static String getAccessToken() {
         return accessToken;
