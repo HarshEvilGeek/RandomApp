@@ -21,6 +21,7 @@ import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.CardAccount;
 import com.example.zaas.pocketbanker.models.local.LoanAccount;
 import com.example.zaas.pocketbanker.models.local.LoanEMI;
+import com.example.zaas.pocketbanker.models.local.Payee;
 import com.example.zaas.pocketbanker.models.local.PocketAccount;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.network.AccountSummary;
@@ -43,7 +44,6 @@ import com.example.zaas.pocketbanker.models.network.WalletCreation;
 import com.example.zaas.pocketbanker.models.network.WalletCreditDebitBody;
 import com.example.zaas.pocketbanker.models.network.WalletCreditDebitResponse;
 import com.example.zaas.pocketbanker.models.network.WalletDetails;
-import com.example.zaas.pocketbanker.models.network.WalletStatement;
 import com.example.zaas.pocketbanker.models.network.WalletStatementBody;
 import com.example.zaas.pocketbanker.models.network.WalletStatementResponse;
 import com.example.zaas.pocketbanker.utils.Constants;
@@ -539,9 +539,13 @@ public class NetworkHelper
 
             if (registeredPayeesList != null) {
                 Log.e(LOG_TAG, "No of registered payees : " + registeredPayeesList.size());
+                List<Payee> receivedPayees = new ArrayList<>();
                 for (RegisteredPayees regPayee : registeredPayeesList) {
                     Log.e(LOG_TAG, "\n registered payee : : " + regPayee);
+                    Payee payee = new Payee(regPayee);
+                    receivedPayees.add(payee);
                 }
+                PocketBankerDBHelper.getInstance().insertUpdateAndDeleteDbModelTable(receivedPayees);
             }
 
         }
