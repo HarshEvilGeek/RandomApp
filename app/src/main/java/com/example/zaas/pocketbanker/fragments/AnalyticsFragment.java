@@ -232,6 +232,10 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
         double amount;
         Double existingAmount;
         for (Transaction currentTransaction : mAllTransactions) {
+            if (currentTransaction.getType() != Transaction.Type.Debit) {
+                continue;
+            }
+
             existingAmount = mAmountPerCategory.get(currentTransaction.getCategory().name());
             amount = currentTransaction.getAmount();
 

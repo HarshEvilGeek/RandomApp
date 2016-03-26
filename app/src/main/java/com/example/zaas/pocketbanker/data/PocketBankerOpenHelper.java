@@ -183,7 +183,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 450, 1200000, Transaction.Type.Debit, "Taxi",
                 System.currentTimeMillis() - 3 * ONE_DAY_IN_MILLIS, "Ola", TransactionCategoryUtils.Category.TRAVEL);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
-        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1000, 1200000, Transaction.Type.Debit, "Doctor",
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1000, 1200000, Transaction.Type.Credit, "Doctor",
                 System.currentTimeMillis() - ONE_DAY_IN_MILLIS, "Fortis", TransactionCategoryUtils.Category.HEALTH);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3500, 1200000, Transaction.Type.Debit, "Gift",
