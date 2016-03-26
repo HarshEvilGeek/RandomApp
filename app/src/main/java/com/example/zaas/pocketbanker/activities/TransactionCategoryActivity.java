@@ -12,7 +12,6 @@ import android.view.MenuItem;
 
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.adapters.TransactionCategoryAdapter;
-import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.utils.TransactionCategoryUtils;
 
@@ -74,7 +73,7 @@ public class TransactionCategoryActivity extends AppCompatActivity
     private void setFilteredTransactions()
     {
         mTransactions = new ArrayList<>();
-        List<Transaction> allTransactions = PocketBankerDBHelper.getInstance().getAllTransactions();
+        List<Transaction> allTransactions = TransactionCategoryUtils.getAllTransactions();
         for (Transaction transaction : allTransactions) {
             if (transaction.getCategory() == mCategory && transaction.getType() == Transaction.Type.Debit
                     && transaction.getTime() >= mFromDate && transaction.getTime() <= mToDate) {

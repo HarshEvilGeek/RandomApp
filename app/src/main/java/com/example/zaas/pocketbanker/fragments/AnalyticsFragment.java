@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.activities.TransactionCategoryActivity;
-import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.utils.DateUtils;
 import com.example.zaas.pocketbanker.utils.TransactionCategoryUtils;
@@ -34,13 +33,16 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 /**
  * Created by zaas on 3/17/16.
  */
-public class AnalyticsFragment extends Fragment implements OnChartValueSelectedListener{
+public class AnalyticsFragment extends Fragment implements OnChartValueSelectedListener
+{
     private static final int FROM_DATE_PICKER_ID = 1000;
     private static final int TO_DATE_PICKER_ID = 1001;
 
-    //private int[] mColors = new int[] { Color.GREEN, Color.BLUE, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.RED  };
+    // private int[] mColors = new int[] { Color.GREEN, Color.BLUE, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.RED
+    // };
 
-    //private static String[] CATEGORY_LABELS = Arrays.toString(TransactionCategoryUtils.Category.values()).replaceAll("^.|.$", "").split(", ");
+    // private static String[] CATEGORY_LABELS =
+    // Arrays.toString(TransactionCategoryUtils.Category.values()).replaceAll("^.|.$", "").split(", ");
 
     private List<Transaction> mAllTransactions;
     private HashMap<String, Double> mAmountPerCategory;
@@ -76,7 +78,8 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         getActivity().setTitle(R.string.action_analytics);
     }
@@ -85,7 +88,7 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
     public void onStart()
     {
         super.onStart();
-        mOriginalTransactionList = PocketBankerDBHelper.getInstance().getAllTransactions();
+        mOriginalTransactionList = TransactionCategoryUtils.getAllTransactions();
         mAllTransactions = mOriginalTransactionList;
         categorizeTransactionAmounts();
         setDefaultDates();
@@ -95,7 +98,8 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View rootView = inflater.inflate(R.layout.fragment_analytics, container, false);
         mFromDate = (TextView) rootView.findViewById(R.id.from_date);
         mToDate = (TextView) rootView.findViewById(R.id.to_date);
@@ -106,8 +110,9 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
     }
 
     @Override
-    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        //Toast.makeText(getActivity(), mLabels[e.getXIndex()], Toast.LENGTH_SHORT).show();
+    public void onValueSelected(Entry e, int dataSetIndex, Highlight h)
+    {
+        // Toast.makeText(getActivity(), mLabels[e.getXIndex()], Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), TransactionCategoryActivity.class);
         intent.putExtra("Category", TransactionCategoryUtils.Category.valueOf(mLabels[e.getXIndex()]));
         intent.putExtra("FromDate", mFromDateValue);
@@ -116,14 +121,17 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
     }
 
     @Override
-    public void onNothingSelected() {
+    public void onNothingSelected()
+    {
 
     }
 
-    private void setDatePickers() {
+    private void setDatePickers()
+    {
         mFromDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 // On button click show datepicker dialog
                 createDialog(FROM_DATE_PICKER_ID).show();
             }
@@ -131,33 +139,33 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
 
         mToDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 // On button click show datepicker dialog
                 createDialog(TO_DATE_PICKER_ID).show();
             }
         });
     }
 
-    protected Dialog createDialog(int id) {
+    protected Dialog createDialog(int id)
+    {
         Time initialDate = new Time();
-        switch (id) {
-            case FROM_DATE_PICKER_ID:
-                initialDate.set(mFromDateValue);
-                return new DatePickerDialog(getActivity(), R.style.DatePickerTheme, fromdatePickerListener
-                        , initialDate.year
-                        , initialDate.month
-                        , initialDate.monthDay);
-            case TO_DATE_PICKER_ID:
-                initialDate.set(mToDateValue);
-                return new DatePickerDialog(getActivity(), R.style.DatePickerTheme, todatePickerListener
-                        , initialDate.year
-                        , initialDate.month
-                        , initialDate.monthDay);
+        switch (id)
+        {
+        case FROM_DATE_PICKER_ID:
+            initialDate.set(mFromDateValue);
+            return new DatePickerDialog(getActivity(), R.style.DatePickerTheme, fromdatePickerListener,
+                    initialDate.year, initialDate.month, initialDate.monthDay);
+        case TO_DATE_PICKER_ID:
+            initialDate.set(mToDateValue);
+            return new DatePickerDialog(getActivity(), R.style.DatePickerTheme, todatePickerListener, initialDate.year,
+                    initialDate.month, initialDate.monthDay);
         }
         return null;
     }
 
-    private void setDefaultDates() {
+    private void setDefaultDates()
+    {
         for (Transaction transaction : mAllTransactions) {
             if (transaction.getTime() < mFromDateValue) {
                 mFromDateValue = transaction.getTime();
@@ -166,7 +174,8 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
         updateDates(true);
     }
 
-    private void updateDates(boolean isFirstSync) {
+    private void updateDates(boolean isFirstSync)
+    {
         mFromDate.setText(DateUtils.getDateStringFromMillis(mFromDateValue));
         mToDate.setText(DateUtils.getDateStringFromMillis(mToDateValue));
         if (!isFirstSync) {
@@ -182,7 +191,8 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
         }
     }
 
-    private void filterTransactions() {
+    private void filterTransactions()
+    {
         mAllTransactions = mOriginalTransactionList;
         List<Transaction> tempList = new ArrayList<>();
         for (Transaction transaction : mAllTransactions) {
@@ -193,7 +203,8 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
         mAllTransactions = tempList;
     }
 
-    private void updatePieDataset() {
+    private void updatePieDataset()
+    {
         // creating data values
         ArrayList<Entry> values = new ArrayList<>();
         int k = 0;
@@ -209,7 +220,8 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
         mDataset.setDrawValues(false);
     }
 
-    private void setPieData() {
+    private void setPieData()
+    {
         mLabels = new String[mAmountPerCategory.size()];
         int k = 0;
         for (String label : mAmountPerCategory.keySet()) {
@@ -227,7 +239,8 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
         mPieChart.invalidate();
     }
 
-    private void categorizeTransactionAmounts() {
+    private void categorizeTransactionAmounts()
+    {
         mAmountPerCategory = new HashMap<>();
         double amount;
         Double existingAmount;
@@ -241,17 +254,18 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
 
             if (existingAmount == null) {
                 if (amount > 0) {
-                    mAmountPerCategory.put(currentTransaction.getCategory().name()
-                            , Double.valueOf(amount));
+                    mAmountPerCategory.put(currentTransaction.getCategory().name(), Double.valueOf(amount));
                 }
-            } else {
-                mAmountPerCategory.put(currentTransaction.getCategory().name()
-                        , Double.valueOf(existingAmount.doubleValue() + amount));
+            }
+            else {
+                mAmountPerCategory.put(currentTransaction.getCategory().name(),
+                        Double.valueOf(existingAmount.doubleValue() + amount));
             }
         }
     }
 
-    private ArrayList<Integer> getPieColorPalette() {
+    private ArrayList<Integer> getPieColorPalette()
+    {
         ArrayList<Integer> colors = new ArrayList<>();
 
         for (int c : ColorTemplate.JOYFUL_COLORS)
