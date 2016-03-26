@@ -40,7 +40,7 @@
                 <item
                     android:id="@+id/pockets_buy_item"
                     android:icon="@drawable/ic_menu_share"
-                    android:title="Buy Item" />
+                    android:title="Recharge/Shop" />
                 <item
                     android:id="@+id/pockets_friends"
                     android:icon="@drawable/ic_menu_share"

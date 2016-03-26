@@ -240,7 +240,7 @@ public class Transaction extends DbModel
 
         public static Type getEnumFromNetworkType(String value)
         {
-            if(Constants.TRANSACTION_TYPE_CREDIT.equals(value)) {
+            if(Constants.TRANSACTION_TYPE_CREDIT.equals(value) || Constants.TRANSACTION_TYPE_CREDIT_WALLET.equals(value)) {
                 return Credit;
             }
             else {
