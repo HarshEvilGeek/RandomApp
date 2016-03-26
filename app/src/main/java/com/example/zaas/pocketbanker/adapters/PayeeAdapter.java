@@ -30,6 +30,12 @@ public class PayeeAdapter extends RecyclerView.Adapter<PayeeAdapter.PayeeViewHol
         mPayeeList = payeeList;
     }
 
+    public void setData(List<Payee> payeeList)
+    {
+        mPayeeList = payeeList;
+        notifyDataSetChanged();
+    }
+
     public void setOnClickListener(OnClickListener onClickListener)
     {
         mOnClickListener = onClickListener;

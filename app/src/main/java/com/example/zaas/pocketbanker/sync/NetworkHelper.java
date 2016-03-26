@@ -41,13 +41,12 @@ public class NetworkHelper
 {
 
     private static final String LOG_TAG = NetworkHelper.class.getSimpleName();
-    RestAdapter restAdapter;
-    UCWARequestInterceptor requestInterceptor;
-    IUCWAAPIInterface methods;
-
     private static final String DEFAULT_ENDPOINT = "https://retailbanking.mybluemix.net";
     private static final String ALPHA_ENDPOINT = "http://alphaiciapi2.mybluemix.net";
     private static final String TOKEN = "f8dc8109cc34";
+    RestAdapter restAdapter;
+    UCWARequestInterceptor requestInterceptor;
+    IUCWAAPIInterface methods;
 
     public NetworkHelper()
     {
@@ -443,7 +442,7 @@ public class NetworkHelper
 
     }
 
-    public void getRegisteredPayees(String customerId)
+    public void fetchRegisteredPayees(String customerId)
     {
         try {
 

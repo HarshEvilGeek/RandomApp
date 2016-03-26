@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -22,6 +23,8 @@ import com.example.zaas.pocketbanker.adapters.PayeeAdapter;
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.interfaces.IFloatingButtonListener;
 import com.example.zaas.pocketbanker.models.local.Payee;
+import com.example.zaas.pocketbanker.sync.NetworkHelper;
+import com.example.zaas.pocketbanker.utils.Constants;
 
 /**
  * Fragment to show transfer funds UI Created by zaas on 3/17/16.
@@ -85,13 +88,7 @@ public class TransferFundsFragment extends Fragment implements PayeeAdapter.OnCl
 
     private void syncPayees()
     {
-        mSwipeContainer.postDelayed(new Runnable() {
-            @Override
-            public void run()
-            {
-                mSwipeContainer.setRefreshing(false);
-            }
-        }, 4000);
+        new NetworkLoadTask().execute();
     }
 
     @Override
@@ -112,5 +109,35 @@ public class TransferFundsFragment extends Fragment implements PayeeAdapter.OnCl
     public void onFloatingButtonPressed()
     {
         startActivity(new Intent(getActivity(), AddPayeeNFCActivity.class));
+    }
+
+    public class NetworkLoadTask extends AsyncTask<Void, Void, Void>
+    {
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+            if (!mSwipeContainer.isRefreshing()) {
+                mSwipeContainer.setRefreshing(true);
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids)
+        {
+            NetworkHelper networkHelper = new NetworkHelper();
+
+            String custId = Constants.CUST_ID;
+            networkHelper.fetchRegisteredPayees(custId);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid)
+        {
+            mSwipeContainer.setRefreshing(false);
+            mAdapter.setData(PocketBankerDBHelper.getInstance().getAllPayees());
+        }
     }
 }
