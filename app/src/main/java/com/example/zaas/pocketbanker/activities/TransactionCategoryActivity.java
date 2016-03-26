@@ -1,5 +1,8 @@
 package com.example.zaas.pocketbanker.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,13 +16,11 @@ import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.utils.TransactionCategoryUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by shseth on 3/26/2016.
  */
-public class TransactionCategoryActivity extends AppCompatActivity {
+public class TransactionCategoryActivity extends AppCompatActivity
+{
     private List<Transaction> mTransactions;
     private TransactionCategoryUtils.Category mCategory;
     private long mFromDate;
@@ -27,7 +28,8 @@ public class TransactionCategoryActivity extends AppCompatActivity {
     private TransactionCategoryAdapter mAdapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_transaction_category);
@@ -62,20 +64,20 @@ public class TransactionCategoryActivity extends AppCompatActivity {
     {
         switch (item.getItemId())
         {
-            case android.R.id.home:
-                finish();
-                return true;
+        case android.R.id.home:
+            finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void setFilteredTransactions() {
+    private void setFilteredTransactions()
+    {
         mTransactions = new ArrayList<>();
         List<Transaction> allTransactions = PocketBankerDBHelper.getInstance().getAllTransactions();
         for (Transaction transaction : allTransactions) {
-            if (transaction.getCategory() == mCategory
-                    && transaction.getTime() >= mFromDate
-                    && transaction.getTime() <= mToDate) {
+            if (transaction.getCategory() == mCategory && transaction.getType() == Transaction.Type.Debit
+                    && transaction.getTime() >= mFromDate && transaction.getTime() <= mToDate) {
                 mTransactions.add(transaction);
             }
         }
