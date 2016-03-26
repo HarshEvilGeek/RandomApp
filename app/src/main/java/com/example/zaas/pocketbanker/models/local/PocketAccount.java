@@ -14,7 +14,7 @@ public class PocketAccount {
     String scope;
     Gender gender;
     long birthday;
-    int balance;
+    double balance;
 
     public PocketAccount()
     {
@@ -91,11 +91,11 @@ public class PocketAccount {
         this.scope = scope;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 

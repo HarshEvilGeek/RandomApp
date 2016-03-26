@@ -906,6 +906,12 @@ public class NetworkHelper
 
         try {
 
+            PocketAccount pocketAccount = SecurityUtils.getPocketsAccount();
+
+            if(pocketAccount == null) {
+                return balance;
+            }
+
             Log.i(LOG_TAG, "getting wallet balance for " + phNumber);
             setupRetrofitParamsForRequest(null, ALPHA_ENDPOINT);
             String clientId = "akhilcherian@gmail.com";
@@ -918,7 +924,7 @@ public class NetworkHelper
             String deviceId = "7b47c06dsj12243";
 
             // TODO get from wherever
-            String authDataForWallet = "";
+            String authDataForWallet = pocketAccount.getAuthToken();
 
             String href = "rest/Wallet/getWalletBalance";
             Log.i(LOG_TAG, "getting wallet balance with href : " + href);
@@ -931,6 +937,8 @@ public class NetworkHelper
             if (walletBalanceResponse != null) {
                 Log.i(LOG_TAG, "wallet balance : " + walletBalanceResponse);
                 balance = walletBalanceResponse.getAmount();
+                pocketAccount.setBalance(balance);
+                SecurityUtils.savePocketsAccount(pocketAccount);
             }
         }
         catch (Exception e) {
