@@ -5,6 +5,7 @@ package com.example.zaas.pocketbanker.models.local;
  */
 public class PocketAccount {
 
+    String authToken;
     String firstName;
     String lastName;
     String emailAddress;
@@ -14,6 +15,14 @@ public class PocketAccount {
     Gender gender;
     long birthday;
     int balance;
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
 
     public String getFirstName() {
         return firstName;

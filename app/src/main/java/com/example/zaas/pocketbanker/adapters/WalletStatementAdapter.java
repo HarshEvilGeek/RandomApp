@@ -1,10 +1,5 @@
 package com.example.zaas.pocketbanker.adapters;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,19 +8,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.zaas.pocketbanker.R;
-import com.example.zaas.pocketbanker.models.local.AccountSummaryDetailItem;
 import com.example.zaas.pocketbanker.models.local.TransactionDataUIItem;
 import com.example.zaas.pocketbanker.models.local.TransactionDetailViewHolder;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 /**
- * Created by zaraahmed on 3/20/16.
+ * Created by akhil on 3/26/16.
  */
-public class TransactionsListFragmentAdapter extends RecyclerView.Adapter<TransactionDetailViewHolder>
-{
+public class WalletStatementAdapter extends RecyclerView.Adapter<TransactionDetailViewHolder> {
     private List<TransactionDataUIItem> mUiItems;
     private Context mContext;
 
-    public TransactionsListFragmentAdapter(Context context, List<TransactionDataUIItem> uiItems)
+    public WalletStatementAdapter(Context context, List<TransactionDataUIItem> uiItems)
     {
         this.mContext = context;
         mUiItems = uiItems;
