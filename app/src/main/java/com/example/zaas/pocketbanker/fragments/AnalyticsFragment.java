@@ -3,6 +3,7 @@ package com.example.zaas.pocketbanker.fragments;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -14,8 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zaas.pocketbanker.R;
+import com.example.zaas.pocketbanker.activities.TransactionCategoryActivity;
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Transaction;
+import com.example.zaas.pocketbanker.utils.DateUtils;
+import com.example.zaas.pocketbanker.utils.TransactionCategoryUtils;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.YAxis;
@@ -81,7 +85,12 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        Toast.makeText(getActivity(), mLabels[e.getXIndex()], Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), mLabels[e.getXIndex()], Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), TransactionCategoryActivity.class);
+        intent.putExtra("Category", TransactionCategoryUtils.Category.valueOf(mLabels[e.getXIndex()]));
+        intent.putExtra("FromDate", mFromDateValue);
+        intent.putExtra("ToDate", mToDateValue);
+        getActivity().startActivity(intent);
     }
 
     @Override
@@ -158,8 +167,8 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
     }
 
     private void updateDates(boolean isFirstSync) {
-        mFromDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date(mFromDateValue)));
-        mToDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date(mToDateValue)));
+        mFromDate.setText(DateUtils.getDateStringFromMillis(mFromDateValue));
+        mToDate.setText(DateUtils.getDateStringFromMillis(mToDateValue));
         if (!isFirstSync) {
             if (mToDateValue < mFromDateValue) {
                 Toast.makeText(getActivity(), "Oops! Invalid date selection", Toast.LENGTH_SHORT).show();
