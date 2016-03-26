@@ -46,7 +46,7 @@ public class TransactionCategoryAdapter extends RecyclerView.Adapter<Transaction
         Transaction transactionToBind = mTransactions.get(position);
         holder.getTransAmountTV().setText("Rs. " + transactionToBind.getAmount());
         holder.getTransDateTV().setText(DateUtils.getDateStringFromMillis(transactionToBind.getTime()));
-        holder.getTransTypeTV().setText(transactionToBind.getType().toString());
+        //holder.getTransTypeTV().setText(transactionToBind.getType().toString());
         holder.getTransRemarkTV().setText(transactionToBind.getRemark());
     }
 
