@@ -237,7 +237,6 @@ public class TransactionsListFragment extends Fragment
         @Override
         protected List<TransactionDataUIItem> doInBackground(Void... voids)
         {
-
             List<TransactionDataUIItem> uiItems = new ArrayList<>();
 
             if (headerType.equals(Constants.HEADER_TYPE_BANKACCOUNT)) {

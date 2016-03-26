@@ -22,7 +22,6 @@ import com.example.zaas.pocketbanker.models.local.TransactionDetailViewHolder;
  */
 public class TransactionsListFragmentAdapter extends RecyclerView.Adapter<TransactionDetailViewHolder>
 {
-
     private List<TransactionDataUIItem> mUiItems;
     private Context mContext;
 
