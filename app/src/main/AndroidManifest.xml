@@ -35,6 +35,11 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|adjustResize"></activity>
 
+        <activity android:name=".activities.CreatePocketsActivity"
+            android:label="Create/Link Wallet"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name=".activities.TransferFundsToPayeeActivity"
             android:label="@string/action_transfer"
@@ -58,6 +63,10 @@
         <activity
             android:name=".activities.BranchAtmMapActivity"
             android:label="@string/branch_atm_map">
+        </activity>
+        <activity
+            android:name=".activities.TransactionCategoryActivity"
+            android:label="@string/action_transactions">
         </activity>
         <service android:name=".services.FetchAddressIntentService"
             android:exported="false" />

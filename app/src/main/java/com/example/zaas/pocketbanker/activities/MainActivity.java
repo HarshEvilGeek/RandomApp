@@ -2,11 +2,10 @@ package com.example.zaas.pocketbanker.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,9 +20,10 @@ import com.example.zaas.pocketbanker.fragments.ATMBranchLocatorFragment;
 import com.example.zaas.pocketbanker.fragments.AccountSummaryFragment;
 import com.example.zaas.pocketbanker.fragments.AnalyticsFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsAddMoneyFragment;
-import com.example.zaas.pocketbanker.fragments.PocketsBuyItemFragment;
+import com.example.zaas.pocketbanker.fragments.PocketsRechargeShopFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsFriendsFragment;
+import com.example.zaas.pocketbanker.fragments.PocketsHistoryFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsHomeFragment;
 import com.example.zaas.pocketbanker.fragments.RecommendationsFragment;
 import com.example.zaas.pocketbanker.fragments.TransactionsFragment;
@@ -40,9 +40,15 @@ import com.example.zaas.pocketbanker.utils.SecurityUtils;
 public class MainActivity extends BaseRestrictedActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String TARGET_FRAGMENT_KEY = "TARGET_FRAGMENT_KEY";
+
+    public static final int FRAGMENT_POCKETS = 9;
+    public static final int FRAGMENT_POCKETS_HOME = 10;
+
     FloatingActionButton fab;
     FrameLayout fragmentContainer;
     IFloatingButtonListener floatingButtonListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +79,33 @@ public class MainActivity extends BaseRestrictedActivity
             navigationView.inflateMenu(R.menu.activity_main_drawer_with_pockets);
         }
         navigationView.setNavigationItemSelectedListener(this);
+
+        if (getIntent() != null && getIntent().getIntExtra(TARGET_FRAGMENT_KEY, 0) > 0) {
+            if (getIntent().getIntExtra(TARGET_FRAGMENT_KEY, 0) == FRAGMENT_POCKETS_HOME) {
+                goToFragment(new PocketsHomeFragment());
+            }
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (SecurityUtils.getPocketsAccount() != null) {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.activity_main_drawer_with_pockets);
+        } else {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.activity_main_drawer);
+        }
+        if (intent != null) {
+            if (intent.getIntExtra(TARGET_FRAGMENT_KEY, 0) == FRAGMENT_POCKETS_HOME) {
+                goToFragment(new PocketsHomeFragment());
+            }
+            if (intent.getIntExtra(TARGET_FRAGMENT_KEY, 0) == FRAGMENT_POCKETS) {
+                goToFragment(new PocketsFragment());
+            }
+        }
     }
 
     @Override
@@ -126,9 +159,11 @@ public class MainActivity extends BaseRestrictedActivity
         } else if (id == R.id.pockets_add_money) {
             fragment = new PocketsAddMoneyFragment();
         } else if (id == R.id.pockets_buy_item) {
-            fragment = new PocketsBuyItemFragment();
+            fragment = new PocketsRechargeShopFragment();
         } else if (id == R.id.pockets_friends) {
             fragment = new PocketsFriendsFragment();
+        } else if (id == R.id.pockets_history) {
+            fragment = new PocketsHistoryFragment();
         }
 
         goToFragment(fragment);

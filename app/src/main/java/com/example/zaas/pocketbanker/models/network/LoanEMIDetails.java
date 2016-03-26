@@ -12,13 +12,13 @@ public class LoanEMIDetails
 
     private String errorDescripttion;
 
-    @SerializedName ("no_of_EMIs")
+    @SerializedName ("No_of_EMIs")
     String noOfEmis;
 
-    @SerializedName ("emi_Dates")
+    @SerializedName ("EMI_Dates")
     String emiDates;
 
-    @SerializedName ("last_three_EMIs")
+    @SerializedName ("Last_three_EMIs")
     String lastThreeEmis;
 
     int code;

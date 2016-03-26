@@ -13,6 +13,7 @@ import com.example.zaas.pocketbanker.data.PocketBankerContract;
 import com.example.zaas.pocketbanker.data.PocketBankerOpenHelper;
 import com.example.zaas.pocketbanker.data.PocketBankerProvider;
 import com.example.zaas.pocketbanker.models.network.LoanDetails;
+import com.example.zaas.pocketbanker.utils.Constants;
 
 /**
  * Created by zaraahmed on 3/25/16.
@@ -39,8 +40,12 @@ public class LoanAccount extends DbModel
 
     public static LoanAccount getLoanAccount(LoanDetails loanDetails)
     {
+        String roi = loanDetails.getRoi();
+        if(roi.endsWith("%")) {
+            roi = roi.substring(0, roi.length() - 1);
+        }
         return new LoanAccount(loanDetails.getLoanAccNum(), loanDetails.getCustomerName(), loanDetails.getPos(),
-                loanDetails.getPrincipleOutstanding(), loanDetails.getTypeOfLoan(), loanDetails.getRoi(),
+                loanDetails.getPrincipleOutstanding(), loanDetails.getTypeOfLoan(), Double.valueOf(roi),
                 loanDetails.getMonthDelinquency(), loanDetails.getLoanAmount(), loanDetails.getCustId(),
                 loanDetails.getDateOfLoan());
     }
@@ -48,7 +53,8 @@ public class LoanAccount extends DbModel
     public LoanAccount(String loanAccountNo, String customerName, String position, double outstandingPrinciple,
             String type, double roi, String monthDelinquency, double amount, String custId, String dateOfLoan)
     {
-        this.loanAccountNo = loanAccountNo;
+        //TODO : hardcoded
+        this.loanAccountNo = Constants.LOAN_ACC_NUMBER;
         this.customerName = customerName;
         this.position = position;
         this.outstandingPrinciple = outstandingPrinciple;

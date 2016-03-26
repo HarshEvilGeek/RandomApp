@@ -1,10 +1,16 @@
 package com.example.zaas.pocketbanker.models.local;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.example.zaas.pocketbanker.application.PocketBankerApplication;
 import com.example.zaas.pocketbanker.data.PocketBankerContract;
 import com.example.zaas.pocketbanker.data.PocketBankerOpenHelper;
+import com.example.zaas.pocketbanker.data.PocketBankerProvider;
+import com.example.zaas.pocketbanker.utils.Constants;
 import com.example.zaas.pocketbanker.utils.TransactionCategoryUtils;
 
 /**
@@ -26,10 +32,17 @@ public class Transaction extends DbModel
     private String merchantName;
     private TransactionCategoryUtils.Category category;
 
+    public static String TRANSACTION_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSSSSS";
+
     public Transaction()
     {
-        type = Type.DEBIT;
+        type = Type.Debit;
         category = TransactionCategoryUtils.Category.UNKNOWN;
+    }
+
+    public Transaction(String accountNumber, double amount, double balance, Type type, String remark, long time)
+    {
+        this(accountNumber,amount,balance,type,remark,time,"", TransactionCategoryUtils.Category.UNKNOWN);
     }
 
     public Transaction(String accountNumber, double amount, double balance, Type type, String remark, long time,
@@ -222,7 +235,76 @@ public class Transaction extends DbModel
 
     public enum Type
     {
-        CREDIT,
-        DEBIT
+        Credit,
+        Debit;
+
+        public static Type getEnumFromNetworkType(String value)
+        {
+            if(Constants.TRANSACTION_TYPE_CREDIT.equals(value)) {
+                return Credit;
+            }
+            else {
+                return Debit;
+            }
+        }
+    }
+
+    public static List<Transaction> getLatestNTransactions(int number, String accNumber, String sortOrder)
+    {
+        List<Transaction> transactions = new ArrayList<>();
+        String where = PocketBankerContract.Transactions.ACCOUNT_NUMBER + " = ? " ;
+        Cursor c = null;
+        try {
+            c = PocketBankerApplication
+                    .getApplication()
+                    .getApplicationContext()
+                    .getContentResolver()
+                    .query(PocketBankerProvider.CONTENT_URI_TRANSACTIONS, null, where, new String[] { accNumber }, sortOrder);
+            if (c != null) {
+                while (c.moveToNext() && number != 0) {
+                    Transaction transaction = new Transaction();
+                    transaction.instantiateFromCursor(c);
+                    transactions.add(transaction);
+                    number--;
+                }
+            }
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return transactions;
+    }
+
+    public static List<Transaction> getLatestTransactionsBetween(String accNumber, String sortOrder, long startTime,
+            long endTime)
+    {
+        List<Transaction> transactions = new ArrayList<>();
+        String where = PocketBankerContract.Transactions.ACCOUNT_NUMBER + " = ? AND "
+                + PocketBankerContract.Transactions.TIME + " >= " + startTime + " AND "
+                + PocketBankerContract.Transactions.TIME + " <= " + endTime;
+        Cursor c = null;
+        try {
+            c = PocketBankerApplication
+                    .getApplication()
+                    .getApplicationContext()
+                    .getContentResolver()
+                    .query(PocketBankerProvider.CONTENT_URI_TRANSACTIONS, null, where, new String[] { accNumber },
+                            sortOrder);
+            if (c != null) {
+                while (c.moveToNext()) {
+                    Transaction transaction = new Transaction();
+                    transaction.instantiateFromCursor(c);
+                    transactions.add(transaction);
+                }
+            }
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return transactions;
     }
 }

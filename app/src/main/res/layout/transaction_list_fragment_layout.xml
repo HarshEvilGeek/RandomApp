@@ -1,12 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/transactions_list_swipe_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/transaction_list_fragment_RV"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/date_selection_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:textColor="@android:color/white"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/from_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/rounded_corner_border"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:padding="3dp"
+                android:text="From:"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/branch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:padding="3dp"
+                android:textColor="@android:color/white"
+                android:text="TO"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/to_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/rounded_corner_border"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:padding="3dp"
+                android:text="To:"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/fetch_transaction_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingTop="3dp"
+                android:src="@drawable/fetch_transaction_history" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/transaction_list_fragment_RV"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5" />
+
+    </LinearLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

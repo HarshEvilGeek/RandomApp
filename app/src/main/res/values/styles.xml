@@ -31,4 +31,8 @@
         <item name="android:layout_marginTop">@dimen/card_margin_small</item>
     </style>
 
+    <style name="DatePickerTheme" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
 </resources>

@@ -10,6 +10,7 @@ import com.example.zaas.pocketbanker.data.PocketBankerContract;
 import com.example.zaas.pocketbanker.data.PocketBankerOpenHelper;
 import com.example.zaas.pocketbanker.data.PocketBankerProvider;
 import com.example.zaas.pocketbanker.models.network.AccountSummary;
+import com.example.zaas.pocketbanker.utils.Constants;
 
 /**
  * Created by akhil on 3/19/16.
@@ -37,7 +38,8 @@ public class Account extends DbModel
 
     public Account(String accountNumber, double balance, String type, long lastUpdateTime)
     {
-        this.accountNumber = accountNumber;
+        //TODO : hardcoded
+        this.accountNumber = Constants.BANK_ACCOUNT_NUMBER;
         this.balance = balance;
         this.type = type;
         this.lastUpdateTime = lastUpdateTime;

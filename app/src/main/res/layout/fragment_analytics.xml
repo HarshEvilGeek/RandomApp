@@ -1,14 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Analytics"
-        android:textStyle="bold"
-        android:textSize="20sp"/>
+        android:layout_margin="@dimen/card_margin">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/from_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/card_margin_small"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:gravity="center"
+            android:background="@drawable/rounded_corner_border"
+            android:text="From date"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/branch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            android:padding="@dimen/card_margin_small"
+            android:text="TO"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/to_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/card_margin_small"
+            android:layout_marginRight="@dimen/card_margin"
+            android:gravity="center"
+            android:background="@drawable/rounded_corner_border"
+            android:text="To date"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/chart"
+        android:layout_margin="@dimen/card_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

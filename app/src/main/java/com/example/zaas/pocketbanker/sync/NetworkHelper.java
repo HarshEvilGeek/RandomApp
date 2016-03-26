@@ -15,9 +15,13 @@ import retrofit.client.Response;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.CardAccount;
 import com.example.zaas.pocketbanker.models.local.LoanAccount;
+import com.example.zaas.pocketbanker.models.local.LoanEMI;
+import com.example.zaas.pocketbanker.models.local.PocketAccount;
+import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.network.AccountSummary;
 import com.example.zaas.pocketbanker.models.network.BalanceEnquiry;
 import com.example.zaas.pocketbanker.models.network.BehaviorScore;
@@ -32,6 +36,16 @@ import com.example.zaas.pocketbanker.models.network.LoanTransactionDetails;
 import com.example.zaas.pocketbanker.models.network.RegisteredPayees;
 import com.example.zaas.pocketbanker.models.network.RequestCode;
 import com.example.zaas.pocketbanker.models.network.Transactions;
+import com.example.zaas.pocketbanker.models.network.WalletBalanceBody;
+import com.example.zaas.pocketbanker.models.network.WalletBalanceResponse;
+import com.example.zaas.pocketbanker.models.network.WalletCreation;
+import com.example.zaas.pocketbanker.models.network.WalletCreditDebitBody;
+import com.example.zaas.pocketbanker.models.network.WalletCreditDebitResponse;
+import com.example.zaas.pocketbanker.models.network.WalletDetails;
+import com.example.zaas.pocketbanker.models.network.WalletStatementBody;
+import com.example.zaas.pocketbanker.models.network.WalletStatementResponse;
+import com.example.zaas.pocketbanker.utils.Constants;
+import com.example.zaas.pocketbanker.utils.SecurityUtils;
 import com.google.gson.Gson;
 
 /**
@@ -289,10 +303,18 @@ public class NetworkHelper
             }
 
             if (transactions != null) {
-                Log.e(LOG_TAG, "no of branch atm locations" + transactions.size());
+                Log.e(LOG_TAG, "transactions" + transactions.size());
+                List<Transaction> receivedTransactions = new ArrayList<>();
                 for (Transactions transaction : transactions) {
                     Log.e(LOG_TAG, " branch atm location : " + transaction);
+                    DateFormat transactionDF = new SimpleDateFormat(Transaction.TRANSACTION_DATE_FORMAT);
+                    Transaction dbTransaction = new Transaction(transaction.getAccountno(),
+                            transaction.getTransactionamount(), transaction.getClosingbalance(),
+                            Transaction.Type.getEnumFromNetworkType(transaction.getCreditdebitflag()),
+                            transaction.getRemark(), transactionDF.parse(transaction.getTransactiondate()).getTime());
+                    receivedTransactions.add(dbTransaction);
                 }
+                PocketBankerDBHelper.getInstance().insertUpdateAndDeleteDbModelTable(receivedTransactions);
             }
 
         }
@@ -369,10 +391,18 @@ public class NetworkHelper
             }
 
             if (transactions != null) {
-                Log.e(LOG_TAG, "no of branch atm locations" + transactions.size());
+                Log.e(LOG_TAG, "transactions" + transactions.size());
+                List<Transaction> receivedTransactions = new ArrayList<>();
                 for (Transactions transaction : transactions) {
                     Log.e(LOG_TAG, " branch atm location : " + transaction);
+                    DateFormat transactionDF = new SimpleDateFormat(Transaction.TRANSACTION_DATE_FORMAT);
+                    Transaction dbTransaction = new Transaction(transaction.getAccountno(),
+                            transaction.getTransactionamount(), transaction.getClosingbalance(),
+                            Transaction.Type.getEnumFromNetworkType(transaction.getCreditdebitflag()),
+                            transaction.getRemark(), transactionDF.parse(transaction.getTransactiondate()).getTime());
+                    receivedTransactions.add(dbTransaction);
                 }
+                PocketBankerDBHelper.getInstance().insertUpdateAndDeleteDbModelTable(receivedTransactions);
             }
 
         }
@@ -599,15 +629,15 @@ public class NetworkHelper
 
     }
 
-    public void getLoanAccountSummary(String custId)
+    public void getLoanAccountSummary(String loanAccountNum)
     {
         try {
 
-            Log.i(LOG_TAG, "Fetching loan account details for : " + custId);
+            Log.i(LOG_TAG, "Fetching loan account details for : " + loanAccountNum);
             setupRetrofitParamsForRequest(null, ALPHA_ENDPOINT);
             String clientId = "akhilcherian@gmail.com";
             String token = TOKEN;
-            String href = "rest/Loan/getLoanDetails/" + custId + "/" + clientId + "/" + token;
+            String href = "rest/Loan/getLoanDetails/" + loanAccountNum + "/" + clientId + "/" + token;
             Log.i(LOG_TAG, "Fetching loan account details for href : " + href);
 
             LoanAccountSummary loanAccountSummary = methods.getLoanAccountSummary(href);
@@ -634,7 +664,7 @@ public class NetworkHelper
             setupRetrofitParamsForRequest(null, ALPHA_ENDPOINT);
             String clientId = "akhilcherian@gmail.com";
             String token = TOKEN;
-            String href = "rest/Loan/EMIDetails/L001/" + accountNo + "/" + clientId + "/" + token;
+            String href = "rest/Loan/EMIDetails/" + accountNo + "/" + Constants.AGREEMENT_ID + "/" + clientId + "/" + token;
             Log.i(LOG_TAG, "Fetching loan EMI details for href : " + href);
 
             LoanEMIDetails loanEMIDetails = methods.getLoanEMIDetails(href);
@@ -642,6 +672,22 @@ public class NetworkHelper
             if (loanEMIDetails != null) {
                 Log.i(LOG_TAG, "data : " + loanEMIDetails);
 
+                String[] emisArray = loanEMIDetails.getLastThreeEmis().split(",");
+                String[] emiDates = loanEMIDetails.getEmiDates().split(",");
+
+                if(emisArray != null && emiDates != null && emisArray.length > 0 && emiDates.length > 0) {
+                    List<LoanEMI> loanEmiList = new ArrayList<>();
+                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                    for(int i = 0 ;i < emisArray.length;i++) {
+
+                        String date = emiDates[i];
+                        long dateMillis = df.parse(date).getTime();
+                        LoanEMI emi = new LoanEMI(Double.valueOf(emisArray[i]), dateMillis, accountNo);
+                        loanEmiList.add(emi);
+                    }
+
+                    PocketBankerDBHelper.getInstance().insertUpdateAndDeleteDbModelTable(loanEmiList);
+                }
             }
         }
         catch (Exception e) {
@@ -752,15 +798,15 @@ public class NetworkHelper
 
     }
 
-    public void getCardAccountDetails(String custId)
+    public void getCardAccountDetails(String cardNum)
     {
         try {
 
-            Log.i(LOG_TAG, "Fetching card details for : " + custId);
+            Log.i(LOG_TAG, "Fetching card details for : " + cardNum);
             setupRetrofitParamsForRequest(null, ALPHA_ENDPOINT);
             String clientId = "akhilcherian@gmail.com";
             String token = TOKEN;
-            String href = "rest/Card/getCardDetails/" + custId + "/" + clientId + "/" + token;
+            String href = "rest/Card/getCardDetails/" + cardNum + "/" + clientId + "/" + token;
             Log.i(LOG_TAG, "Fetching card details for href : " + href);
 
             CardAccDetailsResponse cardAccDetailsResponse = methods.getCardDetails(href);
@@ -798,4 +844,258 @@ public class NetworkHelper
             Log.e(LOG_TAG, " Error while setting up request params", e);
         }
     }
+
+    public String createWallet(String firstName, String lastName, String emailId, String phNumber, Date dob, String gender)
+    {
+        String response = Constants.WALLET_CREATION_FAILED;
+
+        try {
+
+            Log.i(LOG_TAG, "Creating wallet with details : " + firstName + " " + lastName);
+            setupRetrofitParamsForRequest(null, ALPHA_ENDPOINT);
+            String clientId = "akhilcherian@gmail.com";
+            String token = TOKEN;
+            String merchantId = "mer_123";
+            String ipAddress = "10.22.7.74";
+            String os = "android";
+            String imei = "34567890";
+            String randomString = "xyz";
+
+            DateFormat df = new SimpleDateFormat(Constants.WALLET_DOB_FORMAT);
+            String dobString = df.format(dob);
+            String href = "rest/Wallet/createWallet/" + merchantId + "/create/" + firstName + "/" + lastName + "/" + emailId +"/" +phNumber +"/" +dobString + "/" + gender+ "/" + ipAddress + "/" + os + "/" + imei + "/" + randomString + "/" + clientId + "/" + token;
+            Log.i(LOG_TAG, "creating wallet with href : " + href);
+
+            WalletCreation walletCreation = methods.createWallet(href);
+
+            if (walletCreation != null && walletCreation.getWalletDetails() != null && walletCreation.getWalletDetails().length > 0) {
+                Log.i(LOG_TAG, "data : " + walletCreation);
+                WalletDetails walletDetails = walletCreation.getWalletDetails()[0];
+                String authData = "";
+                if(walletDetails.getCreationStatus().equals(Constants.WALLET_ALREADY_EXISTS)) {
+                   Log.i(LOG_TAG,"Wallet already exists");
+                    authData = walletDetails.getAuthData();
+                    response = Constants.WALLET_ALREADY_EXISTS;
+                }
+                else if(walletDetails.getCreationStatus().equals(Constants.WALLET_CREATED_SUCCESSFULLY)) {
+                    Log.i(LOG_TAG,"Wallet created");
+                    authData = walletDetails.getAuthData();
+                    response = Constants.WALLET_CREATED_SUCCESSFULLY;
+                }
+
+                if(response.equals(Constants.WALLET_CREATED_SUCCESSFULLY) || response.equals(Constants.WALLET_ALREADY_EXISTS)) {
+                    PocketAccount pocketAccount = new PocketAccount(firstName, lastName, emailId, dob.getTime(),  phNumber , merchantId,
+                            PocketAccount.Gender.valueOf(gender), authData, "");
+                    SecurityUtils.savePocketsAccount(pocketAccount);
+
+                }
+
+            }
+        }
+        catch (Exception e) {
+            Log.e(LOG_TAG, "Exception while creating wallet", e);
+        }
+
+        return response;
+    }
+
+    public double getWalletBalance(String phNumber)
+    {
+        double balance = 0.0;
+
+        try {
+
+            PocketAccount pocketAccount = SecurityUtils.getPocketsAccount();
+
+            if(pocketAccount == null) {
+                return balance;
+            }
+
+            Log.i(LOG_TAG, "getting wallet balance for " + phNumber);
+            setupRetrofitParamsForRequest(null, ALPHA_ENDPOINT);
+            String clientId = "akhilcherian@gmail.com";
+            String token = TOKEN;
+            String ipAddress = "10.22.7.74";
+            String os = "android";
+            String imei = "34567890";
+            double latitude = 19.11376955;
+            double longitude = 73.8500124;
+            String deviceId = "7b47c06dsj12243";
+
+            // TODO get from wherever
+            String authDataForWallet = pocketAccount.getAuthToken();
+
+            String href = "rest/Wallet/getWalletBalance";
+            Log.i(LOG_TAG, "getting wallet balance with href : " + href);
+
+            WalletBalanceBody walletBalanceBody = new WalletBalanceBody(authDataForWallet, latitude, longitude, imei,
+                    os, ipAddress, deviceId, clientId, token);
+
+            WalletBalanceResponse walletBalanceResponse = methods.getWalletBalance(href, walletBalanceBody);
+
+            if (walletBalanceResponse != null) {
+                Log.i(LOG_TAG, "wallet balance : " + walletBalanceResponse);
+                balance = walletBalanceResponse.getAmount();
+                pocketAccount.setBalance(balance);
+                SecurityUtils.savePocketsAccount(pocketAccount);
+            }
+        }
+        catch (Exception e) {
+            Log.e(LOG_TAG, "Exception while getting wallet response", e);
+        }
+
+        return balance;
+    }
+
+    public void creditWalletAmount(String phNumber, double amount, String promoCode, String remarks,
+            String subMerchant)
+    {
+        try {
+
+            Log.i(LOG_TAG, "credit wallet balance  " + phNumber);
+            setupRetrofitParamsForRequest(null, ALPHA_ENDPOINT);
+            String clientId = "akhilcherian@gmail.com";
+            String token = TOKEN;
+            String ipAddress = "10.22.7.74";
+            String os = "android";
+            String imei = "34567890";
+            double latitude = 19.11376955;
+            double longitude = 73.8500124;
+            String deviceId = "7b47c06dsj12243";
+
+            // TODO get from wherever
+            String authDataForWallet = "";
+
+            String href = "rest/Wallet/creditWalletAmount";
+            Log.i(LOG_TAG, "creditting wallet balance with href : " + href);
+
+            WalletCreditDebitBody walletCreditDebitBody = new WalletCreditDebitBody(authDataForWallet, latitude,
+                    longitude, imei, os, ipAddress, deviceId, clientId, token, amount, remarks, subMerchant, 12345,
+                    promoCode);
+
+            WalletCreditDebitResponse walletCreditDebitResponse = methods.creditWallet(href, walletCreditDebitBody);
+
+            if (walletCreditDebitResponse != null) {
+                Log.i(LOG_TAG, "wallet balance : " + walletCreditDebitResponse);
+            }
+        }
+        catch (Exception e) {
+            Log.e(LOG_TAG, "Exception while crediting wallet amount", e);
+        }
+
+    }
+
+    public void debitWalletAmount(String phNumber, double amount, String promoCode, String remarks,
+                                     String subMerchant)
+    {
+        try {
+
+            Log.i(LOG_TAG, "debit wallet balance  " + phNumber);
+            setupRetrofitParamsForRequest(null, ALPHA_ENDPOINT);
+            String clientId = "akhilcherian@gmail.com";
+            String token = TOKEN;
+            String ipAddress = "10.22.7.74";
+            String os = "android";
+            String imei = "34567890";
+            double latitude = 19.11376955;
+            double longitude = 73.8500124;
+            String deviceId = "7b47c06dsj12243";
+
+            // TODO get from wherever
+            String authDataForWallet = "";
+
+            String href = "rest/Wallet/debitWalletAmount";
+            Log.i(LOG_TAG, "debit wallet balance with href : " + href);
+
+            WalletCreditDebitBody walletCreditDebitBody = new WalletCreditDebitBody(authDataForWallet, latitude,
+                    longitude, imei, os, ipAddress, deviceId, clientId, token, amount, remarks, subMerchant, 12345,
+                    promoCode);
+
+            WalletCreditDebitResponse walletCreditDebitResponse = methods.debitWallet(href, walletCreditDebitBody);
+
+            if (walletCreditDebitResponse != null) {
+                Log.i(LOG_TAG, "wallet balance : " + walletCreditDebitResponse);
+            }
+        }
+        catch (Exception e) {
+            Log.e(LOG_TAG, "Exception while debiting wallet amount", e);
+        }
+    }
+
+    public void getWalletStatement(String phNumber)
+    {
+
+        try {
+
+            Log.i(LOG_TAG, "get wallet statement for " + phNumber);
+            setupRetrofitParamsForRequest(null, ALPHA_ENDPOINT);
+            String clientId = "akhilcherian@gmail.com";
+            String token = TOKEN;
+            String ipAddress = "10.22.7.74";
+            String os = "android";
+            String imei = "34567890";
+            double latitude = 19.11376955;
+            double longitude = 73.8500124;
+            String deviceId = "7b47c06dsj12243";
+
+            // TODO get from wherever
+            String authDataForWallet = "";
+
+            String href = "rest/Wallet/getWalletStatementDetails";
+            Log.i(LOG_TAG, "debit wallet balance with href : " + href);
+
+            WalletStatementBody walletStatementBody = new WalletStatementBody(authDataForWallet, latitude, longitude,
+                    imei, os, ipAddress, deviceId, clientId, token);
+
+            Response walletStatementResponse = methods.getWalletStatement(href, walletStatementBody);
+
+            if (walletStatementResponse != null) {
+
+                InputStream responseStream = walletStatementResponse.getBody().in();
+
+                if (responseStream != null) {
+
+                    String responseString = IOUtils.toString(responseStream);
+
+                    if (!TextUtils.isEmpty(responseString) && responseString.startsWith("[")
+                            && responseString.endsWith("]")) {
+                        responseString = responseString.substring(1, responseString.length() - 1);
+
+                        int status = 500;
+
+                        if (responseString.contains("errorCode")) {
+                            int indexOfErrorCode = responseString.indexOf("errorCode");
+                            if (indexOfErrorCode != -1) {
+                                status = Integer.parseInt(responseString.substring(indexOfErrorCode + 12,
+                                        indexOfErrorCode + 15));
+                            }
+                        }
+
+                        if (status == 200) {
+                            Log.i(LOG_TAG, "getting wallet statement succeeded");
+
+                            int lastIndexOfSeparator = responseString.lastIndexOf(",");
+                            String walletStatementString = responseString.substring(0, lastIndexOfSeparator);
+                            WalletStatementResponse walletStatement = new Gson().fromJson(walletStatementString,
+                                    WalletStatementResponse.class);
+
+                            if (walletStatement != null) {
+                                Log.i(LOG_TAG, "walletStatement : " + walletStatement);
+                            }
+                        }
+                        else {
+                            Log.i(LOG_TAG, "getting wallet statement failed");
+                        }
+
+                    }
+                }
+
+            }
+        }
+        catch (Exception e) {
+            Log.e(LOG_TAG, "Exception while debiting wallet amount", e);
+        }
+    }
+
+
 }

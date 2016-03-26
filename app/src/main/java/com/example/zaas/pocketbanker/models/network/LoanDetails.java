@@ -27,7 +27,7 @@ public class LoanDetails
     @SerializedName ("type_of_loan")
     private String typeOfLoan;
 
-    private double roi;
+    private String roi;
 
     @SerializedName ("month_delinquency")
     private String monthDelinquency;
@@ -106,12 +106,12 @@ public class LoanDetails
         this.typeOfLoan = typeOfLoan;
     }
 
-    public double getRoi()
+    public String getRoi()
     {
         return roi;
     }
 
-    public void setRoi(double roi)
+    public void setRoi(String roi)
     {
         this.roi = roi;
     }

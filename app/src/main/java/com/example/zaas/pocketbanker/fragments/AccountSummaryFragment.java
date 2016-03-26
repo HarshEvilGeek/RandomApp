@@ -61,7 +61,7 @@ public class AccountSummaryFragment extends Fragment
         });
         mAccountSummarySwipeRefresh.setColorSchemeColors(Color.BLUE);
         getActivity().setTitle("Summary");
-        loadData(true);
+        loadData(false);
         return rootView;
     }
 
@@ -196,26 +196,6 @@ public class AccountSummaryFragment extends Fragment
                 }
             }
 
-            /**
-             * SummaryUIItem uiItem4 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Card", -1, null);
-             * SummaryUIItem uiItem7 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER, "Loan Account", -1, null);
-             * SummaryUIItem uiItem2 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012243547123",
-             * 2345687.00, Constants.HEADER_TYPE_BANKACCOUNT); SummaryUIItem uiItem3 = new
-             * SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012246547123", 100000.00,
-             * Constants.HEADER_TYPE_BANKACCOUNT); SummaryUIItem uiItem5 = new
-             * SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0000012143547234", 50000.00,
-             * Constants.HEADER_TYPE_CARD); SummaryUIItem uiItem6 = new SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM,
-             * "0020012243547456", 60000.00, Constants.HEADER_TYPE_CARD); SummaryUIItem uiItem8 = new
-             * SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0030012243547678", 789.00,
-             * Constants.HEADER_TYPE_LOANACCOUNT); SummaryUIItem uiItem9 = new
-             * SummaryUIItem(Constants.SUMMARY_ITEM_TYPE_ITEM, "0007012243547789", 60975.00,
-             * Constants.HEADER_TYPE_LOANACCOUNT);
-             * 
-             * uiItems.add(uiItem1); uiItems.add(uiItem2); uiItems.add(uiItem3); uiItems.add(uiItem4);
-             * uiItems.add(uiItem5); uiItems.add(uiItem6); uiItems.add(uiItem7); uiItems.add(uiItem8);
-             * uiItems.add(uiItem9);
-             **/
-
             return uiItems;
         }
 
@@ -255,13 +235,11 @@ public class AccountSummaryFragment extends Fragment
         {
             NetworkHelper networkHelper = new NetworkHelper();
 
-            // TODO : get from wherever
-            String custId = Constants.CUST_ID;
-            networkHelper.fetchAccountSummary(null, custId);
+            networkHelper.fetchAccountSummary(Constants.BANK_ACCOUNT_NUMBER, null);
 
-            networkHelper.getLoanAccountSummary(custId);
+            networkHelper.getLoanAccountSummary(Constants.LOAN_ACC_NUMBER);
 
-            networkHelper.getCardAccountDetails(custId);
+            networkHelper.getCardAccountDetails(Constants.CARD_ACCOUNT_NUMBER);
 
             return null;
         }

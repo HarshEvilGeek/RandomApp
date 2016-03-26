@@ -85,7 +85,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
 
     private void insertDummyData(SQLiteDatabase db)
     {
-        insertDummyAccountData(db);
+        // insertDummyAccountData(db);
         insertDummyPayeeData(db);
         insertDummyBranchAtmData(db);
         insertDummyTransactionData(db);
@@ -157,37 +157,37 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
 
     private void insertDummyTransactionData(SQLiteDatabase db)
     {
-        Transaction transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 12000, 1200000, Transaction.Type.DEBIT,
+        Transaction transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1200, 1200000, Transaction.Type.Debit,
                 "House Rent", System.currentTimeMillis() - 30 * ONE_DAY_IN_MILLIS, "House Rent",
                 TransactionCategoryUtils.Category.UNKNOWN);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
-        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 800, 1200000, Transaction.Type.DEBIT, "Conveyance",
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 800, 1200000, Transaction.Type.Debit, "Conveyance",
                 System.currentTimeMillis() - 20 * ONE_DAY_IN_MILLIS, "Uber", TransactionCategoryUtils.Category.TRAVEL);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
-        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3000, 1200000, Transaction.Type.DEBIT, "Shopping",
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3000, 1200000, Transaction.Type.Debit, "Shopping",
                 System.currentTimeMillis() - 15 * ONE_DAY_IN_MILLIS, "Puma", TransactionCategoryUtils.Category.SHOPPING);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
-        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 900, 1200000, Transaction.Type.DEBIT, "Movies",
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 900, 1200000, Transaction.Type.Debit, "Movies",
                 System.currentTimeMillis() - 12 * ONE_DAY_IN_MILLIS, "PVR", TransactionCategoryUtils.Category.MOVIES);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
-        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 2600, 1200000, Transaction.Type.DEBIT, "Dinner",
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 2600, 1200000, Transaction.Type.Debit, "Dinner",
                 System.currentTimeMillis() - 10 * ONE_DAY_IN_MILLIS, "Pizza Hut",
                 TransactionCategoryUtils.Category.FOOD);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
-        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1350, 1200000, Transaction.Type.DEBIT, "Lunch",
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1350, 1200000, Transaction.Type.Debit, "Lunch",
                 System.currentTimeMillis() - 7 * ONE_DAY_IN_MILLIS, "Taco Bell", TransactionCategoryUtils.Category.FOOD);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
-        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 25000, 1200000, Transaction.Type.CREDIT,
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 250, 1200000, Transaction.Type.Credit,
                 "Debt Settlement", System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS, "",
                 TransactionCategoryUtils.Category.UNKNOWN);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
-        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 450, 1200000, Transaction.Type.DEBIT, "Taxi",
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 450, 1200000, Transaction.Type.Debit, "Taxi",
                 System.currentTimeMillis() - 3 * ONE_DAY_IN_MILLIS, "Ola", TransactionCategoryUtils.Category.TRAVEL);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
-        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1000, 1200000, Transaction.Type.DEBIT, "Doctor",
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1000, 1200000, Transaction.Type.Debit, "Doctor",
                 System.currentTimeMillis() - ONE_DAY_IN_MILLIS, "Fortis", TransactionCategoryUtils.Category.HEALTH);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
-        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3500, 1200000, Transaction.Type.DEBIT, "Gift",
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3500, 1200000, Transaction.Type.Debit, "Gift",
                 System.currentTimeMillis(), "Archies", TransactionCategoryUtils.Category.UNKNOWN);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
     }
@@ -267,8 +267,8 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
 
         String CREATE_TABLE_EMIS_QUERY = "CREATE table " + EMIS + " (" + PocketBankerContract.Emis._ID
                 + " integer primary key autoincrement, " + PocketBankerContract.Emis.LOAN_ACCOUNT_NUMBER + " text, "
-                + PocketBankerContract.Emis.NO_OF_EMI + " integer, " + PocketBankerContract.Emis.EMI_DATES + " text, "
-                + PocketBankerContract.Emis.EMI_LAST_THREE + " text);";
+                + PocketBankerContract.Emis.EMI_DATE + " real, "
+                + PocketBankerContract.Emis.EMI_AMOUNT + " real);";
 
         String CREATE_TABLE_LOAN_TRANSACTIONS_QUERY = "CREATE table " + LOAN_TRANSACTIONS + " ("
                 + PocketBankerContract.LoanTransactions._ID + " integer primary key autoincrement, "
