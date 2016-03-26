@@ -125,7 +125,7 @@ public class CreatePocketsActivity extends BaseRestrictedActivity {
     protected Dialog createBirthdayDialog() {
         Time initialDate = new Time();
         initialDate.set(birthdayValue);
-        return new DatePickerDialog(this, birthdayPickerListener, initialDate.year, initialDate.month,
+        return new DatePickerDialog(this, R.style.DatePickerTheme, birthdayPickerListener, initialDate.year, initialDate.month,
                 initialDate.monthDay);
     }
 

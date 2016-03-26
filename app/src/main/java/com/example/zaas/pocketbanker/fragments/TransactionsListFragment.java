@@ -173,11 +173,11 @@ public class TransactionsListFragment extends Fragment
         {
         case FROM_DATE_PICKER_ID:
             initialDate.set(mFromDateValue);
-            return new DatePickerDialog(getActivity(), fromdatePickerListener, initialDate.year, initialDate.month,
+            return new DatePickerDialog(getActivity(), R.style.DatePickerTheme, fromdatePickerListener, initialDate.year, initialDate.month,
                     initialDate.monthDay);
         case TO_DATE_PICKER_ID:
             initialDate.set(mToDateValue);
-            return new DatePickerDialog(getActivity(), todatePickerListener, initialDate.year, initialDate.month,
+            return new DatePickerDialog(getActivity(),R.style.DatePickerTheme, todatePickerListener, initialDate.year, initialDate.month,
                     initialDate.monthDay);
         }
         return null;
