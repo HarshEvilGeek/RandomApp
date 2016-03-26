@@ -191,7 +191,7 @@ public class AccountSummaryDetailFragment extends Fragment
                     if (loanEmis != null && loanEmis.size() > 0) {
                         for (LoanEMI loanEmi : loanEmis) {
                             TransactionDataUIItem transactionUiItem = new TransactionDataUIItem(loanEmi.getEmiAmount(),
-                                    "Paid EMI", loanEmi.getEmiDate(), Transaction.Type.CREDIT.name());
+                                    "Paid EMI", loanEmi.getEmiDate(), Transaction.Type.Credit.name());
                             AccountSummaryDetailItem transactionItem = new AccountSummaryDetailItem(
                                     Constants.SUMMARY_ITEM_TYPE_ITEM, null, transactionUiItem);
                             uiItems.add(transactionItem);
@@ -213,17 +213,17 @@ public class AccountSummaryDetailFragment extends Fragment
                     uiItems.add(headerItem);
 
                     TransactionDataUIItem transaction1 = new TransactionDataUIItem(500.00, "Paid phone bill",
-                            System.currentTimeMillis(), Transaction.Type.DEBIT.name());
+                            System.currentTimeMillis(), Transaction.Type.Debit.name());
                     TransactionDataUIItem transaction2 = new TransactionDataUIItem(1245.00, "Groceries purchase",
-                            System.currentTimeMillis() - Constants.ONE_DAY_IN_MILLIS, Transaction.Type.DEBIT.name());
+                            System.currentTimeMillis() - Constants.ONE_DAY_IN_MILLIS, Transaction.Type.Debit.name());
                     TransactionDataUIItem transaction3 = new TransactionDataUIItem(10000.00, null,
-                            System.currentTimeMillis() - Constants.ONE_DAY_IN_MILLIS, Transaction.Type.CREDIT.name());
+                            System.currentTimeMillis() - Constants.ONE_DAY_IN_MILLIS, Transaction.Type.Credit.name());
                     TransactionDataUIItem transaction4 = new TransactionDataUIItem(200.00, null,
                             System.currentTimeMillis() - (2 * Constants.ONE_DAY_IN_MILLIS),
-                            Transaction.Type.DEBIT.name());
+                            Transaction.Type.Debit.name());
                     TransactionDataUIItem transaction5 = new TransactionDataUIItem(5000.00, "Refund from merchant",
                             System.currentTimeMillis() - (3 * Constants.ONE_DAY_IN_MILLIS),
-                            Transaction.Type.CREDIT.name());
+                            Transaction.Type.Credit.name());
 
                     AccountSummaryDetailItem uiItem2 = new AccountSummaryDetailItem(Constants.SUMMARY_ITEM_TYPE_ITEM,
                             null, transaction1);

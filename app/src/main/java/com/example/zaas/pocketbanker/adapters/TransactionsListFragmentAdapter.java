@@ -54,9 +54,9 @@ public class TransactionsListFragmentAdapter extends RecyclerView.Adapter<Transa
 
         DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
-        viewHolder.getTransAmountTV().setText(String.valueOf(transactionDataUIItem.getTransactionAmount()));
+        viewHolder.getTransAmountTV().setText(transactionDataUIItem.getTransactionType() + " of ₹"
+                + String.valueOf(transactionDataUIItem.getTransactionAmount()));
         viewHolder.getTransDateTV().setText(df.format(new Date(transactionDataUIItem.getTransactionDate())));
-        viewHolder.getTransTypeTV().setText(transactionDataUIItem.getTransactionType());
 
         if (!TextUtils.isEmpty(transactionDataUIItem.getTransactionRemark())) {
             viewHolder.getTransRemarkTV().setVisibility(View.VISIBLE);

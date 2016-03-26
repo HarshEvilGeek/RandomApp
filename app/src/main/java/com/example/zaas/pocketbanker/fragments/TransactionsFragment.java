@@ -159,7 +159,7 @@ public class TransactionsFragment extends Fragment
                 LoanEMI latestEmi = latestEmis.get(0);
                 TransactionSummaryUIItem loanTransactionSummary = new TransactionSummaryUIItem(
                         Constants.SUMMARY_ITEM_TYPE_ITEM, Constants.LOAN_ACC_NUMBER, latestEmi.getEmiAmount(),
-                        latestEmi.getEmiDate(), Transaction.Type.CREDIT.name(), Constants.HEADER_TYPE_LOANACCOUNT);
+                        latestEmi.getEmiDate(), Transaction.Type.Credit.name(), Constants.HEADER_TYPE_LOANACCOUNT);
                 uiItems.add(loanTransactionSummary);
             }
 
@@ -175,7 +175,7 @@ public class TransactionsFragment extends Fragment
             // for (CardAccount cardAccount : cardAccounts) {
             TransactionSummaryUIItem cardTransactionSummary = new TransactionSummaryUIItem(
                     Constants.SUMMARY_ITEM_TYPE_ITEM, Constants.CARD_ACCOUNT_NUMBER, 100, System.currentTimeMillis(),
-                    Transaction.Type.DEBIT.name(), Constants.HEADER_TYPE_CARD);
+                    Transaction.Type.Debit.name(), Constants.HEADER_TYPE_CARD);
             uiItems.add(cardTransactionSummary);
             // }
             // }
