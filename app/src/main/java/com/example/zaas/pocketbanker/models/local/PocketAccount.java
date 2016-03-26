@@ -5,13 +5,43 @@ package com.example.zaas.pocketbanker.models.local;
  */
 public class PocketAccount {
 
+    String authToken;
     String firstName;
     String lastName;
     String emailAddress;
     String phoneNumber;
     String merchantId;
     String scope;
-    int balance;
+    Gender gender;
+    long birthday;
+    double balance;
+
+    public PocketAccount()
+    {
+
+    }
+
+    public PocketAccount(String firstName, String lastName, String email, long dob, String phNo, String merchantId,
+            Gender gender, String authToken, String scope)
+    {
+        this.authToken = authToken;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.emailAddress = email;
+        this.phoneNumber = phNo;
+        this.merchantId = merchantId;
+        this.scope = scope;
+        this.gender = gender;
+        this.birthday = dob;
+    }
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -61,11 +91,31 @@ public class PocketAccount {
         this.scope = scope;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public long getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(long birthday) {
+        this.birthday = birthday;
+    }
+
+    public enum Gender {
+        MALE, FEMALE;
     }
 }

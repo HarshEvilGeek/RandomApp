@@ -10,6 +10,7 @@
     <dimen name="recycler_view_top_margin">16dp</dimen>
     <dimen name="card_margin">16dp</dimen>
     <dimen name="card_margin_small">8dp</dimen>
+    <dimen name="card_margin_smaller">4dp</dimen>
 
     <dimen name="summary_detail_header_left_padding">10dp</dimen>
     <dimen name="summary_detail_header_right_padding">10dp</dimen>

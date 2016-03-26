@@ -28,6 +28,8 @@ public class AccountSummaryDetailHeaderUIITem
 
     private String status;
 
+    private String delinquency;
+
     // expiry for card, max date for loan, current for bank account
     private long time;
 
@@ -41,7 +43,7 @@ public class AccountSummaryDetailHeaderUIITem
     }
 
     public void setHeaderDataForLoanAccount(String accountNumber, String customerName, double outstandingBalance,
-            String accountType, long time, double roi, String headerType)
+            String accountType, long time, double roi, String headerType, String delinquency)
     {
         this.accountNo = accountNumber;
         this.accountHolderName = customerName;
@@ -50,6 +52,7 @@ public class AccountSummaryDetailHeaderUIITem
         this.time = time;
         this.rateOfInterest = roi;
         this.headerType = headerType;
+        this.delinquency = delinquency;
     }
 
     public void setHeaderDataForCard(String cardNumber, double debtAmount, double availableLimit, long expiryDate,
@@ -162,5 +165,13 @@ public class AccountSummaryDetailHeaderUIITem
     public void setHeaderType(String headerType)
     {
         this.headerType = headerType;
+    }
+
+    public String getDelinquency() {
+        return delinquency;
+    }
+
+    public void setDelinquency(String delinquency) {
+        this.delinquency = delinquency;
     }
 }
