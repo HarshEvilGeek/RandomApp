@@ -64,6 +64,10 @@
             android:name=".activities.BranchAtmMapActivity"
             android:label="@string/branch_atm_map">
         </activity>
+        <activity
+            android:name=".activities.TransactionCategoryActivity"
+            android:label="@string/action_transactions">
+        </activity>
         <service android:name=".services.FetchAddressIntentService"
             android:exported="false" />
 
