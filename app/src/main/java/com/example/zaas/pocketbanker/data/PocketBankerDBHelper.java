@@ -19,6 +19,7 @@ import com.example.zaas.pocketbanker.application.PocketBankerApplication;
 import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.example.zaas.pocketbanker.models.local.DbModel;
+import com.example.zaas.pocketbanker.models.local.LoanEMI;
 import com.example.zaas.pocketbanker.models.local.Payee;
 import com.example.zaas.pocketbanker.models.local.Recommendation;
 import com.example.zaas.pocketbanker.models.local.Transaction;
@@ -151,6 +152,29 @@ public class PocketBankerDBHelper
         return transactionList;
     }
 
+    public List<LoanEMI> getAllLoanEmis()
+    {
+        Cursor c = null;
+        List<LoanEMI> loanEMIs = new ArrayList<>();
+        try {
+            c = context.getContentResolver().query(PocketBankerProvider.CONTENT_URI_EMIS, null, null, null,
+                    null);
+            if (c != null) {
+                while (c.moveToNext()) {
+                    LoanEMI loanEMI = new LoanEMI();
+                    loanEMI.instantiateFromCursor(c);
+                    loanEMIs.add(loanEMI);
+                }
+            }
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return loanEMIs;
+    }
+
     public void updateTransaction(int id, ContentValues contentValues)
     {
         try {
@@ -273,11 +297,13 @@ public class PocketBankerDBHelper
             return getAllPayees();
         case PocketBankerOpenHelper.Tables.TRANSACTIONS:
             return getAllTransactions();
+        case PocketBankerOpenHelper.Tables.EMIS:
+            return getAllLoanEmis();
         }
         return null;
     }
 
-    private void insertOrUpdateDbModelTable(List<? extends DbModel> newDbModels)
+    public void insertOrUpdateDbModelTable(List<? extends DbModel> newDbModels)
     {
         if (newDbModels == null || newDbModels.isEmpty()) {
             // TODO delete all entries for passed table

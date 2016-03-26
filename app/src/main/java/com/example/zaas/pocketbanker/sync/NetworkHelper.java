@@ -628,15 +628,15 @@ public class NetworkHelper
 
     }
 
-    public void getLoanAccountSummary(String custId)
+    public void getLoanAccountSummary(String loanAccountNum)
     {
         try {
 
-            Log.i(LOG_TAG, "Fetching loan account details for : " + custId);
+            Log.i(LOG_TAG, "Fetching loan account details for : " + loanAccountNum);
             setupRetrofitParamsForRequest(null, ALPHA_ENDPOINT);
             String clientId = "akhilcherian@gmail.com";
             String token = TOKEN;
-            String href = "rest/Loan/getLoanDetails/" + custId + "/" + clientId + "/" + token;
+            String href = "rest/Loan/getLoanDetails/" + loanAccountNum + "/" + clientId + "/" + token;
             Log.i(LOG_TAG, "Fetching loan account details for href : " + href);
 
             LoanAccountSummary loanAccountSummary = methods.getLoanAccountSummary(href);
@@ -663,7 +663,7 @@ public class NetworkHelper
             setupRetrofitParamsForRequest(null, ALPHA_ENDPOINT);
             String clientId = "akhilcherian@gmail.com";
             String token = TOKEN;
-            String href = "rest/Loan/EMIDetails/L001/" + accountNo + "/" + clientId + "/" + token;
+            String href = "rest/Loan/EMIDetails/" + accountNo + "/" + Constants.AGREEMENT_ID + "/" + clientId + "/" + token;
             Log.i(LOG_TAG, "Fetching loan EMI details for href : " + href);
 
             LoanEMIDetails loanEMIDetails = methods.getLoanEMIDetails(href);
@@ -681,7 +681,7 @@ public class NetworkHelper
 
                         String date = emiDates[i];
                         long dateMillis = df.parse(date).getTime();
-                        LoanEMI emi = new LoanEMI(Long.valueOf(emisArray[i]), dateMillis, accountNo);
+                        LoanEMI emi = new LoanEMI(Double.valueOf(emisArray[i]), dateMillis, accountNo);
                         loanEmiList.add(emi);
                     }
 
@@ -797,15 +797,15 @@ public class NetworkHelper
 
     }
 
-    public void getCardAccountDetails(String custId)
+    public void getCardAccountDetails(String cardNum)
     {
         try {
 
-            Log.i(LOG_TAG, "Fetching card details for : " + custId);
+            Log.i(LOG_TAG, "Fetching card details for : " + cardNum);
             setupRetrofitParamsForRequest(null, ALPHA_ENDPOINT);
             String clientId = "akhilcherian@gmail.com";
             String token = TOKEN;
-            String href = "rest/Card/getCardDetails/" + custId + "/" + clientId + "/" + token;
+            String href = "rest/Card/getCardDetails/" + cardNum + "/" + clientId + "/" + token;
             Log.i(LOG_TAG, "Fetching card details for href : " + href);
 
             CardAccDetailsResponse cardAccDetailsResponse = methods.getCardDetails(href);
