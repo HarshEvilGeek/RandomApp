@@ -1,5 +1,6 @@
 package com.example.zaas.pocketbanker.models.local;
 
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ public class TransactionDetailViewHolder extends RecyclerView.ViewHolder
     private TextView transDateTV;
     private TextView transRemarkTV;
     private TextView transRemarkTitleTV;
+    private AppCompatSpinner transCategorySpinner;
 
     public TransactionDetailViewHolder(View itemView)
     {
@@ -25,6 +27,7 @@ public class TransactionDetailViewHolder extends RecyclerView.ViewHolder
         transDateTV = (TextView) itemView.findViewById(R.id.date_of_transaction_tv);
         transRemarkTV = (TextView) itemView.findViewById(R.id.trans_remark_tv);
         transRemarkTitleTV = (TextView) itemView.findViewById(R.id.trans_remark_heading_tv);
+        transCategorySpinner = (AppCompatSpinner) itemView.findViewById(R.id.trans_category_spinner);
 
     }
 
@@ -66,5 +69,9 @@ public class TransactionDetailViewHolder extends RecyclerView.ViewHolder
     public void setTransRemarkTitleTV(TextView transRemarkTitleTV)
     {
         this.transRemarkTitleTV = transRemarkTitleTV;
+    }
+
+    public AppCompatSpinner getTransCategorySpinner() {
+        return transCategorySpinner;
     }
 }

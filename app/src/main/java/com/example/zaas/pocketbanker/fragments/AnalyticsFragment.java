@@ -1,10 +1,13 @@
 package com.example.zaas.pocketbanker.fragments;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.view.LayoutInflater;
@@ -20,21 +23,13 @@ import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.utils.DateUtils;
 import com.example.zaas.pocketbanker.utils.TransactionCategoryUtils;
-import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by zaas on 3/17/16.
@@ -57,16 +52,46 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
     private long mToDateValue = System.currentTimeMillis();
     private List<Transaction> mOriginalTransactionList;
     private String[] mLabels;
+    private DatePickerDialog.OnDateSetListener fromdatePickerListener = new DatePickerDialog.OnDateSetListener() {
+
+        // when dialog box is closed, below method will be called.
+        public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay)
+        {
+            Time updateDate = new Time();
+            updateDate.set(selectedDay, selectedMonth, selectedYear);
+            mFromDateValue = updateDate.normalize(true);
+            updateDates(false);
+        }
+    };
+    private DatePickerDialog.OnDateSetListener todatePickerListener = new DatePickerDialog.OnDateSetListener() {
+
+        // when dialog box is closed, below method will be called.
+        public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay)
+        {
+            Time updateDate = new Time();
+            updateDate.set(selectedDay, selectedMonth, selectedYear);
+            mToDateValue = updateDate.normalize(true);
+            updateDates(false);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle(R.string.action_analytics);
+    }
 
+    @Override
+    public void onStart()
+    {
+        super.onStart();
         mOriginalTransactionList = PocketBankerDBHelper.getInstance().getAllTransactions();
         mAllTransactions = mOriginalTransactionList;
         categorizeTransactionAmounts();
+        setDefaultDates();
+        setDatePickers();
         updatePieDataset();
+        setPieData();
     }
 
     @Override
@@ -74,11 +99,8 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
         View rootView = inflater.inflate(R.layout.fragment_analytics, container, false);
         mFromDate = (TextView) rootView.findViewById(R.id.from_date);
         mToDate = (TextView) rootView.findViewById(R.id.to_date);
-        setDefaultDates();
-        setDatePickers();
         mPieChart = (PieChart) rootView.findViewById(R.id.chart);
         mPieChart.setOnChartValueSelectedListener(this);
-        setPieData();
 
         return rootView;
     }
@@ -102,7 +124,7 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
         mFromDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // On button click show datepicker dialog 
+                // On button click show datepicker dialog
                 createDialog(FROM_DATE_PICKER_ID).show();
             }
         });
@@ -110,7 +132,7 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
         mToDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // On button click show datepicker dialog 
+                // On button click show datepicker dialog
                 createDialog(TO_DATE_PICKER_ID).show();
             }
         });
@@ -134,28 +156,6 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
         }
         return null;
     }
-
-    private DatePickerDialog.OnDateSetListener fromdatePickerListener = new DatePickerDialog.OnDateSetListener() {
-
-        // when dialog box is closed, below method will be called.
-        public void onDateSet(DatePicker view, int selectedYear,int selectedMonth, int selectedDay) {
-            Time updateDate = new Time();
-            updateDate.set(selectedDay, selectedMonth, selectedYear);
-            mFromDateValue = updateDate.normalize(true);
-            updateDates(false);
-        }
-    };
-
-    private DatePickerDialog.OnDateSetListener todatePickerListener = new DatePickerDialog.OnDateSetListener() {
-
-        // when dialog box is closed, below method will be called.
-        public void onDateSet(DatePicker view, int selectedYear,int selectedMonth, int selectedDay) {
-            Time updateDate = new Time();
-            updateDate.set(selectedDay, selectedMonth, selectedYear);
-            mToDateValue = updateDate.normalize(true);
-            updateDates(false);
-        }
-    };
 
     private void setDefaultDates() {
         for (Transaction transaction : mAllTransactions) {

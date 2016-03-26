@@ -178,7 +178,8 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
                 System.currentTimeMillis() - 7 * ONE_DAY_IN_MILLIS, "Taco Bell", TransactionCategoryUtils.Category.FOOD);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 250, 1200000, Transaction.Type.Credit,
-                "Debt Settlement", System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS, "",
+ "Debt Settlement",
+                System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS, "Loan",
                 TransactionCategoryUtils.Category.UNKNOWN);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 450, 1200000, Transaction.Type.Debit, "Taxi",
