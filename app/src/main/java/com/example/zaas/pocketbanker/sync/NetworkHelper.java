@@ -18,6 +18,7 @@ import android.util.Log;
 
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Account;
+import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.example.zaas.pocketbanker.models.local.CardAccount;
 import com.example.zaas.pocketbanker.models.local.LoanAccount;
 import com.example.zaas.pocketbanker.models.local.LoanEMI;
@@ -555,7 +556,15 @@ public class NetworkHelper
 
     }
 
-    public void getBranchAtmLocations(String type, double latitude, double longitude)
+    public void getBranchAtmLocations()
+    {
+        List<BranchAtm> branchAtmList = new ArrayList<>();
+        getBranchAtmLocations("ATM", branchAtmList);
+        getBranchAtmLocations("Branch", branchAtmList);
+        PocketBankerDBHelper.getInstance().insertUpdateAndDeleteDbModelTable(branchAtmList);
+    }
+
+    public void getBranchAtmLocations(String type, List<BranchAtm> branchAtmList)
     {
         try {
 
@@ -563,9 +572,10 @@ public class NetworkHelper
             setupRetrofitParamsForRequest(null, null);
             String clientId = "akhilcherian@gmail.com";
             String token = TOKEN;
+            // String href = "banking/icicibank/BranchAtmLocator" + "?" + "client_id=" + clientId + "&token=" + token
+            // + "&locate=" + type + "&lat=" + latitude + "&long=" + longitude;
             String href = "banking/icicibank/BranchAtmLocator" + "?" + "client_id=" + clientId + "&token=" + token
-                    + "&locate=" + type + "&lat=" + latitude + "&long=" + longitude;
-            Log.i(LOG_TAG, "Fetching branch atm locations for href : " + href);
+                    + "&locate=" + type;
 
             Response branchAtmLocationsResponse = methods.getBranchAtmLocations(href);
 
@@ -624,10 +634,11 @@ public class NetworkHelper
             if (branchAtmLocations != null) {
                 Log.e(LOG_TAG, "no of branch atm locations" + branchAtmLocations.size());
                 for (BranchAtmLocations batmLocations : branchAtmLocations) {
+                    BranchAtm branchAtm = new BranchAtm(batmLocations);
+                    branchAtmList.add(branchAtm);
                     Log.e(LOG_TAG, " branch atm location : " + batmLocations);
                 }
             }
-
         }
         catch (Exception e) {
             Log.e(LOG_TAG, "Exception while fetching branchAtmLocations", e);

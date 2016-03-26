@@ -14,6 +14,8 @@ public class BranchAtmLocations
     private String type;
     private String flag;
     private String address;
+
+    @SerializedName ("lattitude")
     private String latitude;
 
     @SerializedName ("IFSC_CODE")
