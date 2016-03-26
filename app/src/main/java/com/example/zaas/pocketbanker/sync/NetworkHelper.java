@@ -19,6 +19,7 @@ import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.CardAccount;
 import com.example.zaas.pocketbanker.models.local.LoanAccount;
+import com.example.zaas.pocketbanker.models.local.LoanEMI;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.network.AccountSummary;
 import com.example.zaas.pocketbanker.models.network.BalanceEnquiry;
@@ -661,6 +662,22 @@ public class NetworkHelper
             if (loanEMIDetails != null) {
                 Log.i(LOG_TAG, "data : " + loanEMIDetails);
 
+                String[] emisArray = loanEMIDetails.getLastThreeEmis().split(",");
+                String[] emiDates = loanEMIDetails.getEmiDates().split(",");
+
+                if(emisArray != null && emiDates != null && emisArray.length > 0 && emiDates.length > 0) {
+                    List<LoanEMI> loanEmiList = new ArrayList<>();
+                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                    for(int i = 0 ;i < emisArray.length;i++) {
+
+                        String date = emiDates[i];
+                        long dateMillis = df.parse(date).getTime();
+                        LoanEMI emi = new LoanEMI(Long.valueOf(emisArray[i]), dateMillis, accountNo);
+                        loanEmiList.add(emi);
+                    }
+
+                    PocketBankerDBHelper.getInstance().insertUpdateAndDeleteDbModelTable(loanEmiList);
+                }
             }
         }
         catch (Exception e) {

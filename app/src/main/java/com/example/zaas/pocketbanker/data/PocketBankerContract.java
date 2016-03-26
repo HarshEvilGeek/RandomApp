@@ -71,9 +71,8 @@ public class PocketBankerContract {
     }
 
     interface EmiColumns {
-        String NO_OF_EMI = "no_of_emi";
-        String EMI_DATES = "emi_dates";
-        String EMI_LAST_THREE = "emi_last_three";
+        String EMI_DATE = "emi_date";
+        String EMI_AMOUNT = "emi_amount";
     }
 
     interface LoanTransactionColumns {

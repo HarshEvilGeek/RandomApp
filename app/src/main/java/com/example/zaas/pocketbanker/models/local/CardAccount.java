@@ -33,6 +33,8 @@ public class CardAccount extends DbModel
     private String expiryDate;
     private double availLimit;
 
+    public static final String CARD_DETAILS_DATE_FORMAT = "dd/MM/yyyy";
+
     public static CardAccount getCardAccount(CardDetails cardDetails)
     {
         return new CardAccount(cardDetails.getCardType(), cardDetails.getCardStatus(), cardDetails.getCurrentBalance(),

@@ -1,6 +1,5 @@
 package com.example.zaas.pocketbanker.models.local;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -267,6 +266,37 @@ public class Transaction extends DbModel
                     transaction.instantiateFromCursor(c);
                     transactions.add(transaction);
                     number--;
+                }
+            }
+        }
+        finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return transactions;
+    }
+
+    public static List<Transaction> getLatestTransactionsBetween(String accNumber, String sortOrder, long startTime,
+            long endTime)
+    {
+        List<Transaction> transactions = new ArrayList<>();
+        String where = PocketBankerContract.Transactions.ACCOUNT_NUMBER + " = ? AND "
+                + PocketBankerContract.Transactions.TIME + " >= " + startTime + " AND "
+                + PocketBankerContract.Transactions.TIME + " <= " + endTime;
+        Cursor c = null;
+        try {
+            c = PocketBankerApplication
+                    .getApplication()
+                    .getApplicationContext()
+                    .getContentResolver()
+                    .query(PocketBankerProvider.CONTENT_URI_TRANSACTIONS, null, where, new String[] { accNumber },
+                            sortOrder);
+            if (c != null) {
+                while (c.moveToNext()) {
+                    Transaction transaction = new Transaction();
+                    transaction.instantiateFromCursor(c);
+                    transactions.add(transaction);
                 }
             }
         }
