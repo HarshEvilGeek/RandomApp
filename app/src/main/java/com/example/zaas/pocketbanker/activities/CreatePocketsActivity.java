@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.fragments.PinOrFingerprintFragment;
 import com.example.zaas.pocketbanker.models.local.PocketAccount;
+import com.example.zaas.pocketbanker.sync.NetworkHelper;
 import com.example.zaas.pocketbanker.utils.Constants;
 import com.example.zaas.pocketbanker.utils.SecurityUtils;
 
@@ -139,33 +140,45 @@ public class CreatePocketsActivity extends BaseRestrictedActivity {
         }
     };
 
-    class CreatePocketsTask extends AsyncTask<PocketAccount, String, PocketAccount> {
+    class CreatePocketsTask extends AsyncTask<PocketAccount, String, String> {
 
-        boolean success;
 
         @Override
-        protected PocketAccount doInBackground(PocketAccount... params) {
-            success = true;
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return params[0];
+        protected String doInBackground(PocketAccount... params) {
+            NetworkHelper networkHelper = new NetworkHelper();
+            PocketAccount pocketAccount = params[0];
+            String response = networkHelper.createWallet(pocketAccount.getFirstName(), pocketAccount.getLastName(), pocketAccount.getEmailAddress(), pocketAccount.getPhoneNumber(), new Date(pocketAccount.getBirthday()), pocketAccount.getGender().name());
+            return response;
         }
 
         @Override
-        protected void onPostExecute(PocketAccount pocketAccount) {
+        protected void onPostExecute(String response) {
             createProgressDialog.dismiss();
             createInProgress = false;
-            if (success) {
-                SecurityUtils.savePocketsAccount(pocketAccount);
-                Intent intent = new Intent(CreatePocketsActivity.this, MainActivity.class);
-                intent.putExtra(MainActivity.TARGET_FRAGMENT_KEY, MainActivity.FRAGMENT_POCKETS_HOME);
-                CreatePocketsActivity.this.startActivity(intent);
-            } else {
+            if(!TextUtils.isEmpty(response)) {
+                if(Constants.WALLET_ALREADY_EXISTS.equals(response)) {
+                    Toast.makeText(CreatePocketsActivity.this, "Pockets account already exists.", Toast.LENGTH_LONG).show();
+                    startPocketsActivity();
+                }
+                else if (Constants.WALLET_CREATED_SUCCESSFULLY.equals(response)) {
+                    Toast.makeText(CreatePocketsActivity.this, "Pockets account created.", Toast.LENGTH_LONG).show();
+                    startPocketsActivity();
+                }
+                else if (Constants.WALLET_CREATION_FAILED.equals(response)) {
+                    Toast.makeText(CreatePocketsActivity.this, "Pockets creation or linking failed.", Toast.LENGTH_LONG).show();
+                }
+            }
+            else {
                 Toast.makeText(CreatePocketsActivity.this, "Pockets creation or linking failed.", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void startPocketsActivity()
+    {
+        Intent intent = new Intent(CreatePocketsActivity.this, MainActivity.class);
+        intent.putExtra(MainActivity.TARGET_FRAGMENT_KEY, MainActivity.FRAGMENT_POCKETS_HOME);
+        CreatePocketsActivity.this.startActivity(intent);
+
     }
 }
