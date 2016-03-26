@@ -22,4 +22,9 @@ public interface Constants
     String CUST_ID = "88881949";
     long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     long ONE_MONTH_IN_MILLIS = 30 * ONE_DAY_IN_MILLIS;
+    String WALLET_DOB_FORMAT = "yyyy-MM-dd";
+    String WALLET_CREATED_SUCCESSFULLY = "Wallet Created Successfully";
+    String WALLET_ALREADY_EXISTS = "Wallet Already Exist";
+    String WALLET_CREATION_FAILED = "WALLET_CREATION_FAILED";
+
  }
