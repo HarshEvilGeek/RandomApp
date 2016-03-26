@@ -1,7 +1,6 @@
 package com.example.zaas.pocketbanker.activities;
 
 import android.content.Intent;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -39,9 +38,9 @@ public class BranchAtmDetailActivity extends AppCompatActivity {
             return;
         }
         int id = extras.getInt(BranchAtmMapActivity.SINGLE_BRANCH_ATM_KEY);
-        Location loc = (Location) extras.get(BranchAtmMapActivity.CURRENT_LOCATION_KEY);
+        LatLng loc = (LatLng) extras.get(BranchAtmMapActivity.CURRENT_LOCATION_KEY);
         if (loc != null) {
-            mCurrentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
+            mCurrentLocation = loc;
         }
         mBranchAtm = PocketBankerDBHelper.getInstance().getBranchAtmForLocalId(id);
 
