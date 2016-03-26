@@ -25,6 +25,8 @@ public class BranchAtmDetailActivity extends AppCompatActivity {
     private LatLng mCurrentLocation;
     private ImageButton mPhoneButton;
     private TextView mAddressHolder;
+    private TextView mIfscHolder;
+    private TextView mPhoneHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,7 +54,12 @@ public class BranchAtmDetailActivity extends AppCompatActivity {
         }
 
         mAddressHolder = (TextView) findViewById(R.id.address_holder);
-        mAddressHolder.setText(mBranchAtm.getAddress() + ", " + mBranchAtm.getCity());
+        mAddressHolder.setText(mBranchAtm.getAddress() + ", " + mBranchAtm.getCity() + ", " + mBranchAtm.getState());
+        mIfscHolder = (TextView) findViewById(R.id.ifsc_holder);
+        mIfscHolder.setText(mBranchAtm.getIfscCode());
+        mPhoneHolder = (TextView) findViewById(R.id.phone_holder);
+        mPhoneHolder.setText(mBranchAtm.getPhoneNumber());
+
         mMapButton = (ImageButton) findViewById(R.id.map_button);
         mMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +78,7 @@ public class BranchAtmDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:0123456789"));
+                intent.setData(Uri.parse("tel:" + mBranchAtm.getPhoneNumber()));
                 startActivity(intent);
             }
         });
