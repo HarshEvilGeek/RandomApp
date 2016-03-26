@@ -16,6 +16,7 @@ import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.adapters.TransactionsListFragmentAdapter;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.local.TransactionDataUIItem;
+import com.example.zaas.pocketbanker.models.network.WalletStatement;
 import com.example.zaas.pocketbanker.sync.NetworkHelper;
 import com.example.zaas.pocketbanker.utils.Constants;
 import com.example.zaas.pocketbanker.utils.SecurityUtils;
@@ -98,8 +99,18 @@ public class PocketsHistoryFragment extends Fragment {
 
         @Override
         protected List<TransactionDataUIItem> doInBackground(Void... voids) {
+
+            List<WalletStatement> walletStatementList = SecurityUtils.getWalletStatement();
             List<TransactionDataUIItem> uiItems = new ArrayList<>();
 
+            for (WalletStatement walletStatement : walletStatementList) {
+                uiItems.add(new TransactionDataUIItem(walletStatement.getAmount(),
+                        walletStatement.getRemarks(),
+                        walletStatement.getTransactionDate(),
+                        walletStatement.getTransactionType().name()));
+            }
+
+            // TODO ZARA DELETE THIS
             TransactionDataUIItem transaction1 = new TransactionDataUIItem(10000.00,
                     "Transferred to other account", System.currentTimeMillis(), Transaction.Type.Debit.name());
             TransactionDataUIItem transaction2 = new TransactionDataUIItem(5000.00, null,

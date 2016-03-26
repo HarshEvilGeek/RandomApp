@@ -1,5 +1,6 @@
 package com.example.zaas.pocketbanker.models.network;
 
+import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -59,6 +60,11 @@ public class WalletStatement
         return transDate;
     }
 
+    public long getTransactionDate() {
+        // TODO ZARA FIX THIS
+        return System.currentTimeMillis();
+    }
+
     public void setTransDate(String transDate)
     {
         this.transDate = transDate;
@@ -67,6 +73,10 @@ public class WalletStatement
     public String getTransType()
     {
         return transType;
+    }
+
+    public Transaction.Type getTransactionType() {
+        return Transaction.Type.getEnumFromNetworkType(transType);
     }
 
     public void setTransType(String transType)
