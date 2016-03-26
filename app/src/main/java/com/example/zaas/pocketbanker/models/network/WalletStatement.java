@@ -1,5 +1,10 @@
 package com.example.zaas.pocketbanker.models.network;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import android.util.Log;
+
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.google.gson.annotations.SerializedName;
 
@@ -8,6 +13,9 @@ import com.google.gson.annotations.SerializedName;
  */
 public class WalletStatement
 {
+
+    public static final String WALLET_STATEMENT_DATE_FORMAT = "yyyy-MM-dd";
+    public static DateFormat df = new SimpleDateFormat(WALLET_STATEMENT_DATE_FORMAT);
 
     @SerializedName ("bank_txn_id")
     private long bankTransactionId;
@@ -60,8 +68,14 @@ public class WalletStatement
         return transDate;
     }
 
-    public long getTransactionDate() {
-        // TODO ZARA FIX THIS
+    public long getTransactionDate()
+    {
+        try {
+            return df.parse(transDate).getTime();
+        }
+        catch (Exception e) {
+            Log.e("DateFormat", "", e);
+        }
         return System.currentTimeMillis();
     }
 
@@ -75,7 +89,8 @@ public class WalletStatement
         return transType;
     }
 
-    public Transaction.Type getTransactionType() {
+    public Transaction.Type getTransactionType()
+    {
         return Transaction.Type.getEnumFromNetworkType(transType);
     }
 

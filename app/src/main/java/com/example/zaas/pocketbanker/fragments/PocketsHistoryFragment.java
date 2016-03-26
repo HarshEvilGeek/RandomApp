@@ -33,11 +33,6 @@ public class PocketsHistoryFragment extends Fragment {
 
     TransactionsListFragmentAdapter mAdapter;
     SwipeRefreshLayout mTransactionsListSwipeRefresh;
-    private long mFromDateValue = System.currentTimeMillis() - Constants.ONE_MONTH_IN_MILLIS;
-    private long mToDateValue = System.currentTimeMillis();
-
-    private static final int FROM_DATE_PICKER_ID = 1000;
-    private static final int TO_DATE_PICKER_ID = 1001;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,10 +50,8 @@ public class PocketsHistoryFragment extends Fragment {
                 .findViewById(R.id.transactions_list_swipe_refresh);
         mTransactionsListSwipeRefresh.setColorSchemeColors(Color.BLUE);
 
-        // we dont need the pull to refresh option in this fragment
-        disablePullToRefresh();
         getActivity().setTitle("Pockets - History ");
-        loadData();
+        loadData(true);
         return rootView;
 
     }
@@ -91,7 +84,7 @@ public class PocketsHistoryFragment extends Fragment {
         new NetworkTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
     }
 
-    private void loadData() {
+    private void loadData(boolean doNetworkCall) {
         new DataLoadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
     }
 
@@ -103,15 +96,17 @@ public class PocketsHistoryFragment extends Fragment {
             List<WalletStatement> walletStatementList = SecurityUtils.getWalletStatement();
             List<TransactionDataUIItem> uiItems = new ArrayList<>();
 
-            for (WalletStatement walletStatement : walletStatementList) {
-                uiItems.add(new TransactionDataUIItem(walletStatement.getAmount(),
-                        walletStatement.getRemarks(),
-                        walletStatement.getTransactionDate(),
-                        walletStatement.getTransactionType().name()));
+            if(walletStatementList != null && walletStatementList.size() > 0) {
+                for (WalletStatement walletStatement : walletStatementList) {
+                    uiItems.add(new TransactionDataUIItem(walletStatement.getAmount(),
+                            walletStatement.getRemarks(),
+                            walletStatement.getTransactionDate(),
+                            walletStatement.getTransactionType().name()));
+                }
             }
 
             // TODO ZARA DELETE THIS
-            TransactionDataUIItem transaction1 = new TransactionDataUIItem(10000.00,
+            /**TransactionDataUIItem transaction1 = new TransactionDataUIItem(10000.00,
                     "Transferred to other account", System.currentTimeMillis(), Transaction.Type.Debit.name());
             TransactionDataUIItem transaction2 = new TransactionDataUIItem(5000.00, null,
                     System.currentTimeMillis() + 345670000, Transaction.Type.Credit.name());
@@ -136,7 +131,7 @@ public class PocketsHistoryFragment extends Fragment {
             uiItems.add(transaction7);
             uiItems.add(transaction1);
             uiItems.add(transaction3);
-            uiItems.add(transaction4);
+            uiItems.add(transaction4);**/
 
             return uiItems;
         }
@@ -161,6 +156,7 @@ public class PocketsHistoryFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             startProgressInPullToRefresh();
+            disablePullToRefresh();
         }
 
         @Override
@@ -174,8 +170,9 @@ public class PocketsHistoryFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            loadData();
+            loadData(false);
             stopProgressInPullToRefresh();
+            enablePullToRefresh();
         }
     }
 }
