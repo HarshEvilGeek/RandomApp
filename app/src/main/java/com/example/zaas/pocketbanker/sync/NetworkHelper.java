@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +43,7 @@ import com.example.zaas.pocketbanker.models.network.WalletCreation;
 import com.example.zaas.pocketbanker.models.network.WalletCreditDebitBody;
 import com.example.zaas.pocketbanker.models.network.WalletCreditDebitResponse;
 import com.example.zaas.pocketbanker.models.network.WalletDetails;
+import com.example.zaas.pocketbanker.models.network.WalletStatement;
 import com.example.zaas.pocketbanker.models.network.WalletStatementBody;
 import com.example.zaas.pocketbanker.models.network.WalletStatementResponse;
 import com.example.zaas.pocketbanker.utils.Constants;
@@ -1045,8 +1047,10 @@ public class NetworkHelper
             double longitude = 73.8500124;
             String deviceId = "7b47c06dsj12243";
 
+            PocketAccount pocketAccount = SecurityUtils.getPocketsAccount();
+
             // TODO get from wherever
-            String authDataForWallet = "";
+            String authDataForWallet = pocketAccount.getAuthToken();
 
             String href = "rest/Wallet/getWalletStatementDetails";
             Log.i(LOG_TAG, "debit wallet balance with href : " + href);
@@ -1083,11 +1087,12 @@ public class NetworkHelper
 
                             int lastIndexOfSeparator = responseString.lastIndexOf(",");
                             String walletStatementString = responseString.substring(0, lastIndexOfSeparator);
-                            WalletStatementResponse walletStatement = new Gson().fromJson(walletStatementString,
+                            WalletStatementResponse finalWalletStatementResponse = new Gson().fromJson(walletStatementString,
                                     WalletStatementResponse.class);
 
-                            if (walletStatement != null) {
-                                Log.i(LOG_TAG, "walletStatement : " + walletStatement);
+                            if (finalWalletStatementResponse != null && finalWalletStatementResponse.getWalletStatement() != null) {
+                                Log.i(LOG_TAG, "walletStatement : " + finalWalletStatementResponse);
+                                SecurityUtils.saveWalletStatement(Arrays.asList(finalWalletStatementResponse.getWalletStatement()));
                             }
                         }
                         else {

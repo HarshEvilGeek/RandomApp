@@ -146,7 +146,7 @@ public class SecurityUtils {
 
     public static List<WalletStatement> getWalletStatement() {
         if (walletStatementList == null) {
-            String jsonString = getPreferences().getString(POCKET_ACCOUNT_KEY, "");
+            String jsonString = getPreferences().getString(WALLET_STATEMENT_KEY, "");
             if (!TextUtils.isEmpty(jsonString)) {
                 Type statementListType = new TypeToken<List<WalletStatement>>() {}.getType();
                 walletStatementList = new Gson().fromJson(jsonString, statementListType);
@@ -156,7 +156,6 @@ public class SecurityUtils {
     }
 
     public static void saveWalletStatement(List<WalletStatement> walletStatement) {
-        // TODO ZARA CALL THIS AFTER NETWORK
         walletStatementList = walletStatement;
         getPreferences().edit().putString(WALLET_STATEMENT_KEY, new Gson().toJson(walletStatementList)).apply();
     }
