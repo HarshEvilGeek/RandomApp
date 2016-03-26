@@ -11,6 +11,8 @@ public class PocketAccount {
     String phoneNumber;
     String merchantId;
     String scope;
+    Gender gender;
+    long birthday;
     int balance;
 
     public String getFirstName() {
@@ -67,5 +69,25 @@ public class PocketAccount {
 
     public void setBalance(int balance) {
         this.balance = balance;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public long getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(long birthday) {
+        this.birthday = birthday;
+    }
+
+    public enum Gender {
+        MALE, FEMALE;
     }
 }

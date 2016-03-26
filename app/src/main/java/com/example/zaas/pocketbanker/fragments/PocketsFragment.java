@@ -19,7 +19,6 @@ import com.example.zaas.pocketbanker.activities.CreatePocketsActivity;
 public class PocketsFragment extends Fragment {
 
     Button getStarted;
-    TextView login;
 
     @Nullable
     @Override
@@ -30,15 +29,6 @@ public class PocketsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CreatePocketsActivity.class);
-                getActivity().startActivity(intent);
-            }
-        });
-        login = (TextView) rootView.findViewById(R.id.pockets_login);
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CreatePocketsActivity.class);
-                intent.putExtra(CreatePocketsActivity.LOGIN_KEY, true);
                 getActivity().startActivity(intent);
             }
         });

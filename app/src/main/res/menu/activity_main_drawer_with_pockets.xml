@@ -41,11 +41,15 @@
             <item
                 android:id="@+id/pockets_buy_item"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Buy Item" />
+                android:title="Shop/Recharge" />
             <item
                 android:id="@+id/pockets_friends"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Friends" />
+            <item
+                android:id="@+id/pockets_history"
+                android:icon="@drawable/ic_menu_share"
+                android:title="History" />
         </menu>
     </item>
 
