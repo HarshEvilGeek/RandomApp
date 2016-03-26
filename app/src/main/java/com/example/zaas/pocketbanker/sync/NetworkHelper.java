@@ -948,9 +948,10 @@ public class NetworkHelper
         return balance;
     }
 
-    public void creditWalletAmount(String phNumber, double amount, String promoCode, String remarks,
+    public boolean creditWalletAmount(String phNumber, double amount, String promoCode, String remarks,
             String subMerchant)
     {
+        boolean result = false;
         try {
 
             Log.i(LOG_TAG, "credit wallet balance  " + phNumber);
@@ -964,8 +965,8 @@ public class NetworkHelper
             double longitude = 73.8500124;
             String deviceId = "7b47c06dsj12243";
 
-            // TODO get from wherever
-            String authDataForWallet = "";
+            PocketAccount pocketAccount = SecurityUtils.getPocketsAccount();
+            String authDataForWallet = pocketAccount.getAuthToken();
 
             String href = "rest/Wallet/creditWalletAmount";
             Log.i(LOG_TAG, "creditting wallet balance with href : " + href);
@@ -978,11 +979,16 @@ public class NetworkHelper
 
             if (walletCreditDebitResponse != null) {
                 Log.i(LOG_TAG, "wallet balance : " + walletCreditDebitResponse);
+                if(walletCreditDebitResponse.getErrorCode().equals("200")) {
+                    result = true;
+                }
             }
         }
         catch (Exception e) {
             Log.e(LOG_TAG, "Exception while crediting wallet amount", e);
         }
+
+        return result;
 
     }
 
