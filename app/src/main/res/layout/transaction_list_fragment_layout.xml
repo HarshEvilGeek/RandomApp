@@ -22,6 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:textColor="@android:color/white"
                 android:gravity="center_vertical"
                 android:padding="3dp"
                 android:textStyle="bold" />
@@ -32,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:background="@drawable/rounded_corner_border"
+                android:textColor="@android:color/white"
                 android:gravity="center"
                 android:padding="3dp"
                 android:text="From:"
@@ -45,6 +47,7 @@
                 android:layout_marginLeft="5dp"
                 android:gravity="center"
                 android:padding="3dp"
+                android:textColor="@android:color/white"
                 android:text="TO"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -55,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:background="@drawable/rounded_corner_border"
+                android:textColor="@android:color/white"
                 android:gravity="center"
                 android:padding="3dp"
                 android:text="To:"

@@ -5,6 +5,9 @@
     <color name="colorAccent">#536DFE</color>
     <color name="colorControlNormal">#FF9800</color>
     <color name="colorControlActivated">#FF9800</color>
+    <color name="delinquency_green">#8BC34A</color>
+    <color name="delinquency_red">#FF5252</color>
+    <color name="delinquency_orange">#FF9800</color>
 
     <array name="pieColors">
         <item>#E65100</item>

@@ -179,7 +179,7 @@ public class AccountSummaryDetailFragment extends Fragment
                     DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
                     accountHeader.setHeaderDataForLoanAccount(accountNo, loanAccount.getCustomerName(),
                             loanAccount.getOutstandingPrinciple(), loanAccount.getType(),
-                            df.parse(loanAccount.getDateOfLoan()).getTime(), loanAccount.getRoi(), headerType);
+                            df.parse(loanAccount.getDateOfLoan()).getTime(), loanAccount.getRoi(), headerType, loanAccount.getMonthDelinquency());
 
                     AccountSummaryDetailItem headerItem = new AccountSummaryDetailItem(
                             Constants.SUMMARY_ITEM_TYPE_HEADER, accountHeader, null);

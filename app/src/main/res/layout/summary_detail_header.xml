@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/acc_no_tv"
             android:paddingLeft="@dimen/summary_detail_header_left_padding"
+            android:textColor="@android:color/white"
             android:paddingTop="2dp"
             android:text="Customer Name"
             android:textStyle="bold"
@@ -49,6 +50,7 @@
             android:layout_below="@id/acc_no_tv"
             android:paddingRight="@dimen/summary_detail_header_right_padding"
             android:paddingTop="2dp"
+            android:textColor="@android:color/white"
             android:text="zara"
             android:visibility="gone" />
 
@@ -60,6 +62,7 @@
             android:layout_below="@id/cust_name_tv"
             android:paddingLeft="@dimen/summary_detail_header_left_padding"
             android:paddingTop="2dp"
+            android:textColor="@android:color/white"
             android:text="Balance"
             android:textStyle="bold"
             android:visibility="gone" />
@@ -71,6 +74,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/cust_name_value_tv"
             android:paddingRight="@dimen/summary_detail_header_right_padding"
+            android:textColor="@android:color/white"
             android:paddingTop="2dp"
             android:text="10000"
             android:visibility="gone" />
@@ -84,6 +88,7 @@
             android:paddingLeft="@dimen/summary_detail_header_left_padding"
             android:paddingTop="2dp"
             android:text="Available Limit"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
             android:visibility="gone" />
 
@@ -94,6 +99,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/balance_value_tv"
             android:paddingRight="@dimen/summary_detail_header_right_padding"
+            android:textColor="@android:color/white"
             android:paddingTop="2dp"
             android:text="10000"
             android:visibility="gone" />
@@ -106,6 +112,7 @@
             android:layout_below="@id/avail_lt_tv"
             android:paddingLeft="@dimen/summary_detail_header_left_padding"
             android:paddingTop="2dp"
+            android:textColor="@android:color/white"
             android:text="Account Type"
             android:textStyle="bold"
             android:visibility="gone" />
@@ -118,6 +125,7 @@
             android:layout_below="@id/avail_lt_value_tv"
             android:paddingRight="@dimen/summary_detail_header_right_padding"
             android:paddingTop="2dp"
+            android:textColor="@android:color/white"
             android:text="Savings"
             android:visibility="gone" />
 
@@ -130,6 +138,7 @@
             android:paddingLeft="@dimen/summary_detail_header_left_padding"
             android:paddingTop="2dp"
             android:text="Time"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
             android:visibility="gone" />
 
@@ -142,6 +151,7 @@
             android:paddingRight="@dimen/summary_detail_header_right_padding"
             android:paddingTop="2dp"
             android:text="12-03-2016"
+            android:textColor="@android:color/white"
             android:visibility="gone" />
 
 
@@ -152,6 +162,7 @@
             android:layout_below="@id/time_tv"
             android:paddingLeft="@dimen/summary_detail_header_left_padding"
             android:paddingTop="2dp"
+            android:textColor="@android:color/white"
             android:text="Status"
             android:textStyle="bold"
             android:visibility="gone" />
@@ -164,6 +175,7 @@
             android:layout_below="@id/time_value_tv"
             android:paddingRight="@dimen/summary_detail_header_right_padding"
             android:paddingTop="2dp"
+            android:textColor="@android:color/white"
             android:text="Active"
             android:visibility="gone" />
 
@@ -176,6 +188,7 @@
             android:paddingLeft="@dimen/summary_detail_header_left_padding"
             android:paddingTop="2dp"
             android:text="ROI %"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
             android:visibility="gone" />
 
@@ -187,7 +200,31 @@
             android:layout_below="@id/status_value_tv"
             android:paddingRight="@dimen/summary_detail_header_right_padding"
             android:paddingTop="2dp"
+            android:textColor="@android:color/white"
             android:text="12"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/delinquency_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/roi_tv"
+            android:paddingLeft="@dimen/summary_detail_header_left_padding"
+            android:paddingTop="2dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"/>
+
+        <TextView
+            android:id="@+id/delinquency_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/roi_value_tv"
+            android:paddingRight="@dimen/summary_detail_header_right_padding"
+            android:paddingTop="2dp"
+            android:textColor="@android:color/white"
             android:visibility="gone" />
 
 
