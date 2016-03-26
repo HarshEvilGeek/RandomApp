@@ -1,9 +1,11 @@
 package com.example.zaas.pocketbanker.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import android.content.ContentValues;
 import android.text.TextUtils;
@@ -18,7 +20,18 @@ import com.example.zaas.pocketbanker.models.local.TransactionCategory;
  */
 public class TransactionCategoryUtils
 {
+    private static final List<String> RANDOM_MERCHANTS = Arrays.asList("yatra", "irctc", "uber", "indigo", "puma",
+            "arrow", "elle", "airtel", "idea", "pizzahut", "mcdonals", "fortis", "apollo", "pvr", "inox", "random1",
+            "random2", "random3", "random4", "random5");
+    private static final long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
+    private static final String DUMMY_ACCOUNT_NUMBER_1 = "120938029383";
     private static Map<String, Category> sTransactionCategoryMap;
+
+    public static String getRandomMerchant()
+    {
+        Random r = new Random();
+        return RANDOM_MERCHANTS.get(r.nextInt(20));
+    }
 
     public static Category getCategoryForTransaction(Transaction transaction)
     {
@@ -137,6 +150,58 @@ public class TransactionCategoryUtils
         for (TransactionCategory transactionCategory : transactionCategoryList) {
             sTransactionCategoryMap.put(transactionCategory.getMerchantName(), transactionCategory.getCategory());
         }
+    }
+
+    public static List<Transaction> getAllTransactions()
+    {
+        Transaction transaction1 = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1200, 1200000, Transaction.Type.Debit,
+                "House Rent", System.currentTimeMillis() - 30 * ONE_DAY_IN_MILLIS, "House Rent",
+                TransactionCategoryUtils.Category.UNKNOWN);
+        Transaction transaction2 = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 800, 1200000, Transaction.Type.Debit,
+                "Conveyance", System.currentTimeMillis() - 20 * ONE_DAY_IN_MILLIS, "Uber",
+                TransactionCategoryUtils.Category.TRAVEL);
+        Transaction transaction3 = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3000, 1200000, Transaction.Type.Debit,
+                "Shopping", System.currentTimeMillis() - 15 * ONE_DAY_IN_MILLIS, "Puma",
+                TransactionCategoryUtils.Category.SHOPPING);
+        Transaction transaction4 = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 900, 1200000, Transaction.Type.Debit,
+                "Movies", System.currentTimeMillis() - 12 * ONE_DAY_IN_MILLIS, "PVR",
+                TransactionCategoryUtils.Category.MOVIES);
+        Transaction transaction5 = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 2600, 1200000, Transaction.Type.Debit,
+                "Dinner", System.currentTimeMillis() - 10 * ONE_DAY_IN_MILLIS, "Pizza Hut",
+                TransactionCategoryUtils.Category.FOOD);
+        Transaction transaction6 = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1350, 1200000, Transaction.Type.Debit,
+                "Lunch", System.currentTimeMillis() - 7 * ONE_DAY_IN_MILLIS, "Taco Bell",
+                TransactionCategoryUtils.Category.FOOD);
+        Transaction transaction7 = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 250, 1200000, Transaction.Type.Credit,
+                "Debt Settlement", System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS, "Loan",
+                TransactionCategoryUtils.Category.UNKNOWN);
+        Transaction transaction8 = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 450, 1200000, Transaction.Type.Debit,
+                "Taxi", System.currentTimeMillis() - 3 * ONE_DAY_IN_MILLIS, "Ola",
+                TransactionCategoryUtils.Category.TRAVEL);
+        Transaction transaction9 = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1000, 1200000, Transaction.Type.Credit,
+                "Doctor", System.currentTimeMillis() - ONE_DAY_IN_MILLIS, "Fortis",
+                TransactionCategoryUtils.Category.HEALTH);
+        Transaction transaction10 = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 3500, 1200000, Transaction.Type.Debit,
+                "Gift", System.currentTimeMillis(), "Archies", TransactionCategoryUtils.Category.UNKNOWN);
+        List<Transaction> dummyTransactions = new ArrayList<>();
+        dummyTransactions.add(transaction1);
+        dummyTransactions.add(transaction2);
+        dummyTransactions.add(transaction3);
+        dummyTransactions.add(transaction4);
+        dummyTransactions.add(transaction5);
+        dummyTransactions.add(transaction6);
+        dummyTransactions.add(transaction7);
+        dummyTransactions.add(transaction8);
+        dummyTransactions.add(transaction9);
+        dummyTransactions.add(transaction10);
+
+        List<Transaction> allTransactions = new ArrayList<>();
+        allTransactions.addAll(PocketBankerDBHelper.getInstance().getAllTransactions());
+
+        // Comment this line when dummy transactions are no longer required
+        allTransactions.addAll(dummyTransactions);
+
+        return allTransactions;
     }
 
     public enum Category

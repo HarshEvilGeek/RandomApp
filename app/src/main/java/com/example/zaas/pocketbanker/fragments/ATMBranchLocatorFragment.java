@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -36,6 +37,7 @@ import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.interfaces.IFloatingButtonListener;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.example.zaas.pocketbanker.services.FetchAddressIntentService;
+import com.example.zaas.pocketbanker.sync.NetworkHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -128,7 +130,7 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     public void onStart()
     {
         super.onStart();
-        syncBranchAtms();
+        // syncBranchAtms();
     }
 
     @Override
@@ -185,16 +187,7 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         }
         else {
             // Current location available. Do network call
-            if (!mSwipeContainer.isRefreshing()) {
-                mSwipeContainer.setRefreshing(true);
-            }
-            mSwipeContainer.postDelayed(new Runnable() {
-                @Override
-                public void run()
-                {
-                    mSwipeContainer.setRefreshing(false);
-                }
-            }, 4000);
+            new NetworkLoadTask().execute();
         }
     }
 
@@ -368,6 +361,37 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
             else {
                 showErrorDialog();
             }
+        }
+    }
+
+    public class NetworkLoadTask extends AsyncTask<Void, Void, Void>
+    {
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+            if (!mSwipeContainer.isRefreshing()) {
+                mSwipeContainer.setRefreshing(true);
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids)
+        {
+            NetworkHelper networkHelper = new NetworkHelper();
+
+            networkHelper.getBranchAtmLocations();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid)
+        {
+            mSwipeContainer.setRefreshing(false);
+            List<BranchAtm> listAll = PocketBankerDBHelper.getInstance().getAllBranchAtms();
+            splitList(listAll);
+            toggleList(BranchAtm.Type.BRANCH);
         }
     }
 }

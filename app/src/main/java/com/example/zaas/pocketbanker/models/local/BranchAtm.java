@@ -2,11 +2,11 @@ package com.example.zaas.pocketbanker.models.local;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
 import android.util.Log;
 
 import com.example.zaas.pocketbanker.data.PocketBankerContract;
 import com.example.zaas.pocketbanker.data.PocketBankerOpenHelper;
+import com.example.zaas.pocketbanker.models.network.BranchAtmLocations;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -41,8 +41,34 @@ public class BranchAtm extends DbModel
         this.mapLocation = mapLocation;
     }
 
+    public BranchAtm(BranchAtmLocations branchAtmLocation)
+    {
+        name = branchAtmLocation.getBranchname();
+        address = branchAtmLocation.getAddress();
+        city = branchAtmLocation.getCity();
+        state = branchAtmLocation.getState();
+        ifscCode = branchAtmLocation.getIfscCode();
+        flag = branchAtmLocation.getFlag();
+        if (Type.ATM.name().equalsIgnoreCase(branchAtmLocation.getType())) {
+            type = Type.ATM;
+        }
+        else {
+            type = Type.BRANCH;
+        }
+        phoneNumber = branchAtmLocation.getPhoneno();
+        try {
+            double latitude = Double.parseDouble(branchAtmLocation.getLatitude());
+            double longitude = Double.parseDouble(branchAtmLocation.getLongitude());
+            mapLocation = new LatLng(latitude, longitude);
+        }
+        catch (Exception e) {
+            // Do nothing
+        }
+    }
+
     @Override
-    public void instantiateFromCursor(Cursor cursor) {
+    public void instantiateFromCursor(Cursor cursor)
+    {
         if (cursor != null) {
             setId(cursor.getInt(cursor.getColumnIndex(PocketBankerContract.BranchAtms._ID)));
             setName(cursor.getString(cursor.getColumnIndex(PocketBankerContract.BranchAtms.BRANCH_NAME)));
@@ -62,21 +88,22 @@ public class BranchAtm extends DbModel
     }
 
     @Override
-    public String getSelectionString() {
-        return PocketBankerContract.BranchAtms.ADDRESS + " = ? AND "
-                + PocketBankerContract.BranchAtms.TYPE + " = ?" ;
+    public String getSelectionString()
+    {
+        return PocketBankerContract.BranchAtms.ADDRESS + " = ? AND " + PocketBankerContract.BranchAtms.TYPE + " = ?";
     }
 
     @Override
-    public String[] getSelectionValues() {
-        return new String[]{address, String.valueOf(type.ordinal())};
+    public String[] getSelectionValues()
+    {
+        return new String[] { address, String.valueOf(type.ordinal()) };
     }
 
     @Override
-    public boolean isEqual(DbModel model) {
-        return model instanceof BranchAtm
-                && (address.equals(((BranchAtm) model).getAddress()))
-                && (type == ((BranchAtm)model).getType());
+    public boolean isEqual(DbModel model)
+    {
+        return model instanceof BranchAtm && (address.equals(((BranchAtm) model).getAddress()))
+                && (type == ((BranchAtm) model).getType());
     }
 
     public ContentValues toContentValues()
@@ -96,8 +123,9 @@ public class BranchAtm extends DbModel
     }
 
     @Override
-    public String getTable() {
-        return null;
+    public String getTable()
+    {
+        return PocketBankerOpenHelper.Tables.BRANCH_ATMS;
     }
 
     public int getId()

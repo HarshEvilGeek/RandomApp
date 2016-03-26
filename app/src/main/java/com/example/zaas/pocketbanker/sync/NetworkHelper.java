@@ -18,9 +18,11 @@ import android.util.Log;
 
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Account;
+import com.example.zaas.pocketbanker.models.local.BranchAtm;
 import com.example.zaas.pocketbanker.models.local.CardAccount;
 import com.example.zaas.pocketbanker.models.local.LoanAccount;
 import com.example.zaas.pocketbanker.models.local.LoanEMI;
+import com.example.zaas.pocketbanker.models.local.Payee;
 import com.example.zaas.pocketbanker.models.local.PocketAccount;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.network.AccountSummary;
@@ -43,7 +45,6 @@ import com.example.zaas.pocketbanker.models.network.WalletCreation;
 import com.example.zaas.pocketbanker.models.network.WalletCreditDebitBody;
 import com.example.zaas.pocketbanker.models.network.WalletCreditDebitResponse;
 import com.example.zaas.pocketbanker.models.network.WalletDetails;
-import com.example.zaas.pocketbanker.models.network.WalletStatement;
 import com.example.zaas.pocketbanker.models.network.WalletStatementBody;
 import com.example.zaas.pocketbanker.models.network.WalletStatementResponse;
 import com.example.zaas.pocketbanker.utils.Constants;
@@ -57,13 +58,12 @@ public class NetworkHelper
 {
 
     private static final String LOG_TAG = NetworkHelper.class.getSimpleName();
-    RestAdapter restAdapter;
-    UCWARequestInterceptor requestInterceptor;
-    IUCWAAPIInterface methods;
-
     private static final String DEFAULT_ENDPOINT = "https://retailbanking.mybluemix.net";
     private static final String ALPHA_ENDPOINT = "http://alphaiciapi2.mybluemix.net";
     private static final String TOKEN = "f8dc8109cc34";
+    RestAdapter restAdapter;
+    UCWARequestInterceptor requestInterceptor;
+    IUCWAAPIInterface methods;
 
     public NetworkHelper()
     {
@@ -475,7 +475,7 @@ public class NetworkHelper
 
     }
 
-    public void getRegisteredPayees(String customerId)
+    public void fetchRegisteredPayees(String customerId)
     {
         try {
 
@@ -540,9 +540,13 @@ public class NetworkHelper
 
             if (registeredPayeesList != null) {
                 Log.e(LOG_TAG, "No of registered payees : " + registeredPayeesList.size());
+                List<Payee> receivedPayees = new ArrayList<>();
                 for (RegisteredPayees regPayee : registeredPayeesList) {
                     Log.e(LOG_TAG, "\n registered payee : : " + regPayee);
+                    Payee payee = new Payee(regPayee);
+                    receivedPayees.add(payee);
                 }
+                PocketBankerDBHelper.getInstance().insertUpdateAndDeleteDbModelTable(receivedPayees);
             }
 
         }
@@ -552,7 +556,15 @@ public class NetworkHelper
 
     }
 
-    public void getBranchAtmLocations(String type, double latitude, double longitude)
+    public void getBranchAtmLocations()
+    {
+        List<BranchAtm> branchAtmList = new ArrayList<>();
+        getBranchAtmLocations("ATM", branchAtmList);
+        getBranchAtmLocations("Branch", branchAtmList);
+        PocketBankerDBHelper.getInstance().insertUpdateAndDeleteDbModelTable(branchAtmList);
+    }
+
+    public void getBranchAtmLocations(String type, List<BranchAtm> branchAtmList)
     {
         try {
 
@@ -560,9 +572,10 @@ public class NetworkHelper
             setupRetrofitParamsForRequest(null, null);
             String clientId = "akhilcherian@gmail.com";
             String token = TOKEN;
+            // String href = "banking/icicibank/BranchAtmLocator" + "?" + "client_id=" + clientId + "&token=" + token
+            // + "&locate=" + type + "&lat=" + latitude + "&long=" + longitude;
             String href = "banking/icicibank/BranchAtmLocator" + "?" + "client_id=" + clientId + "&token=" + token
-                    + "&locate=" + type + "&lat=" + latitude + "&long=" + longitude;
-            Log.i(LOG_TAG, "Fetching branch atm locations for href : " + href);
+                    + "&locate=" + type;
 
             Response branchAtmLocationsResponse = methods.getBranchAtmLocations(href);
 
@@ -621,10 +634,11 @@ public class NetworkHelper
             if (branchAtmLocations != null) {
                 Log.e(LOG_TAG, "no of branch atm locations" + branchAtmLocations.size());
                 for (BranchAtmLocations batmLocations : branchAtmLocations) {
+                    BranchAtm branchAtm = new BranchAtm(batmLocations);
+                    branchAtmList.add(branchAtm);
                     Log.e(LOG_TAG, " branch atm location : " + batmLocations);
                 }
             }
-
         }
         catch (Exception e) {
             Log.e(LOG_TAG, "Exception while fetching branchAtmLocations", e);
