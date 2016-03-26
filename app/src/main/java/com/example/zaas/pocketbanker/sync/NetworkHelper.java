@@ -20,6 +20,7 @@ import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.CardAccount;
 import com.example.zaas.pocketbanker.models.local.LoanAccount;
 import com.example.zaas.pocketbanker.models.local.LoanEMI;
+import com.example.zaas.pocketbanker.models.local.PocketAccount;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.network.AccountSummary;
 import com.example.zaas.pocketbanker.models.network.BalanceEnquiry;
@@ -44,6 +45,7 @@ import com.example.zaas.pocketbanker.models.network.WalletDetails;
 import com.example.zaas.pocketbanker.models.network.WalletStatementBody;
 import com.example.zaas.pocketbanker.models.network.WalletStatementResponse;
 import com.example.zaas.pocketbanker.utils.Constants;
+import com.example.zaas.pocketbanker.utils.SecurityUtils;
 import com.google.gson.Gson;
 
 /**
@@ -880,6 +882,13 @@ public class NetworkHelper
                     Log.i(LOG_TAG,"Wallet created");
                     authData = walletDetails.getAuthData();
                     response = Constants.WALLET_CREATED_SUCCESSFULLY;
+                }
+
+                if(response.equals(Constants.WALLET_CREATED_SUCCESSFULLY) || response.equals(Constants.WALLET_ALREADY_EXISTS)) {
+                    PocketAccount pocketAccount = new PocketAccount(firstName, lastName, emailId, dob.getTime(),  phNumber , merchantId,
+                            PocketAccount.Gender.valueOf(gender), authData, "");
+                    SecurityUtils.savePocketsAccount(pocketAccount);
+
                 }
 
             }
