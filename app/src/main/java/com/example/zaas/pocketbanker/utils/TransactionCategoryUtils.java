@@ -1,9 +1,11 @@
 package com.example.zaas.pocketbanker.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import android.content.ContentValues;
 import android.text.TextUtils;
@@ -18,7 +20,16 @@ import com.example.zaas.pocketbanker.models.local.TransactionCategory;
  */
 public class TransactionCategoryUtils
 {
+    private static final List<String> RANDOM_MERCHANTS = Arrays.asList("yatra", "irctc", "uber", "indigo", "puma",
+            "arrow", "elle", "airtel", "idea", "pizzahut", "mcdonals", "fortis", "apollo", "pvr", "inox", "random1",
+            "random2", "random3", "random4", "random5");
     private static Map<String, Category> sTransactionCategoryMap;
+
+    public static String getRandomMerchant()
+    {
+        Random r = new Random();
+        return RANDOM_MERCHANTS.get(r.nextInt(20));
+    }
 
     public static Category getCategoryForTransaction(Transaction transaction)
     {
