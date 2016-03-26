@@ -83,7 +83,7 @@ public class CreatePocketsActivity extends BaseRestrictedActivity {
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 createInProgress = true;
                 createProgressDialog = new ProgressDialog(CreatePocketsActivity.this);
-                createProgressDialog.setMessage("Logging in...");
+                createProgressDialog.setMessage("Creating...");
                 createProgressDialog.show();
                 PocketAccount pocketAccount = new PocketAccount();
                 pocketAccount.setFirstName(firstName.getText().toString());
