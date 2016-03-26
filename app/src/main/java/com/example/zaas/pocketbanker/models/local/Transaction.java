@@ -36,7 +36,7 @@ public class Transaction extends DbModel
 
     public Transaction()
     {
-        type = Type.DEBIT;
+        type = Type.Debit;
         category = TransactionCategoryUtils.Category.UNKNOWN;
     }
 
@@ -235,16 +235,16 @@ public class Transaction extends DbModel
 
     public enum Type
     {
-        CREDIT,
-        DEBIT;
+        Credit,
+        Debit;
 
         public static Type getEnumFromNetworkType(String value)
         {
             if(Constants.TRANSACTION_TYPE_CREDIT.equals(value)) {
-                return CREDIT;
+                return Credit;
             }
             else {
-                return DEBIT;
+                return Debit;
             }
         }
     }

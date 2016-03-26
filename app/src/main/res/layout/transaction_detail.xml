@@ -8,6 +8,7 @@
     android:layout_marginLeft="@dimen/card_margin"
     android:layout_marginRight="@dimen/card_margin"
     android:layout_marginTop="@dimen/card_margin_small"
+    android:layout_marginBottom="@dimen/card_margin_small"
     card_view:cardCornerRadius="2dp">
 
     <LinearLayout
@@ -25,27 +26,20 @@
             <TextView
                 android:id="@+id/amount_tv"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textStyle="bold"
                 android:paddingLeft="@dimen/summary_detail_header_left_padding"
                 android:text="Rs. 10000" />
 
             <TextView
                 android:id="@+id/date_of_transaction_tv"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:gravity="center"
+                android:paddingRight="@dimen/summary_detail_header_left_padding"
                 android:text="10-03-2016" />
-
-            <TextView
-                android:id="@+id/type_of_trans_tv"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Debit" />
 
 
         </LinearLayout>

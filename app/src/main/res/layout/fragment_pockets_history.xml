@@ -16,7 +16,7 @@
             android:padding="20dp"
             android:textColor="@android:color/white"
             android:background="@android:color/holo_blue_dark"
-            android:text="Wall Statement"
+            android:text="Wallet Statement"
             android:textStyle="bold"
             android:textSize="16sp"/>
 
