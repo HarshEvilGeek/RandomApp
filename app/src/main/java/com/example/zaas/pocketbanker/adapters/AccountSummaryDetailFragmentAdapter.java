@@ -116,7 +116,7 @@ public class AccountSummaryDetailFragmentAdapter extends RecyclerView.Adapter<Re
                 viewHolder.roiTV.setVisibility(View.VISIBLE);
                 viewHolder.roiValTV.setVisibility(View.VISIBLE);
 
-                viewHolder.balanceTV.setText("Outstanding Balance");
+                viewHolder.balanceTV.setText("Outstanding Principle");
                 viewHolder.balanceValueTV.setText(String.valueOf(headerUIITem.getAccountDebt()));
                 viewHolder.accTypeTV.setText("Type");
                 viewHolder.accTypeValueTV.setText(headerUIITem.getAccountType());

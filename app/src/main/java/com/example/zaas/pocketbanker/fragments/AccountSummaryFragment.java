@@ -61,7 +61,7 @@ public class AccountSummaryFragment extends Fragment
         });
         mAccountSummarySwipeRefresh.setColorSchemeColors(Color.BLUE);
         getActivity().setTitle("Summary");
-        loadData(false);
+        loadData(true);
         return rootView;
     }
 
@@ -235,13 +235,11 @@ public class AccountSummaryFragment extends Fragment
         {
             NetworkHelper networkHelper = new NetworkHelper();
 
-            // TODO : get from wherever
-            String custId = Constants.CUST_ID;
-            networkHelper.fetchAccountSummary(null, custId);
+            networkHelper.fetchAccountSummary(Constants.BANK_ACCOUNT_NUMBER, null);
 
-            networkHelper.getLoanAccountSummary(custId);
+            networkHelper.getLoanAccountSummary(Constants.LOAN_ACC_NUMBER);
 
-            networkHelper.getCardAccountDetails(custId);
+            networkHelper.getCardAccountDetails(Constants.CARD_ACCOUNT_NUMBER);
 
             return null;
         }

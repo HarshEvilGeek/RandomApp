@@ -38,6 +38,23 @@ public class WalletBalanceBody
 
     private String authToken;
 
+    public WalletBalanceBody(String walletAuthData, double lat, double longitude, String imei, String os, String ipAddress, String deviceId, String clientId, String authToken)
+    {
+        this.idType = "TOKEN";
+        this.idValue = walletAuthData;
+        this.authType = "TOKEN";
+        this.authData = walletAuthData;
+        this.latitude = lat;
+        this.longitude = longitude;
+        this.imei = imei;
+        this.deviceId = deviceId;
+        this.os = os;
+        this.ipAddress = ipAddress;
+        this.clientID = clientId;
+        this.authToken = authToken;
+
+    }
+
     public String getIdType()
     {
         return idType;

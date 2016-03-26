@@ -50,6 +50,28 @@ public class WalletCreditDebitBody
 
     private String authToken;
 
+    public WalletCreditDebitBody(String walletAuthData, double lat, double longitude, String imei, String os, String ipAddress, String deviceId, String clientId, String authToken, double amount, String remark, String subMerchantId, long transactionId, String promocode)
+    {
+        this.idType = "TOKEN";
+        this.idValue = walletAuthData;
+        this.authType = "TOKEN";
+        this.authData = walletAuthData;
+        this.latitude = lat;
+        this.longitude = longitude;
+        this.imei = imei;
+        this.deviceId = deviceId;
+        this.os = os;
+        this.ipAddress = ipAddress;
+        this.clientID = clientId;
+        this.authToken = authToken;
+        this.transactionId = transactionId;
+        this.amount = amount;
+        this.promocode = promocode;
+        this.remarks = remark;
+        this.subMerchant = subMerchantId;
+
+    }
+
     public String getIdType()
     {
         return idType;

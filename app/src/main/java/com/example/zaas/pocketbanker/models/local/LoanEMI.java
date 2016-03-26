@@ -17,7 +17,7 @@ import com.example.zaas.pocketbanker.data.PocketBankerProvider;
 public class LoanEMI extends DbModel
 {
 
-    private long emiAmount;
+    private double emiAmount;
     private long emiDate;
     private String loanAccNo;
 
@@ -26,19 +26,19 @@ public class LoanEMI extends DbModel
 
     }
 
-    public LoanEMI(long amount, long date, String loanAccNo)
+    public LoanEMI(double amount, long date, String loanAccNo)
     {
         this.emiAmount = amount;
         this.emiDate = date;
         this.loanAccNo = loanAccNo;
     }
 
-    public long getEmiAmount()
+    public double getEmiAmount()
     {
         return emiAmount;
     }
 
-    public void setEmiAmount(long emiAmount)
+    public void setEmiAmount(double emiAmount)
     {
         this.emiAmount = emiAmount;
     }
@@ -67,7 +67,7 @@ public class LoanEMI extends DbModel
     public void instantiateFromCursor(Cursor cursor)
     {
         if (cursor != null) {
-            this.emiAmount = cursor.getLong(cursor.getColumnIndex(PocketBankerContract.Emis.EMI_AMOUNT));
+            this.emiAmount = cursor.getDouble(cursor.getColumnIndex(PocketBankerContract.Emis.EMI_AMOUNT));
             this.emiDate = cursor.getLong(cursor.getColumnIndex(PocketBankerContract.Emis.EMI_DATE));
             this.loanAccNo = cursor.getString(cursor.getColumnIndex(PocketBankerContract.Emis.LOAN_ACCOUNT_NUMBER));
         }
@@ -77,13 +77,13 @@ public class LoanEMI extends DbModel
     @Override
     public String getSelectionString()
     {
-        return PocketBankerContract.Emis.LOAN_ACCOUNT_NUMBER + " = ?";
+        return PocketBankerContract.Emis.EMI_DATE + " = ? ";
     }
 
     @Override
     public String[] getSelectionValues()
     {
-        return new String[] { loanAccNo };
+        return new String[] { String.valueOf(emiDate) };
     }
 
     @Override

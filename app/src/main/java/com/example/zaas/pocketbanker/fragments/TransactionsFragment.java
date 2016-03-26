@@ -19,10 +19,6 @@ import android.view.ViewGroup;
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.adapters.TransactionsSummaryFragmentAdapter;
 import com.example.zaas.pocketbanker.data.PocketBankerContract;
-import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
-import com.example.zaas.pocketbanker.models.local.Account;
-import com.example.zaas.pocketbanker.models.local.CardAccount;
-import com.example.zaas.pocketbanker.models.local.LoanAccount;
 import com.example.zaas.pocketbanker.models.local.LoanEMI;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.local.TransactionSummaryUIItem;
@@ -63,7 +59,7 @@ public class TransactionsFragment extends Fragment
         mTransactionsSummarySwipeRefresh.setColorSchemeColors(Color.BLUE);
 
         getActivity().setTitle("Transactions");
-        loadData(false);
+        loadData(true);
         return rootView;
     }
 
@@ -121,66 +117,68 @@ public class TransactionsFragment extends Fragment
         {
             List<TransactionSummaryUIItem> uiItems = new ArrayList<>();
 
-            List<Account> bankAccounts = PocketBankerDBHelper.getInstance().getAllAccounts();
+            // List<Account> bankAccounts = PocketBankerDBHelper.getInstance().getAllAccounts();
 
-            if (bankAccounts != null && !bankAccounts.isEmpty()) {
-                TransactionSummaryUIItem bankHeaderItem = new TransactionSummaryUIItem(
-                        Constants.SUMMARY_ITEM_TYPE_HEADER, "Bank Account", -1, -1, null, null);
+            // if (bankAccounts != null && !bankAccounts.isEmpty()) {
+
+            // for (Account bankAccount : bankAccounts) {
+
+            List<Transaction> latestTransactions = Transaction.getLatestNTransactions(1, Constants.BANK_ACCOUNT_NUMBER,
+                    PocketBankerContract.Transactions.TIME + " DESC ");
+
+            if (latestTransactions != null && latestTransactions.size() > 0) {
+                TransactionSummaryUIItem bankHeaderItem = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER,
+                        "Bank Account", -1, -1, null, null);
 
                 uiItems.add(bankHeaderItem);
 
-                for (Account bankAccount : bankAccounts) {
-
-                    List<Transaction> latestTransactions = Transaction.getLatestNTransactions(1,
-                            bankAccount.getAccountNumber(), PocketBankerContract.Transactions.TIME + " DESC ");
-
-                    if(latestTransactions != null && latestTransactions.size() > 0) {
-                        Transaction latestTransaction = latestTransactions.get(0);
-                        TransactionSummaryUIItem bankAccountTransSummary = new TransactionSummaryUIItem(
-                                Constants.SUMMARY_ITEM_TYPE_ITEM, bankAccount.getAccountNumber(),
-                                latestTransaction.getAmount(), latestTransaction.getTime(), latestTransaction.getType()
-                                .name(), Constants.HEADER_TYPE_BANKACCOUNT);
-                        uiItems.add(bankAccountTransSummary);
-                    }
-                }
+                Transaction latestTransaction = latestTransactions.get(0);
+                TransactionSummaryUIItem bankAccountTransSummary = new TransactionSummaryUIItem(
+                        Constants.SUMMARY_ITEM_TYPE_ITEM, Constants.BANK_ACCOUNT_NUMBER, latestTransaction.getAmount(),
+                        latestTransaction.getTime(), latestTransaction.getType().name(),
+                        Constants.HEADER_TYPE_BANKACCOUNT);
+                uiItems.add(bankAccountTransSummary);
             }
+            // }
+            // }
 
-            List<LoanAccount> loanAccounts = LoanAccount.getAllLoanAccounts();
-            if (loanAccounts != null && !loanAccounts.isEmpty()) {
+            // List<LoanAccount> loanAccounts = LoanAccount.getAllLoanAccounts();
+            // if (loanAccounts != null && !loanAccounts.isEmpty()) {
+
+            // for (LoanAccount loanAccount : loanAccounts) {
+
+            List<LoanEMI> latestEmis = LoanEMI.getLatestNEmis(1, Constants.LOAN_ACC_NUMBER,
+                    PocketBankerContract.Emis.EMI_DATE + " DESC ");
+
+            if (latestEmis != null && latestEmis.size() > 0) {
+
                 TransactionSummaryUIItem loanAccountHeader = new TransactionSummaryUIItem(
                         Constants.SUMMARY_ITEM_TYPE_HEADER, "Loan Account", -1, -1, null, null);
                 uiItems.add(loanAccountHeader);
 
-                for (LoanAccount loanAccount : loanAccounts) {
-
-                    List<LoanEMI> latestEmis = LoanEMI.getLatestNEmis(1, loanAccount.getLoanAccountNo(),
-                            PocketBankerContract.Emis.EMI_DATE + " DESC ");
-
-                    if(latestEmis != null && latestEmis.size() > 0) {
-
-                        LoanEMI latestEmi = latestEmis.get(0);
-                        TransactionSummaryUIItem loanTransactionSummary = new TransactionSummaryUIItem(
-                                Constants.SUMMARY_ITEM_TYPE_ITEM, loanAccount.getLoanAccountNo(), latestEmi.getEmiAmount(),
-                                latestEmi.getEmiDate(), Constants.TRANSACTION_TYPE_DEBIT, Constants.HEADER_TYPE_LOANACCOUNT);
-                        uiItems.add(loanTransactionSummary);
-                    }
-
-                }
+                LoanEMI latestEmi = latestEmis.get(0);
+                TransactionSummaryUIItem loanTransactionSummary = new TransactionSummaryUIItem(
+                        Constants.SUMMARY_ITEM_TYPE_ITEM, Constants.LOAN_ACC_NUMBER, latestEmi.getEmiAmount(),
+                        latestEmi.getEmiDate(), Transaction.Type.CREDIT.name(), Constants.HEADER_TYPE_LOANACCOUNT);
+                uiItems.add(loanTransactionSummary);
             }
 
-            List<CardAccount> cardAccounts = CardAccount.getAllCardAccounts();
-            if (cardAccounts != null && !cardAccounts.isEmpty()) {
-                TransactionSummaryUIItem cardHeader = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER,
-                        "Card", -1, -1, null, null);
-                uiItems.add(cardHeader);
+            // }
+            // }
 
-                for (CardAccount cardAccount : cardAccounts) {
-                    TransactionSummaryUIItem cardTransactionSummary = new TransactionSummaryUIItem(
-                            Constants.SUMMARY_ITEM_TYPE_ITEM, cardAccount.getCardAccNumber(), 100,
-                            System.currentTimeMillis(), Transaction.Type.DEBIT.name(), Constants.HEADER_TYPE_CARD);
-                    uiItems.add(cardTransactionSummary);
-                }
-            }
+            // List<CardAccount> cardAccounts = CardAccount.getAllCardAccounts();
+            // if (cardAccounts != null && !cardAccounts.isEmpty()) {
+            TransactionSummaryUIItem cardHeader = new TransactionSummaryUIItem(Constants.SUMMARY_ITEM_TYPE_HEADER,
+                    "Card", -1, -1, null, null);
+            uiItems.add(cardHeader);
+
+            // for (CardAccount cardAccount : cardAccounts) {
+            TransactionSummaryUIItem cardTransactionSummary = new TransactionSummaryUIItem(
+                    Constants.SUMMARY_ITEM_TYPE_ITEM, Constants.CARD_ACCOUNT_NUMBER, 100, System.currentTimeMillis(),
+                    Transaction.Type.DEBIT.name(), Constants.HEADER_TYPE_CARD);
+            uiItems.add(cardTransactionSummary);
+            // }
+            // }
             return uiItems;
         }
 
@@ -219,27 +217,27 @@ public class TransactionsFragment extends Fragment
         {
             NetworkHelper networkHelper = new NetworkHelper();
 
-            List<Account> bankAccounts = PocketBankerDBHelper.getInstance().getAllAccounts();
-            if (bankAccounts != null && bankAccounts.size() > 0) {
+            // List<Account> bankAccounts = PocketBankerDBHelper.getInstance().getAllAccounts();
+            // if (bankAccounts != null && bankAccounts.size() > 0) {
 
-                for (Account bankAccount : bankAccounts) {
-                    // TODO : get from wherever
-                    networkHelper.fetchTransactionHistoryForPeriod(bankAccount.getAccountNumber(),
-                            new Date((System.currentTimeMillis() - Constants.ONE_MONTH_IN_MILLIS)),
-                            new Date(System.currentTimeMillis()));
-                }
+            // for (Account bankAccount : bankAccounts) {
+            // TODO : get from wherever
+            networkHelper.fetchTransactionHistoryForPeriod(Constants.BANK_ACCOUNT_NUMBER,
+                    new Date((System.currentTimeMillis() - Constants.ONE_MONTH_IN_MILLIS)),
+                    new Date(System.currentTimeMillis()));
+            // }
 
-            }
+            // }
 
-            List<LoanAccount> loanAccounts = LoanAccount.getAllLoanAccounts();
-            if (loanAccounts != null && loanAccounts.size() > 0) {
+            // List<LoanAccount> loanAccounts = LoanAccount.getAllLoanAccounts();
+            // if (loanAccounts != null && loanAccounts.size() > 0) {
 
-                for (LoanAccount loanAccount : loanAccounts) {
-                    // TODO : get from wherever
-                    // networkHelper.getLoanEMIDetails(loanAccount.getLoanAccountNo());
-                }
+            // for (LoanAccount loanAccount : loanAccounts) {
+            // TODO : get from wherever
+            networkHelper.getLoanEMIDetails(Constants.LOAN_ACC_NUMBER);
+            // }
 
-            }
+            // }
 
             return null;
         }

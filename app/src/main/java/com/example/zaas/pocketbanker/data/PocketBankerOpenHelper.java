@@ -85,7 +85,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
 
     private void insertDummyData(SQLiteDatabase db)
     {
-        insertDummyAccountData(db);
+        // insertDummyAccountData(db);
         insertDummyPayeeData(db);
         insertDummyBranchAtmData(db);
         insertDummyTransactionData(db);

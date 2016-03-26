@@ -26,9 +26,10 @@ import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.AccountSummaryDetailHeaderUIITem;
 import com.example.zaas.pocketbanker.models.local.AccountSummaryDetailItem;
 import com.example.zaas.pocketbanker.models.local.CardAccount;
+import com.example.zaas.pocketbanker.models.local.LoanAccount;
+import com.example.zaas.pocketbanker.models.local.LoanEMI;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.local.TransactionDataUIItem;
-import com.example.zaas.pocketbanker.models.network.LoanEMIDetails;
 import com.example.zaas.pocketbanker.sync.NetworkHelper;
 import com.example.zaas.pocketbanker.utils.Constants;
 
@@ -46,7 +47,6 @@ public class AccountSummaryDetailFragment extends Fragment
     String headerType;
     SwipeRefreshLayout mAccountSummaryDetailSwipeRefresh;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -61,7 +61,8 @@ public class AccountSummaryDetailFragment extends Fragment
         View rootView = inflater.inflate(R.layout.account_summary_detail_fragment, container, false);
 
         mAccountSummaryDetailFragmentRV = (RecyclerView) rootView.findViewById(R.id.account_summary_detail_fragment_RV);
-        mAccountSummaryDetailSwipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.account_summary_detail_swipe_refresh);
+        mAccountSummaryDetailSwipeRefresh = (SwipeRefreshLayout) rootView
+                .findViewById(R.id.account_summary_detail_swipe_refresh);
         mAccountSummaryDetailSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh()
@@ -73,7 +74,7 @@ public class AccountSummaryDetailFragment extends Fragment
 
         getActivity().setTitle("Summary");
         populateArguments();
-        loadData(false);
+        loadData(true);
         return rootView;
 
     }
@@ -123,7 +124,6 @@ public class AccountSummaryDetailFragment extends Fragment
         }
     }
 
-
     private void loadData(boolean doNetworkCallAfter)
     {
         new DataLoadTask(doNetworkCallAfter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
@@ -140,31 +140,32 @@ public class AccountSummaryDetailFragment extends Fragment
             this.doNetworkCall = doNetworkCall;
         }
 
-
         @Override
         protected List<AccountSummaryDetailItem> doInBackground(Void... voids)
         {
             List<AccountSummaryDetailItem> uiItems = new ArrayList<>();
 
             try {
-                
+
                 AccountSummaryDetailHeaderUIITem accountHeader = new AccountSummaryDetailHeaderUIITem();
 
                 if (headerType.equals(Constants.HEADER_TYPE_BANKACCOUNT)) {
                     Account bankAccount = Account.getAccount(accountNo);
-                    accountHeader.setHeaderDataForBankAccount(accountNo, bankAccount.getBalance(), bankAccount.getType(),
-                            bankAccount.getLastUpdateTime(), headerType);
+                    accountHeader.setHeaderDataForBankAccount(accountNo, bankAccount.getBalance(),
+                            bankAccount.getType(), bankAccount.getLastUpdateTime(), headerType);
 
-                    AccountSummaryDetailItem headerItem = new AccountSummaryDetailItem(Constants.SUMMARY_ITEM_TYPE_HEADER,
-                            accountHeader, null);
+                    AccountSummaryDetailItem headerItem = new AccountSummaryDetailItem(
+                            Constants.SUMMARY_ITEM_TYPE_HEADER, accountHeader, null);
 
                     uiItems.add(headerItem);
 
-                    List<Transaction> accountTransactions = Transaction.getLatestNTransactions(5, accountNo, PocketBankerContract.Transactions.TIME + " DESC ");
+                    List<Transaction> accountTransactions = Transaction.getLatestNTransactions(5, accountNo,
+                            PocketBankerContract.Transactions.TIME + " DESC ");
                     if (accountTransactions != null && accountTransactions.size() > 0) {
                         for (Transaction transaction : accountTransactions) {
-                            TransactionDataUIItem transactionUiItem = new TransactionDataUIItem(transaction.getAmount(),
-                                    transaction.getRemark(), transaction.getTime(), transaction.getType().name());
+                            TransactionDataUIItem transactionUiItem = new TransactionDataUIItem(
+                                    transaction.getAmount(), transaction.getRemark(), transaction.getTime(),
+                                    transaction.getType().name());
                             AccountSummaryDetailItem transactionItem = new AccountSummaryDetailItem(
                                     Constants.SUMMARY_ITEM_TYPE_ITEM, null, transactionUiItem);
                             uiItems.add(transactionItem);
@@ -172,31 +173,57 @@ public class AccountSummaryDetailFragment extends Fragment
                         }
                     }
 
-                } else if (headerType.equals(Constants.HEADER_TYPE_LOANACCOUNT)) {
+                }
+                else if (headerType.equals(Constants.HEADER_TYPE_LOANACCOUNT)) {
+                    LoanAccount loanAccount = LoanAccount.getLoanAccount(accountNo);
+                    DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+                    accountHeader.setHeaderDataForLoanAccount(accountNo, loanAccount.getCustomerName(),
+                            loanAccount.getOutstandingPrinciple(), loanAccount.getType(),
+                            df.parse(loanAccount.getDateOfLoan()).getTime(), loanAccount.getRoi(), headerType);
 
-                } else if (headerType.equals(Constants.HEADER_TYPE_CARD)) {
+                    AccountSummaryDetailItem headerItem = new AccountSummaryDetailItem(
+                            Constants.SUMMARY_ITEM_TYPE_HEADER, accountHeader, null);
+
+                    uiItems.add(headerItem);
+
+                    List<LoanEMI> loanEmis = LoanEMI.getLatestNEmis(5, accountNo, PocketBankerContract.Emis.EMI_DATE
+                            + " DESC ");
+                    if (loanEmis != null && loanEmis.size() > 0) {
+                        for (LoanEMI loanEmi : loanEmis) {
+                            TransactionDataUIItem transactionUiItem = new TransactionDataUIItem(loanEmi.getEmiAmount(),
+                                    "Paid EMI", loanEmi.getEmiDate(), Transaction.Type.CREDIT.name());
+                            AccountSummaryDetailItem transactionItem = new AccountSummaryDetailItem(
+                                    Constants.SUMMARY_ITEM_TYPE_ITEM, null, transactionUiItem);
+                            uiItems.add(transactionItem);
+
+                        }
+                    }
+
+                }
+               else if (headerType.equals(Constants.HEADER_TYPE_CARD)) {
 
                     CardAccount cardAccount = CardAccount.getCardAccount(accountNo);
 
                     DateFormat df = new SimpleDateFormat(CardAccount.CARD_DETAILS_DATE_FORMAT);
-                    accountHeader.setHeaderDataForBankAccount(accountNo, cardAccount.getBalance(), cardAccount.getType(),
-                            df.parse(cardAccount.getExpiryDate()).getTime(), headerType);
+                    accountHeader.setHeaderDataForCard(accountNo, cardAccount.getAvailLimit(), cardAccount.getBalance(), df.parse(cardAccount.getExpiryDate()).getTime(), cardAccount.getType(), cardAccount.getStatus(), headerType);
 
-                    AccountSummaryDetailItem headerItem = new AccountSummaryDetailItem(Constants.SUMMARY_ITEM_TYPE_HEADER,
-                            accountHeader, null);
+                    AccountSummaryDetailItem headerItem = new AccountSummaryDetailItem(
+                            Constants.SUMMARY_ITEM_TYPE_HEADER, accountHeader, null);
 
                     uiItems.add(headerItem);
 
-                    TransactionDataUIItem transaction1 = new TransactionDataUIItem(500.00, "Shoe purchase",
-                            System.currentTimeMillis(), Constants.TRANSACTION_TYPE_DEBIT);
-                    TransactionDataUIItem transaction2 = new TransactionDataUIItem(1245.00, "groceries",
-                            System.currentTimeMillis() - Constants.ONE_DAY_IN_MILLIS, Constants.TRANSACTION_TYPE_DEBIT);
+                    TransactionDataUIItem transaction1 = new TransactionDataUIItem(500.00, "Paid phone bill",
+                            System.currentTimeMillis(), Transaction.Type.DEBIT.name());
+                    TransactionDataUIItem transaction2 = new TransactionDataUIItem(1245.00, "Groceries purchase",
+                            System.currentTimeMillis() - Constants.ONE_DAY_IN_MILLIS, Transaction.Type.DEBIT.name());
                     TransactionDataUIItem transaction3 = new TransactionDataUIItem(10000.00, null,
-                            System.currentTimeMillis()- Constants.ONE_DAY_IN_MILLIS, Constants.TRANSACTION_TYPE_CREDIT);
+                            System.currentTimeMillis() - Constants.ONE_DAY_IN_MILLIS, Transaction.Type.CREDIT.name());
                     TransactionDataUIItem transaction4 = new TransactionDataUIItem(200.00, null,
-                            System.currentTimeMillis()- (2* Constants.ONE_DAY_IN_MILLIS), Constants.TRANSACTION_TYPE_DEBIT);
-                    TransactionDataUIItem transaction5 = new TransactionDataUIItem(5000.00, "transferred from other account",
-                            System.currentTimeMillis()-(3* Constants.ONE_DAY_IN_MILLIS), Constants.TRANSACTION_TYPE_CREDIT);
+                            System.currentTimeMillis() - (2 * Constants.ONE_DAY_IN_MILLIS),
+                            Transaction.Type.DEBIT.name());
+                    TransactionDataUIItem transaction5 = new TransactionDataUIItem(5000.00, "Refund from merchant",
+                            System.currentTimeMillis() - (3 * Constants.ONE_DAY_IN_MILLIS),
+                            Transaction.Type.CREDIT.name());
 
                     AccountSummaryDetailItem uiItem2 = new AccountSummaryDetailItem(Constants.SUMMARY_ITEM_TYPE_ITEM,
                             null, transaction1);
@@ -216,8 +243,9 @@ public class AccountSummaryDetailFragment extends Fragment
                     uiItems.add(uiItem6);
 
                 }
-            }catch (Exception e) {
-                Log.e("abc","Exception : ",e);
+            }
+            catch (Exception e) {
+                Log.e("abc", "Exception : ", e);
             }
 
             return uiItems;
@@ -231,7 +259,6 @@ public class AccountSummaryDetailFragment extends Fragment
                 mAccountSummaryDetailFragmentRV.setAdapter(mAdapter);
                 mAccountSummaryDetailFragmentRV.setLayoutManager(new LinearLayoutManager(
                         mAccountSummaryDetailFragmentRV.getContext()));
-                // mAccountSummaryDetailFragmentRV.setScrollBarStyle(View.SCROLL_AXIS_VERTICAL);
 
             }
             else {
@@ -259,14 +286,16 @@ public class AccountSummaryDetailFragment extends Fragment
         protected Void doInBackground(Void... voids)
         {
             NetworkHelper networkHelper = new NetworkHelper();
-            if(headerType.equals(Constants.HEADER_TYPE_BANKACCOUNT)) {
-                networkHelper.fetchTransactionHistoryForPeriod(accountNo, new Date((System.currentTimeMillis() - Constants.ONE_MONTH_IN_MILLIS)), new Date(System.currentTimeMillis()));
+            if (headerType.equals(Constants.HEADER_TYPE_BANKACCOUNT)) {
+                networkHelper.fetchTransactionHistoryForPeriod(accountNo, new Date(
+                        (System.currentTimeMillis() - Constants.ONE_MONTH_IN_MILLIS)),
+                        new Date(System.currentTimeMillis()));
             }
             else if (headerType.equals(Constants.HEADER_TYPE_LOANACCOUNT)) {
                 networkHelper.getLoanEMIDetails(accountNo);
             }
             else if (headerType.equals(Constants.HEADER_TYPE_CARD)) {
-                //No api
+                // No api
             }
             return null;
         }

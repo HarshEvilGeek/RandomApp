@@ -57,7 +57,8 @@ public class CardAccount extends DbModel
         this.balance = balance;
         this.dateOfEnrollment = dateOfEnrollment;
         this.monthDelinquency = monthDelinquency;
-        this.cardAccNumber = cardAccNumber;
+        //TODO hardcoded
+        this.cardAccNumber = Constants.CARD_ACCOUNT_NUMBER;
         this.expiryDate = expiryDate;
         this.availLimit = availLimit;
     }
@@ -114,7 +115,7 @@ public class CardAccount extends DbModel
 
     public String getCardAccNumber()
     {
-        return id + cardAccNumber;
+        return cardAccNumber;
     }
 
     public void setCardAccNumber(String cardAccNumber)

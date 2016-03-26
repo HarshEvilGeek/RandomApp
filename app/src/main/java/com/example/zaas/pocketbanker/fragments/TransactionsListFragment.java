@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.adapters.TransactionsListFragmentAdapter;
 import com.example.zaas.pocketbanker.data.PocketBankerContract;
+import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.LoanEMI;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.local.TransactionDataUIItem;
@@ -256,10 +257,11 @@ public class TransactionsListFragment extends Fragment
                 List<LoanEMI> latestTransactions = LoanEMI.getEmisBetween(accountNo, PocketBankerContract.Emis.EMI_DATE
                         + " DESC ", mFromDateValue, mToDateValue);
 
+
                 if (latestTransactions != null && latestTransactions.size() > 0) {
                     for (LoanEMI transaction : latestTransactions) {
                         TransactionDataUIItem transactionUiItem = new TransactionDataUIItem(transaction.getEmiAmount(),
-                                null, transaction.getEmiDate(), Constants.TRANSACTION_TYPE_DEBIT);
+                                null, transaction.getEmiDate(), Transaction.Type.CREDIT.name());
                         uiItems.add(transactionUiItem);
                     }
                 }
@@ -267,19 +269,19 @@ public class TransactionsListFragment extends Fragment
             }
             else if (headerType.equals(Constants.HEADER_TYPE_CARD)) {
 
-                TransactionDataUIItem transaction1 = new TransactionDataUIItem(10000.00, "transferred for saving",
-                        System.currentTimeMillis(), Transaction.Type.DEBIT.name());
+                TransactionDataUIItem transaction1 = new TransactionDataUIItem(10000.00,
+                        "Transferred to other account", System.currentTimeMillis(), Transaction.Type.DEBIT.name());
                 TransactionDataUIItem transaction2 = new TransactionDataUIItem(5000.00, null,
                         System.currentTimeMillis() + 345670000, Transaction.Type.CREDIT.name());
-                TransactionDataUIItem transaction3 = new TransactionDataUIItem(10000.00, "transferred for blah",
+                TransactionDataUIItem transaction3 = new TransactionDataUIItem(10000.00, "Refund from Merchant",
                         System.currentTimeMillis(), Transaction.Type.DEBIT.name());
-                TransactionDataUIItem transaction4 = new TransactionDataUIItem(10000.00, "transferred for xyz",
-                        System.currentTimeMillis(), Transaction.Type.DEBIT.name());
-                TransactionDataUIItem transaction5 = new TransactionDataUIItem(10000.00, "transferred for fd",
+                TransactionDataUIItem transaction4 = new TransactionDataUIItem(10000.00,
+                        "Transferred to other account", System.currentTimeMillis(), Transaction.Type.DEBIT.name());
+                TransactionDataUIItem transaction5 = new TransactionDataUIItem(10000.00, "Paid Loan EMI",
                         System.currentTimeMillis(), Transaction.Type.CREDIT.name());
-                TransactionDataUIItem transaction6 = new TransactionDataUIItem(10000.00, "transferred for fd",
+                TransactionDataUIItem transaction6 = new TransactionDataUIItem(10000.00, "Added amount",
                         System.currentTimeMillis(), Transaction.Type.DEBIT.name());
-                TransactionDataUIItem transaction7 = new TransactionDataUIItem(10000.00, "transferred for fd",
+                TransactionDataUIItem transaction7 = new TransactionDataUIItem(10000.00, "Transferred for FD",
                         System.currentTimeMillis(), Transaction.Type.CREDIT.name());
 
                 uiItems.add(transaction1);
@@ -307,7 +309,6 @@ public class TransactionsListFragment extends Fragment
                 mTransactionListFragmentRV.setAdapter(mAdapter);
                 mTransactionListFragmentRV.setLayoutManager(new LinearLayoutManager(mTransactionListFragmentRV
                         .getContext()));
-                // mAccountSummaryDetailFragmentRV.setScrollBarStyle(View.SCROLL_AXIS_VERTICAL);
 
             }
             else {
