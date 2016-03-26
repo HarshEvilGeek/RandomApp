@@ -177,10 +177,8 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 1350, 1200000, Transaction.Type.Debit, "Lunch",
                 System.currentTimeMillis() - 7 * ONE_DAY_IN_MILLIS, "Taco Bell", TransactionCategoryUtils.Category.FOOD);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
-        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 250, 1200000, Transaction.Type.Credit,
- "Debt Settlement",
-                System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS, "Loan",
-                TransactionCategoryUtils.Category.UNKNOWN);
+        transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 250, 1200000, Transaction.Type.Credit, "Debt Settlement",
+                System.currentTimeMillis() - 5 * ONE_DAY_IN_MILLIS, "Loan", TransactionCategoryUtils.Category.UNKNOWN);
         db.insert(Tables.TRANSACTIONS, null, transaction.toContentValues());
         transaction = new Transaction(DUMMY_ACCOUNT_NUMBER_1, 450, 1200000, Transaction.Type.Debit, "Taxi",
                 System.currentTimeMillis() - 3 * ONE_DAY_IN_MILLIS, "Ola", TransactionCategoryUtils.Category.TRAVEL);
@@ -268,8 +266,7 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
 
         String CREATE_TABLE_EMIS_QUERY = "CREATE table " + EMIS + " (" + PocketBankerContract.Emis._ID
                 + " integer primary key autoincrement, " + PocketBankerContract.Emis.LOAN_ACCOUNT_NUMBER + " text, "
-                + PocketBankerContract.Emis.EMI_DATE + " real, "
-                + PocketBankerContract.Emis.EMI_AMOUNT + " real);";
+                + PocketBankerContract.Emis.EMI_DATE + " real, " + PocketBankerContract.Emis.EMI_AMOUNT + " real);";
 
         String CREATE_TABLE_LOAN_TRANSACTIONS_QUERY = "CREATE table " + LOAN_TRANSACTIONS + " ("
                 + PocketBankerContract.LoanTransactions._ID + " integer primary key autoincrement, "
