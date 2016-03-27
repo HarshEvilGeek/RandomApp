@@ -118,10 +118,10 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         if (type == BranchAtm.Type.ATM) {
             mAdapter.updateList(mAtmList);
             mAtm.setTextColor(Color.WHITE);
-            mBranch.setTextColor(Color.GRAY);
+            mBranch.setTextColor(Color.BLACK);
         } else {
             mAdapter.updateList(mBranchList);
-            mAtm.setTextColor(Color.GRAY);
+            mAtm.setTextColor(Color.BLACK);
             mBranch.setTextColor(Color.WHITE);
         }
     }

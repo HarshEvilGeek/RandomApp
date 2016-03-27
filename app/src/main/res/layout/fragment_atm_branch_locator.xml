@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/card_margin_small"
             android:text="Branch"
+            android:textColor="@android:color/black"
             android:textSize="14sp"
             android:textStyle="bold"/>
 
@@ -48,6 +49,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/card_margin_small"
             android:text="ATM"
+            android:textColor="@android:color/black"
             android:textSize="14sp"
             android:textStyle="bold"/>
 

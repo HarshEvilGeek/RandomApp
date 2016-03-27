@@ -17,6 +17,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/card_margin_small"
                 android:text="Address"
+                android:textStyle="bold"
                 android:textColor="@color/colorPrimaryDark"/>
     
             <include layout="@layout/thin_line"/>
@@ -58,6 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/card_margin_small"
+                android:textStyle="bold"
                 android:text="IFSC Code"
                 android:textColor="@color/colorPrimaryDark"/>
     
@@ -101,6 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/card_margin_small"
                 android:text="Phone"
+                android:textStyle="bold"
                 android:textColor="@color/colorPrimaryDark"/>
             
             <include layout="@layout/thin_line"/>
