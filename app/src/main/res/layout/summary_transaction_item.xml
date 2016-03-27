@@ -27,7 +27,7 @@
                 style="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Account # :"
+                android:text="Account #"
                 android:paddingLeft="10dp"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
@@ -57,7 +57,7 @@
                 style="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Balance :"
+                android:text="Balance"
                 android:paddingLeft="10dp"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
@@ -67,7 +67,7 @@
                 style="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingLeft="25dp"
+                android:paddingLeft="24dp"
                 tools:text="Rs. 10000" />
 
         </LinearLayout>
