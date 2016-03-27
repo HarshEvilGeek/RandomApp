@@ -20,6 +20,7 @@ import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.fragments.TransactionsListFragment;
 import com.example.zaas.pocketbanker.models.local.TransactionSummaryUIItem;
 import com.example.zaas.pocketbanker.utils.Constants;
+import com.example.zaas.pocketbanker.utils.DateUtils;
 
 /**
  * Created by zaraahmed on 3/20/16.
@@ -106,10 +107,7 @@ public class TransactionsSummaryFragmentAdapter extends RecyclerView.Adapter<Rec
 
             vh.transTypeTV.setText(uiItem.getTransactionType());
 
-            Date transactionDate = new Date(uiItem.getTransactionDate());
-            DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-
-            String dateString = df.format(transactionDate);
+            String dateString = DateUtils.getDateStringFromMillis(uiItem.getTransactionDate());
 
             vh.transDateTV.setText(dateString);
 

@@ -28,7 +28,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Account #"
-                android:paddingLeft="10dp"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -58,7 +57,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Balance"
-                android:paddingLeft="10dp"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
