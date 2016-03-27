@@ -12,4 +12,8 @@ public class DateUtils {
         return new SimpleDateFormat("dd/MM/yyyy").format(new Date(millis));
     }
 
+    public static String getTimeStringFromMillis(long millis) {
+        return new SimpleDateFormat("HH:mm").format(new Date(millis));
+    }
+
 }

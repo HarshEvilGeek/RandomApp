@@ -49,17 +49,10 @@ public class TransferFundsFragment extends Fragment implements PayeeAdapter.OnCl
 
         getActivity().setTitle(R.string.action_transfer);
 
-        setupHeaderView(rootView);
         setupSwipeContainer(rootView);
         setupRecyclerView(rootView);
 
         return rootView;
-    }
-
-    private void setupHeaderView(View rootView)
-    {
-        TextView headerTv = (TextView) rootView.findViewById(R.id.header_tv);
-        headerTv.setText(R.string.registered_payees);
     }
 
     private void setupSwipeContainer(View rootView)

@@ -24,7 +24,7 @@
             android:title="Analytics" />
         <item
             android:id="@+id/recommendations"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_recommendations"
             android:title="@string/action_recommendations" />
 
         <item android:title="Pockets">

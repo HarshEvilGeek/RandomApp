@@ -99,7 +99,7 @@ public class AccountSummaryFragmentAdapter extends RecyclerView.Adapter<Recycler
 
             vh.summaryTitleTV.setText(uiItem.getTitle());
 
-            vh.summaryBalanceTV.setText("Rs. " + String.valueOf(uiItem.getBalance()));
+            vh.summaryBalanceTV.setText("₹ " + String.valueOf(uiItem.getBalance()));
 
         }
 

@@ -16,6 +16,7 @@ import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.models.local.AccountSummaryDetailItem;
 import com.example.zaas.pocketbanker.models.local.TransactionDataUIItem;
 import com.example.zaas.pocketbanker.models.local.TransactionDetailViewHolder;
+import com.example.zaas.pocketbanker.utils.DateUtils;
 
 /**
  * Created by zaraahmed on 3/20/16.
@@ -52,11 +53,11 @@ public class TransactionsListFragmentAdapter extends RecyclerView.Adapter<Transa
 
         TransactionDataUIItem transactionDataUIItem = mUiItems.get(position);
 
-        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-
-        viewHolder.getTransAmountTV().setText(transactionDataUIItem.getTransactionType() + " of ₹"
+        viewHolder.getTransAmountTV().setText("₹ "
                 + String.valueOf(transactionDataUIItem.getTransactionAmount()));
-        viewHolder.getTransDateTV().setText(df.format(new Date(transactionDataUIItem.getTransactionDate())));
+        viewHolder.getTransTypeTV().setText(transactionDataUIItem.getTransactionType());
+        viewHolder.getTransDateTV().setText(DateUtils.getDateStringFromMillis(transactionDataUIItem.getTransactionDate()));
+        viewHolder.getTransTimeTV().setText(DateUtils.getTimeStringFromMillis(transactionDataUIItem.getTransactionDate()));
 
         if (!TextUtils.isEmpty(transactionDataUIItem.getTransactionRemark())) {
             viewHolder.getTransRemarkTV().setVisibility(View.VISIBLE);

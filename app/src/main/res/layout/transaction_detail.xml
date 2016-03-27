@@ -31,10 +31,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorAccent"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                tools:text="Rs. 10000" />
+                tools:text="₹ 10000" />
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/trans_category_spinner"
@@ -44,6 +44,16 @@
                 android:gravity="right"
                 android:visibility="gone"
                 />
+
+            <TextView
+                android:id="@+id/trans_type_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:layout_marginRight="@dimen/card_margin_small"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                tools:text="DEBIT"/>
 
         </LinearLayout>
 
@@ -57,8 +67,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Date: "
+            android:text="Date  "
             android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
             android:visibility="visible" />
 
         <TextView
@@ -77,12 +88,37 @@
             android:orientation="horizontal"
             android:paddingTop="@dimen/card_margin_small">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time  "
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/time_of_transaction_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/summary_detail_header_left_padding"
+                android:text="10-03-2016" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/card_margin_small">
+
 
             <TextView
                 android:id="@+id/trans_remark_heading_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Remark:"
+                android:text="Remark "
+                android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold"
                 android:visibility="visible" />
 
