@@ -124,6 +124,7 @@ public class ChatBotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private TextView message;
         // private LinearLayout timestampLayout;
         private LinearLayout messageLL;
+        private FrameLayout messageFL;
 
         public ChatBotViewHolder(View itemView)
         {
@@ -132,6 +133,7 @@ public class ChatBotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             message = (TextView) itemView.findViewById(R.id.message_tv);
             // timestampLayout = (LinearLayout) itemView.findViewById(R.id.timeStampLayout);
             messageLL = (LinearLayout) itemView.findViewById(R.id.chat_item_ll);
+            messageFL = (FrameLayout) itemView.findViewById(R.id.message_framelayout);
 
         }
     }
