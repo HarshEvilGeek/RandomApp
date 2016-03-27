@@ -83,7 +83,7 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
         mBranchAtmToggle = (SwitchCompat) rootView.findViewById(R.id.branch_atm_toggle);
         mAtm = (TextView) rootView.findViewById(R.id.atm);
         mBranch = (TextView) rootView.findViewById(R.id.branch);
-        mBranch.setTextColor(getResources().getColor(R.color.colorPrimary));
+        mBranch.setTextColor(Color.WHITE);
         setClickListeners();
         setupSwipeContainer(rootView);
         setupRecyclerView(rootView);
@@ -117,12 +117,12 @@ public class ATMBranchLocatorFragment extends Fragment implements BranchAtmAdapt
     private void toggleList(BranchAtm.Type type) {
         if (type == BranchAtm.Type.ATM) {
             mAdapter.updateList(mAtmList);
-            mAtm.setTextColor(getResources().getColor(R.color.colorPrimary));
+            mAtm.setTextColor(Color.WHITE);
             mBranch.setTextColor(Color.GRAY);
         } else {
             mAdapter.updateList(mBranchList);
             mAtm.setTextColor(Color.GRAY);
-            mBranch.setTextColor(getResources().getColor(R.color.colorPrimary));
+            mBranch.setTextColor(Color.WHITE);
         }
     }
 
