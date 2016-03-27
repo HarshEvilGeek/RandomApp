@@ -178,7 +178,6 @@
                     android:layout_margin="@dimen/card_margin_smaller"
                     android:text="@string/contact_address"
                     android:textAlignment="center"
-                    android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold"
                     android:textSize="14sp"
                     />
@@ -228,7 +227,6 @@ android:layout_margin="@dimen/card_margin">
             android:layout_margin="@dimen/card_margin_smaller"
             android:textAlignment="center"
             android:text="@string/contact_branch_atm"
-            android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             android:textSize="14sp"
             />
