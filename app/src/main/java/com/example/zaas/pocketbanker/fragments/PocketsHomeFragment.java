@@ -55,6 +55,8 @@ public class PocketsHomeFragment extends Fragment {
         balance.setText(String.valueOf(pocketAccount.getBalance()) + "/-");
         dob.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date(pocketAccount.getBirthday())));
         fetchPocketBalance();
+        getActivity().setTitle("Pockets - Home");
+
         return rootView;
     }
 

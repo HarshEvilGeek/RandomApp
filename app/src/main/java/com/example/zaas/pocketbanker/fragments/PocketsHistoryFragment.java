@@ -1,5 +1,8 @@
 package com.example.zaas.pocketbanker.fragments;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Fragment;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -14,20 +17,16 @@ import android.view.ViewGroup;
 
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.adapters.TransactionsListFragmentAdapter;
-import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.local.TransactionDataUIItem;
 import com.example.zaas.pocketbanker.models.network.WalletStatement;
 import com.example.zaas.pocketbanker.sync.NetworkHelper;
-import com.example.zaas.pocketbanker.utils.Constants;
 import com.example.zaas.pocketbanker.utils.SecurityUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by akhil on 3/26/16.
  */
-public class PocketsHistoryFragment extends Fragment {
+public class PocketsHistoryFragment extends Fragment
+{
 
     RecyclerView mTransactionListFragmentRV;
 
@@ -35,13 +34,15 @@ public class PocketsHistoryFragment extends Fragment {
     SwipeRefreshLayout mTransactionsListSwipeRefresh;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
 
         View rootView = inflater.inflate(R.layout.fragment_pockets_history, container, false);
 
@@ -49,6 +50,12 @@ public class PocketsHistoryFragment extends Fragment {
         mTransactionsListSwipeRefresh = (SwipeRefreshLayout) rootView
                 .findViewById(R.id.transactions_list_swipe_refresh);
         mTransactionsListSwipeRefresh.setColorSchemeColors(Color.BLUE);
+        mTransactionsListSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchTransactions();
+            }
+        });
 
         getActivity().setTitle("Pockets - History ");
         loadData(true);
@@ -56,111 +63,105 @@ public class PocketsHistoryFragment extends Fragment {
 
     }
 
-    private void disablePullToRefresh() {
+    private void disablePullToRefresh()
+    {
         if (mTransactionsListSwipeRefresh != null) {
             mTransactionsListSwipeRefresh.setEnabled(false);
         }
     }
 
-    private void enablePullToRefresh() {
+    private void enablePullToRefresh()
+    {
         if (mTransactionsListSwipeRefresh != null) {
             mTransactionsListSwipeRefresh.setEnabled(true);
         }
     }
 
-    private void stopProgressInPullToRefresh() {
+    private void stopProgressInPullToRefresh()
+    {
         if (mTransactionsListSwipeRefresh != null) {
             mTransactionsListSwipeRefresh.setRefreshing(false);
         }
     }
 
-    private void startProgressInPullToRefresh() {
+    private void startProgressInPullToRefresh()
+    {
         if (mTransactionsListSwipeRefresh != null) {
             mTransactionsListSwipeRefresh.setRefreshing(true);
         }
     }
 
-    private void fetchTransactions() {
+    private void fetchTransactions()
+    {
         new NetworkTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
     }
 
-    private void loadData(boolean doNetworkCall) {
-        new DataLoadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
+    private void loadData(boolean doNetworkCall)
+    {
+        new DataLoadTask(doNetworkCall).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
     }
 
-    public class DataLoadTask extends AsyncTask<Void, Void, List<TransactionDataUIItem>> {
+    public class DataLoadTask extends AsyncTask<Void, Void, List<TransactionDataUIItem>>
+    {
+
+        private boolean doNetworkCall;
+
+        public DataLoadTask(boolean doNetworkCall)
+        {
+            this.doNetworkCall = doNetworkCall;
+        }
 
         @Override
-        protected List<TransactionDataUIItem> doInBackground(Void... voids) {
+        protected List<TransactionDataUIItem> doInBackground(Void... voids)
+        {
 
             List<WalletStatement> walletStatementList = SecurityUtils.getWalletStatement();
             List<TransactionDataUIItem> uiItems = new ArrayList<>();
 
-            if(walletStatementList != null && walletStatementList.size() > 0) {
+            if (walletStatementList != null && walletStatementList.size() > 0) {
                 for (WalletStatement walletStatement : walletStatementList) {
-                    uiItems.add(new TransactionDataUIItem(walletStatement.getAmount(),
-                            walletStatement.getRemarks(),
-                            walletStatement.getTransactionDate(),
-                            walletStatement.getTransactionType().name()));
+                    uiItems.add(new TransactionDataUIItem(walletStatement.getAmount(), walletStatement.getRemarks(),
+                            walletStatement.getTransactionDate(), walletStatement.getTransactionType().name()));
                 }
             }
-
-            // TODO ZARA DELETE THIS
-            /**TransactionDataUIItem transaction1 = new TransactionDataUIItem(10000.00,
-                    "Transferred to other account", System.currentTimeMillis(), Transaction.Type.Debit.name());
-            TransactionDataUIItem transaction2 = new TransactionDataUIItem(5000.00, null,
-                    System.currentTimeMillis() + 345670000, Transaction.Type.Credit.name());
-            TransactionDataUIItem transaction3 = new TransactionDataUIItem(10000.00, "Refund from Merchant",
-                    System.currentTimeMillis(), Transaction.Type.Debit.name());
-            TransactionDataUIItem transaction4 = new TransactionDataUIItem(10000.00,
-                    "Transferred to other account", System.currentTimeMillis(), Transaction.Type.Debit.name());
-            TransactionDataUIItem transaction5 = new TransactionDataUIItem(10000.00, "Paid Loan EMI",
-                    System.currentTimeMillis(), Transaction.Type.Credit.name());
-            TransactionDataUIItem transaction6 = new TransactionDataUIItem(10000.00, "Added amount",
-                    System.currentTimeMillis(), Transaction.Type.Debit.name());
-            TransactionDataUIItem transaction7 = new TransactionDataUIItem(10000.00, "Transferred for FD",
-                    System.currentTimeMillis(), Transaction.Type.Credit.name());
-
-            uiItems.add(transaction1);
-            uiItems.add(transaction2);
-            uiItems.add(transaction3);
-            uiItems.add(transaction4);
-            uiItems.add(transaction5);
-            uiItems.add(transaction6);
-            uiItems.add(transaction7);
-            uiItems.add(transaction7);
-            uiItems.add(transaction1);
-            uiItems.add(transaction3);
-            uiItems.add(transaction4);**/
 
             return uiItems;
         }
 
         @Override
-        protected void onPostExecute(List<TransactionDataUIItem> uiItems) {
+        protected void onPostExecute(List<TransactionDataUIItem> uiItems)
+        {
             if (mAdapter == null) {
                 mAdapter = new TransactionsListFragmentAdapter(getActivity(), uiItems);
                 mTransactionListFragmentRV.setAdapter(mAdapter);
                 mTransactionListFragmentRV.setLayoutManager(new LinearLayoutManager(mTransactionListFragmentRV
                         .getContext()));
 
-            } else {
+            }
+            else {
                 mAdapter.setUiItems(uiItems);
                 mAdapter.notifyDataSetChanged();
+            }
+
+            if (doNetworkCall) {
+                fetchTransactions();
             }
         }
     }
 
-    public class NetworkTask extends AsyncTask<Void, Void, Void> {
+    public class NetworkTask extends AsyncTask<Void, Void, Void>
+    {
         @Override
-        protected void onPreExecute() {
+        protected void onPreExecute()
+        {
             super.onPreExecute();
             startProgressInPullToRefresh();
             disablePullToRefresh();
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Void doInBackground(Void... voids)
+        {
             NetworkHelper networkHelper = new NetworkHelper();
 
             networkHelper.getWalletStatement(SecurityUtils.getPocketsAccount().getPhoneNumber());
@@ -169,7 +170,8 @@ public class PocketsHistoryFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(Void aVoid)
+        {
             loadData(false);
             stopProgressInPullToRefresh();
             enablePullToRefresh();

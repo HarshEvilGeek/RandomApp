@@ -50,6 +50,8 @@ public class PocketsAddMoneyFragment extends Fragment {
                 }
             }
         });
+        getActivity().setTitle("Pockets - Add Money");
+
         return rootView;
     }
 

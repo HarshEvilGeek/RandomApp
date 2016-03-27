@@ -1099,8 +1099,10 @@ public class NetworkHelper
                         if (status == 200) {
                             Log.i(LOG_TAG, "getting wallet statement succeeded");
 
-                            int lastIndexOfSeparator = responseString.lastIndexOf(",");
+                            int lastIndexOfSeparator = responseString.lastIndexOf(",{");
                             String walletStatementString = responseString.substring(0, lastIndexOfSeparator);
+                            Log.i(LOG_TAG, "wallet statement string : " + walletStatementString);
+
                             WalletStatementResponse finalWalletStatementResponse = new Gson().fromJson(walletStatementString,
                                     WalletStatementResponse.class);
 
