@@ -30,6 +30,7 @@ import com.example.zaas.pocketbanker.models.local.AccountSummaryDetailItem;
 import com.example.zaas.pocketbanker.models.local.TransactionDataUIItem;
 import com.example.zaas.pocketbanker.models.local.TransactionDetailViewHolder;
 import com.example.zaas.pocketbanker.utils.Constants;
+import com.example.zaas.pocketbanker.utils.DateUtils;
 
 /**
  * Created by zaraahmed on 3/20/16.
@@ -79,8 +80,6 @@ public class AccountSummaryDetailFragmentAdapter extends RecyclerView.Adapter<Re
         AccountSummaryDetailItem uiItem = mUiItems.get(position);
         int viewType = getItemViewType(position);
 
-        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-
         if (Constants.SUMMARY_ITEM_TYPE_HEADER == viewType) {
 
             final AccountSummaryDetailHeaderUIITem headerUIITem = uiItem.getHeaderUIITem();
@@ -102,7 +101,7 @@ public class AccountSummaryDetailFragmentAdapter extends RecyclerView.Adapter<Re
                 viewHolder.accTypeTV.setText("Account Type");
                 viewHolder.accTypeValueTV.setText(headerUIITem.getAccountType());
                 viewHolder.timeTV.setText("Time");
-                viewHolder.timeValTV.setText(df.format(new Date(headerUIITem.getTime())));
+                viewHolder.timeValTV.setText(DateUtils.getDateStringFromMillis(headerUIITem.getTime()));
 
                 viewHolder.custNameTV.setVisibility(View.GONE);
                 viewHolder.custNameValueTV.setVisibility(View.GONE);
@@ -139,7 +138,7 @@ public class AccountSummaryDetailFragmentAdapter extends RecyclerView.Adapter<Re
                 viewHolder.accTypeTV.setText("Type");
                 viewHolder.accTypeValueTV.setText(headerUIITem.getAccountType());
                 viewHolder.timeTV.setText("Date");
-                viewHolder.timeValTV.setText(df.format(new Date(headerUIITem.getTime())));
+                viewHolder.timeValTV.setText(DateUtils.getDateStringFromMillis(headerUIITem.getTime()));
                 viewHolder.custNameTV.setText("Customer Name");
                 viewHolder.custNameValueTV.setText(headerUIITem.getAccountHolderName());
                 viewHolder.roiTV.setText("ROI %");
@@ -178,7 +177,7 @@ public class AccountSummaryDetailFragmentAdapter extends RecyclerView.Adapter<Re
                 viewHolder.accTypeTV.setText("Type");
                 viewHolder.accTypeValueTV.setText(headerUIITem.getAccountType());
                 viewHolder.timeTV.setText("Date of Expiry");
-                viewHolder.timeValTV.setText(df.format(new Date(headerUIITem.getTime())));
+                viewHolder.timeValTV.setText(DateUtils.getDateStringFromMillis(headerUIITem.getTime()));
                 viewHolder.availLtTV.setText("Available Limit");
                 viewHolder.availLtValTV.setText(String.valueOf(headerUIITem.getAvailableLimit()));
                 viewHolder.statusTV.setText("Status");
@@ -200,9 +199,11 @@ public class AccountSummaryDetailFragmentAdapter extends RecyclerView.Adapter<Re
 
             TransactionDetailViewHolder viewHolder = (TransactionDetailViewHolder) vh;
 
-            viewHolder.getTransAmountTV().setText(transactionDataUIItem.getTransactionType() + " of ₹"
+            viewHolder.getTransAmountTV().setText("₹ "
                     + String.valueOf(transactionDataUIItem.getTransactionAmount()));
-            viewHolder.getTransDateTV().setText(df.format(new Date(transactionDataUIItem.getTransactionDate())));
+            viewHolder.getTransTypeTV().setText(transactionDataUIItem.getTransactionType());
+            viewHolder.getTransDateTV().setText(DateUtils.getDateStringFromMillis(transactionDataUIItem.getTransactionDate()));
+            viewHolder.getTransTimeTV().setText(DateUtils.getTimeStringFromMillis(transactionDataUIItem.getTransactionDate()));
 
             if (!TextUtils.isEmpty(transactionDataUIItem.getTransactionRemark())) {
                 viewHolder.getTransRemarkTV().setVisibility(View.VISIBLE);

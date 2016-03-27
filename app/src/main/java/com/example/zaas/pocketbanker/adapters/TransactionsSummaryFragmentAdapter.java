@@ -103,7 +103,7 @@ public class TransactionsSummaryFragmentAdapter extends RecyclerView.Adapter<Rec
 
             vh.transTitleTV.setText(uiItem.getTitle());
 
-            vh.transAmountTV.setText("Rs. " + String.valueOf(uiItem.getTransactionAmount()));
+            vh.transAmountTV.setText("₹ " + String.valueOf(uiItem.getTransactionAmount()));
 
             vh.transTypeTV.setText(uiItem.getTransactionType());
 

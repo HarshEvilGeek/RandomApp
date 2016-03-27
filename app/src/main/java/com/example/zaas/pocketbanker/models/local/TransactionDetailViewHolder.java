@@ -13,6 +13,8 @@ import com.example.zaas.pocketbanker.R;
 public class TransactionDetailViewHolder extends RecyclerView.ViewHolder
 {
 
+    private TextView transTypeTV;
+    private TextView transTimeTV;
     private TextView transAmountTV;
     private TextView transDateTV;
     private TextView transRemarkTV;
@@ -23,8 +25,10 @@ public class TransactionDetailViewHolder extends RecyclerView.ViewHolder
     {
 
         super(itemView);
+        transTypeTV = (TextView) itemView.findViewById(R.id.trans_type_tv);
         transAmountTV = (TextView) itemView.findViewById(R.id.amount_tv);
         transDateTV = (TextView) itemView.findViewById(R.id.date_of_transaction_tv);
+        transTimeTV = (TextView) itemView.findViewById(R.id.time_of_transaction_tv);
         transRemarkTV = (TextView) itemView.findViewById(R.id.trans_remark_tv);
         transRemarkTitleTV = (TextView) itemView.findViewById(R.id.trans_remark_heading_tv);
         transCategorySpinner = (AppCompatSpinner) itemView.findViewById(R.id.trans_category_spinner);
@@ -44,6 +48,11 @@ public class TransactionDetailViewHolder extends RecyclerView.ViewHolder
     public TextView getTransDateTV()
     {
         return transDateTV;
+    }
+
+    public TextView getTransTimeTV()
+    {
+        return transTimeTV;
     }
 
     public void setTransDateTV(TextView transDateTV)
@@ -73,5 +82,9 @@ public class TransactionDetailViewHolder extends RecyclerView.ViewHolder
 
     public AppCompatSpinner getTransCategorySpinner() {
         return transCategorySpinner;
+    }
+
+    public TextView getTransTypeTV() {
+        return transTypeTV;
     }
 }

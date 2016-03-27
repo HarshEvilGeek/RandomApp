@@ -91,6 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Amount"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
 
                 <TextView
@@ -99,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:paddingLeft="24dp"
-                    tools:text="Rs. 10000" />
+                    tools:text="₹ 10000" />
 
             </LinearLayout>
 
@@ -115,6 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Date"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
 
                 <TextView
