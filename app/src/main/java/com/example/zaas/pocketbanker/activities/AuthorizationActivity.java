@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -13,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.fragments.LoginFragment;
 import com.example.zaas.pocketbanker.fragments.PinOrFingerprintFragment;
+import com.example.zaas.pocketbanker.preferences.PocketBankerPreferences;
 import com.example.zaas.pocketbanker.utils.SecurityUtils;
 
 /**
@@ -53,7 +53,8 @@ public class AuthorizationActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void login(String custId, String pass, View view) {
+    public void login(String name, String custId, String pass, View view)
+    {
         if (loginInProgress) return;
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -63,6 +64,7 @@ public class AuthorizationActivity extends AppCompatActivity {
         loginInProgressDialog = new ProgressDialog(this);
         loginInProgressDialog.setMessage("Logging in...");
         loginInProgressDialog.show();
+        PocketBankerPreferences.put(PocketBankerPreferences.NAME, name);
         new LoginTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, userName, password);
     }
 

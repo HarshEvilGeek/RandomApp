@@ -42,4 +42,5 @@
     <string name="password">Password</string>
     <string name="log_in">LOGIN</string>
     <string name="registered_payees">Registered Payees</string>
+    <string name="name">Name</string>
 </resources>

@@ -9,17 +9,17 @@
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
-        android:src="@mipmap/icici_bank"
-        android:layout_gravity="center_horizontal"/>
+        android:src="@mipmap/icici_bank"/>
 
     <EditText
-        android:id="@+id/customer_id"
+        android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:hint="@string/customer_id"
         android:backgroundTint="@android:color/white"
+        android:hint="@string/name"
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/white">
 
@@ -27,12 +27,21 @@
     </EditText>
 
     <EditText
+        android:id="@+id/customer_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/white"
+        android:hint="@string/customer_id"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/white" />
+
+    <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/white"
         android:hint="@string/password"
         android:inputType="textPassword"
-        android:backgroundTint="@android:color/white"
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/white" />
 
@@ -40,11 +49,11 @@
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="5dp"
         android:layout_gravity="right"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/log_in"
         android:textColor="@android:color/white"
-        android:textStyle="bold"
         android:textSize="20sp"
-        android:text="@string/log_in" />
+        android:textStyle="bold" />
 </LinearLayout>

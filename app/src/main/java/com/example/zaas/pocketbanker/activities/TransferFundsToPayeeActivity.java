@@ -26,6 +26,7 @@ import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.Payee;
+import com.example.zaas.pocketbanker.preferences.PocketBankerPreferences;
 
 /**
  * Created by adugar on 3/20/16.
@@ -201,7 +202,7 @@ public class TransferFundsToPayeeActivity extends AppCompatActivity
             Account account = mAccounts.get(position);
 
             TextView name = (TextView) view.findViewById(R.id.name);
-            name.setText("Akshay Dugar");
+            name.setText(PocketBankerPreferences.get(PocketBankerPreferences.NAME));
 
             TextView accountNumber = (TextView) view.findViewById(R.id.account_number);
             accountNumber.setText(account.getAccountNumber());
