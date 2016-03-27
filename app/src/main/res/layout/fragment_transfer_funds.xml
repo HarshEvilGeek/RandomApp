@@ -14,7 +14,10 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/header_separators" />
+            <TextView
+                style="@style/HeaderStyle"
+                android:padding="@dimen/card_margin"
+                android:text="Registered Payees" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerview"
