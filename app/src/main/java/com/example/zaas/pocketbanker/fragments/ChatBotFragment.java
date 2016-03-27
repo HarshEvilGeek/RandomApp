@@ -1,5 +1,7 @@
 package com.example.zaas.pocketbanker.fragments;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import android.app.Fragment;
@@ -26,6 +28,13 @@ public class ChatBotFragment extends Fragment
 {
 
     private static String LOG_TAG = ChatBotFragment.class.getSimpleName();
+
+    private static Map<String, String> questionAnswerMap = new HashMap<>();
+    static {
+        questionAnswerMap.put("Whom do I contact for getting a Loan ?", "Loan Department");
+        questionAnswerMap.put("Why is Akhil crazy ?", "Nooo one knows!!!");
+
+    }
 
     Stack<ChatBotUIItem> mUiItems = new Stack<>();
 
@@ -71,7 +80,7 @@ public class ChatBotFragment extends Fragment
 
     private void handleSendMsgClick()
     {
-        String message = chatBox.getText().toString();
+        final String message = chatBox.getText().toString();
         ChatBotUIItem question = new ChatBotUIItem(Constants.CHAT_BOT_TYPE_QUESTION, message,
                 System.currentTimeMillis());
         mUiItems.push(question);
@@ -86,9 +95,15 @@ public class ChatBotFragment extends Fragment
             public void run()
             {
 
-                ChatBotUIItem answer = new ChatBotUIItem(Constants.CHAT_BOT_TYPE_ANSWER, "answer", System
+                String answer = "Sorry can't answer this";
+
+                if (questionAnswerMap.containsKey(message)) {
+                    answer = questionAnswerMap.get(message);
+                }
+
+                ChatBotUIItem answerUIItem = new ChatBotUIItem(Constants.CHAT_BOT_TYPE_ANSWER, answer, System
                         .currentTimeMillis());
-                mUiItems.push(answer);
+                mUiItems.push(answerUIItem);
 
                 mAdapter.setUiItems(mUiItems);
                 mAdapter.notifyDataSetChanged();

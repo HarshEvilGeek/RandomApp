@@ -1003,6 +1003,9 @@ public class NetworkHelper
                 Log.i(LOG_TAG, "wallet balance : " + walletCreditDebitResponse);
                 if(walletCreditDebitResponse.getErrorCode().equals("200")) {
                     result = true;
+                    double newBalance = walletCreditDebitResponse.getAmount();
+                    pocketAccount.setBalance(newBalance);
+                    SecurityUtils.savePocketsAccount(pocketAccount);
                 }
             }
         }
@@ -1014,9 +1017,10 @@ public class NetworkHelper
 
     }
 
-    public void debitWalletAmount(String phNumber, double amount, String promoCode, String remarks,
+    public boolean debitWalletAmount(String phNumber, double amount, String promoCode, String remarks,
                                      String subMerchant)
     {
+        boolean result = false;
         try {
 
             Log.i(LOG_TAG, "debit wallet balance  " + phNumber);
@@ -1030,8 +1034,9 @@ public class NetworkHelper
             double longitude = 73.8500124;
             String deviceId = "7b47c06dsj12243";
 
+            PocketAccount pocketAccount = SecurityUtils.getPocketsAccount();
             // TODO get from wherever
-            String authDataForWallet = "";
+            String authDataForWallet = pocketAccount.getAuthToken();
 
             String href = "rest/Wallet/debitWalletAmount";
             Log.i(LOG_TAG, "debit wallet balance with href : " + href);
@@ -1044,11 +1049,21 @@ public class NetworkHelper
 
             if (walletCreditDebitResponse != null) {
                 Log.i(LOG_TAG, "wallet balance : " + walletCreditDebitResponse);
+                if(walletCreditDebitResponse.getErrorCode().equals("200")) {
+                    Log.i(LOG_TAG, "debit successful" + walletCreditDebitResponse);
+                    result = true;
+                    double newBalance = walletCreditDebitResponse.getAmount();
+                    pocketAccount.setBalance(newBalance);
+                    SecurityUtils.savePocketsAccount(pocketAccount);
+
+                }
             }
         }
         catch (Exception e) {
             Log.e(LOG_TAG, "Exception while debiting wallet amount", e);
         }
+
+        return result;
     }
 
     public void getWalletStatement(String phNumber)
