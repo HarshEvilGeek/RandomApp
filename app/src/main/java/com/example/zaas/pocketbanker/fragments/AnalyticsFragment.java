@@ -78,13 +78,6 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.action_analytics);
-    }
-
-    @Override
     public void onStart()
     {
         super.onStart();
@@ -100,6 +93,7 @@ public class AnalyticsFragment extends Fragment implements OnChartValueSelectedL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        getActivity().setTitle(R.string.action_analytics);
         View rootView = inflater.inflate(R.layout.fragment_analytics, container, false);
         mFromDate = (TextView) rootView.findViewById(R.id.from_date);
         mToDate = (TextView) rootView.findViewById(R.id.to_date);

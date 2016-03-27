@@ -21,6 +21,7 @@ import com.example.zaas.pocketbanker.fragments.ATMBranchLocatorFragment;
 import com.example.zaas.pocketbanker.fragments.AccountSummaryFragment;
 import com.example.zaas.pocketbanker.fragments.AnalyticsFragment;
 import com.example.zaas.pocketbanker.fragments.ChatBotFragment;
+import com.example.zaas.pocketbanker.fragments.ContactUsFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsAddMoneyFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsFriendsFragment;
@@ -172,6 +173,8 @@ public class MainActivity extends BaseRestrictedActivity
             fragment = new PocketsHistoryFragment();
         } else if(id == R.id.chat_bot) {
             fragment = new ChatBotFragment();
+        } else if(id == R.id.contact_us) {
+            fragment = new ContactUsFragment();
         }
 
         goToFragment(fragment);
