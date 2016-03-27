@@ -91,6 +91,8 @@ public class MainActivity extends BaseRestrictedActivity
             if (getIntent().getIntExtra(TARGET_FRAGMENT_KEY, 0) == FRAGMENT_POCKETS_HOME) {
                 goToFragment(new PocketsHomeFragment());
             }
+        } else {
+            goToFragment(new AccountSummaryFragment());
         }
     }
 

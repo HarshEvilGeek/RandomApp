@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,9 @@ import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.fragments.PocketsAddMoneyFragment;
 import com.example.zaas.pocketbanker.models.local.PocketAccount;
 import com.example.zaas.pocketbanker.models.local.Shop;
+
+import java.util.ArrayList;
+
 import com.example.zaas.pocketbanker.sync.NetworkHelper;
 import com.example.zaas.pocketbanker.utils.Constants;
 import com.example.zaas.pocketbanker.utils.SecurityUtils;
@@ -31,16 +36,18 @@ import com.example.zaas.pocketbanker.utils.SecurityUtils;
 /**
  * Created by akhil on 3/26/16.
  */
-public class PocketShopAdapter extends RecyclerView.Adapter<PocketShopAdapter.PocketShopViewHolder>
+public class PocketShopAdapter extends RecyclerView.Adapter<PocketShopAdapter.PocketShopViewHolder> implements Filterable
 {
     private Context mContext;
     private LayoutInflater mInflater;
+    private List<Shop> mOriginalList;
     private List<Shop> mShopList;
 
     public PocketShopAdapter(Context context, List<Shop> shopList)
     {
         mContext = context;
         mInflater = LayoutInflater.from(context);
+        mOriginalList = shopList;
         mShopList = shopList;
     }
 
@@ -108,7 +115,7 @@ public class PocketShopAdapter extends RecyclerView.Adapter<PocketShopAdapter.Po
 
     private void buyWithWallet(double amount)
     {
-        new BuyItem().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Double[] { amount });
+        new BuyItem().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Double[]{amount});
     }
 
     private void showLessFundsDialog()
@@ -147,6 +154,45 @@ public class PocketShopAdapter extends RecyclerView.Adapter<PocketShopAdapter.Po
     public int getItemCount()
     {
         return mShopList.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+
+        Filter filter = new Filter() {
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mShopList = (List<Shop>) results.values;
+                notifyDataSetChanged();
+            }
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                FilterResults results = new FilterResults();
+                List<Shop> filteredShops = new ArrayList<>();
+
+                // perform your search here using the searchConstraint String.
+
+                constraint = constraint.toString().toLowerCase();
+                for (int i = 0; i < mOriginalList.size(); i++) {
+                    String shopName = mOriginalList.get(i).getName();
+                    if (shopName.toLowerCase().startsWith(constraint.toString()))  {
+                        filteredShops.add(mOriginalList.get(i));
+                    }
+                }
+
+                results.count = filteredShops.size();
+                results.values = filteredShops;
+                Log.e("VALUES", results.values.toString());
+
+                return results;
+            }
+        };
+
+        return filter;
     }
 
     public class PocketShopViewHolder extends RecyclerView.ViewHolder
