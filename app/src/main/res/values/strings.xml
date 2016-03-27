@@ -9,7 +9,7 @@
     <string name="action_transfer">Transfer Funds</string>
     <string name="action_locator">ATM/Branch Locator</string>
     <string name="action_analytics">Analytics</string>
-    <string name="action_recommendations">Recommendations</string>
+    <string name="action_recommendations">Offers</string>
     <string name="action_pocket">Pockets</string>
     <string name="action_settings">Settings</string>
     <string name="payee_name_default">Payee Name</string>
