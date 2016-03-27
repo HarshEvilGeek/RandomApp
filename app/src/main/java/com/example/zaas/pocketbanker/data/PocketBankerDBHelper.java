@@ -146,9 +146,34 @@ public class PocketBankerDBHelper
         shop3.setId(3);
         shop3.setName("Book My Show");
         shop3.setUrl("http://www.afaqs.com/all/news/images/news_story_grfx/2013/12/39336/Bookmyshow-new-logo.jpg");
+        Shop shop4 = new Shop();
+        shop4.setId(4);
+        shop4.setName("Domino's Pizza");
+        shop4.setUrl("http://www.techyville.com/wp-content/uploads/2015/01/dominos.png");
+        Shop shop5 = new Shop();
+        shop5.setId(5);
+        shop5.setName("Gucci");
+        shop5.setUrl("http://cdn-4.famouslogos.us/images/gucci-logo.jpg");
+        Shop shop6 = new Shop();
+        shop6.setId(6);
+        shop6.setName("Myntra");
+        shop6.setUrl("http://techstory.in/wp-content/uploads/2016/02/Myntra-Customer-Care-Contact-Phone-Number.png");
+        Shop shop7 = new Shop();
+        shop7.setId(7);
+        shop7.setName("Amazon");
+        shop7.setUrl("http://scottmarshallmusic.com/wp-content/uploads/2015/01/amazon-icon.png");
+        Shop shop8 = new Shop();
+        shop8.setId(8);
+        shop8.setName("Body Shop");
+        shop8.setUrl("https://appscommon.blob.core.windows.net/muscat-container/images/shopImages/body_shop_logo.jpg");
         shopList.add(shop);
         shopList.add(shop2);
         shopList.add(shop3);
+        shopList.add(shop4);
+        shopList.add(shop5);
+        shopList.add(shop6);
+        shopList.add(shop7);
+        shopList.add(shop8);
         return shopList;
     }
 
