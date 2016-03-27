@@ -1,4 +1,4 @@
-package com.example.zaas.pocketbanker.fragments;
+package com.example.zaas.pocketbanker.activities;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,19 +7,19 @@ import java.util.List;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Time;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,8 +36,7 @@ import com.example.zaas.pocketbanker.utils.Constants;
 /**
  * Created by zaraahmed on 3/20/16.
  */
-public class TransactionsListFragment extends Fragment
-{
+public class TransactionsListActivity extends AppCompatActivity {
 
     RecyclerView mTransactionListFragmentRV;
 
@@ -55,25 +54,32 @@ public class TransactionsListFragment extends Fragment
 
     private static final int FROM_DATE_PICKER_ID = 1000;
     private static final int TO_DATE_PICKER_ID = 1001;
+    private Context mContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-    }
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            finish();
+            return;
+        }
+        handleExtras(extras);
+        mContext = this;
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setTitle("Acc. # " + accountNo);
+            ab.setHomeButtonEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
+        setContentView(R.layout.activity_transaction_list);
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-
-        View rootView = inflater.inflate(R.layout.transaction_list_fragment_layout, container, false);
-
-        mTransactionListFragmentRV = (RecyclerView) rootView.findViewById(R.id.transaction_list_fragment_RV);
-        fromDateTV = (TextView) rootView.findViewById(R.id.from_date);
-        toDateTV = (TextView) rootView.findViewById(R.id.to_date);
-        dateSelectionTextTV = (TextView) rootView.findViewById(R.id.date_selection_text);
-        fetchTransactionIV = (ImageView) rootView.findViewById(R.id.fetch_transaction_button);
+        mTransactionListFragmentRV = (RecyclerView) findViewById(R.id.transaction_list_fragment_RV);
+        fromDateTV = (TextView) findViewById(R.id.from_date);
+        toDateTV = (TextView) findViewById(R.id.to_date);
+        dateSelectionTextTV = (TextView) findViewById(R.id.date_selection_text);
+        fetchTransactionIV = (ImageView) findViewById(R.id.fetch_transaction_button);
         fetchTransactionIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -81,19 +87,14 @@ public class TransactionsListFragment extends Fragment
                 fetchTransactions();
             }
         });
-        mTransactionsListSwipeRefresh = (SwipeRefreshLayout) rootView
-                .findViewById(R.id.transactions_list_swipe_refresh);
+        mTransactionsListSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.transactions_list_swipe_refresh);
         mTransactionsListSwipeRefresh.setColorSchemeColors(Color.BLUE);
 
         // we dont need the pull to refresh option in this fragment
         disablePullToRefresh();
         setDatePickers();
-        populateArguments();
         populateDatePickerHeading();
-        getActivity().setTitle("Acc. # " + accountNo);
         loadData();
-        return rootView;
-
     }
 
     private void disablePullToRefresh()
@@ -172,11 +173,11 @@ public class TransactionsListFragment extends Fragment
         {
         case FROM_DATE_PICKER_ID:
             initialDate.set(mFromDateValue);
-            return new DatePickerDialog(getActivity(), R.style.DatePickerTheme, fromdatePickerListener, initialDate.year, initialDate.month,
+            return new DatePickerDialog(mContext, R.style.DatePickerTheme, fromdatePickerListener, initialDate.year, initialDate.month,
                     initialDate.monthDay);
         case TO_DATE_PICKER_ID:
             initialDate.set(mToDateValue);
-            return new DatePickerDialog(getActivity(),R.style.DatePickerTheme, todatePickerListener, initialDate.year, initialDate.month,
+            return new DatePickerDialog(mContext,R.style.DatePickerTheme, todatePickerListener, initialDate.year, initialDate.month,
                     initialDate.monthDay);
         }
         return null;
@@ -214,14 +215,11 @@ public class TransactionsListFragment extends Fragment
                 + toDateTV.getText().toString());
     }
 
-    private void populateArguments()
+    private void handleExtras(Bundle extras)
     {
-        Bundle args = getArguments();
-        if (args != null) {
-
-            accountNo = args.getString(Constants.SUMMARY_DETAIL_FRAGMENT_ACCOUNT_NUMBER);
-            headerType = args.getString(Constants.SUMMARY_DETAIL_FRAGMENT_HEADER_TYPE);
-
+        if (extras != null) {
+            accountNo = extras.getString(Constants.SUMMARY_DETAIL_FRAGMENT_ACCOUNT_NUMBER);
+            headerType = extras.getString(Constants.SUMMARY_DETAIL_FRAGMENT_HEADER_TYPE);
         }
     }
 
@@ -303,7 +301,7 @@ public class TransactionsListFragment extends Fragment
         protected void onPostExecute(List<TransactionDataUIItem> uiItems)
         {
             if (mAdapter == null) {
-                mAdapter = new TransactionsListFragmentAdapter(getActivity(), uiItems);
+                mAdapter = new TransactionsListFragmentAdapter(mContext, uiItems);
                 mTransactionListFragmentRV.setAdapter(mAdapter);
                 mTransactionListFragmentRV.setLayoutManager(new LinearLayoutManager(mTransactionListFragmentRV
                         .getContext()));
@@ -352,6 +350,18 @@ public class TransactionsListFragment extends Fragment
             loadData();
             stopProgressInPullToRefresh();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

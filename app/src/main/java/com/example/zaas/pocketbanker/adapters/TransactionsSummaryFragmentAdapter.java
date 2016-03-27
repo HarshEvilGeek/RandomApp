@@ -1,14 +1,12 @@
 package com.example.zaas.pocketbanker.adapters;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.zaas.pocketbanker.R;
-import com.example.zaas.pocketbanker.fragments.TransactionsListFragment;
+import com.example.zaas.pocketbanker.activities.TransactionsListActivity;
 import com.example.zaas.pocketbanker.models.local.TransactionSummaryUIItem;
 import com.example.zaas.pocketbanker.utils.Constants;
 import com.example.zaas.pocketbanker.utils.DateUtils;
@@ -142,18 +140,10 @@ public class TransactionsSummaryFragmentAdapter extends RecyclerView.Adapter<Rec
         @Override
         public void onClick(View view)
         {
-
-            TransactionsListFragment fragment = new TransactionsListFragment();
-            Bundle args = new Bundle();
-            args.putString(Constants.SUMMARY_DETAIL_FRAGMENT_HEADER_TYPE, headerType);
-            args.putString(Constants.SUMMARY_DETAIL_FRAGMENT_ACCOUNT_NUMBER, transTitleTV.getText().toString());
-            fragment.setArguments(args);
-            FragmentManager fragmentManager = ((Activity) mContext).getFragmentManager();
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.replace(R.id.content_frame, fragment);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            // ft.addToBackStack(null);
-            ft.commit();
+            Intent listIntent = new Intent(mContext, TransactionsListActivity.class);
+            listIntent.putExtra(Constants.SUMMARY_DETAIL_FRAGMENT_HEADER_TYPE, headerType);
+            listIntent.putExtra(Constants.SUMMARY_DETAIL_FRAGMENT_ACCOUNT_NUMBER, transTitleTV.getText().toString());
+            mContext.startActivity(listIntent);
         }
     }
 

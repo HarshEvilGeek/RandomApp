@@ -6,22 +6,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.adapters.AccountSummaryDetailFragmentAdapter;
@@ -56,6 +51,12 @@ public class AccountSummaryDetailActivity extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            finish();
+            return;
+        }
+        handleExtras(extras);
         mContext = this;
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
@@ -63,7 +64,7 @@ public class AccountSummaryDetailActivity extends AppCompatActivity
             ab.setHomeButtonEnabled(true);
             ab.setDisplayHomeAsUpEnabled(true);
         }
-        setContentView(R.layout.account_summary_detail_fragment);
+        setContentView(R.layout.activity_account_summary_detail);
 
         mAccountSummaryDetailFragmentRV = (RecyclerView) findViewById(R.id.account_summary_detail_fragment_RV);
         mAccountSummaryDetailSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.account_summary_detail_swipe_refresh);
@@ -74,10 +75,6 @@ public class AccountSummaryDetailActivity extends AppCompatActivity
             }
         });
         mAccountSummaryDetailSwipeRefresh.setColorSchemeColors(Color.BLUE);
-
-        setTitle("Summary");
-        Bundle extras = getIntent().getExtras();
-        handleExtras(extras);
         loadData(true);
     }
 
