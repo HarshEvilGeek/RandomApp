@@ -1,6 +1,12 @@
 package com.example.zaas.pocketbanker.adapters;
 
+import java.util.List;
+
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,10 +23,15 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.zaas.pocketbanker.R;
+import com.example.zaas.pocketbanker.fragments.PocketsAddMoneyFragment;
+import com.example.zaas.pocketbanker.models.local.PocketAccount;
 import com.example.zaas.pocketbanker.models.local.Shop;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import com.example.zaas.pocketbanker.sync.NetworkHelper;
+import com.example.zaas.pocketbanker.utils.Constants;
+import com.example.zaas.pocketbanker.utils.SecurityUtils;
 
 /**
  * Created by akhil on 3/26/16.
@@ -29,12 +40,14 @@ public class PocketShopAdapter extends RecyclerView.Adapter<PocketShopAdapter.Po
 {
     private Context mContext;
     private LayoutInflater mInflater;
+    private List<Shop> mOriginalList;
     private List<Shop> mShopList;
 
     public PocketShopAdapter(Context context, List<Shop> shopList)
     {
         mContext = context;
         mInflater = LayoutInflater.from(context);
+        mOriginalList = shopList;
         mShopList = shopList;
     }
 
@@ -53,7 +66,8 @@ public class PocketShopAdapter extends RecyclerView.Adapter<PocketShopAdapter.Po
         holder.messageTv.setText(recommendation.getName());
         holder.buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 showBuyDialog(recommendation.getId(), recommendation.getName());
             }
         });
@@ -62,38 +76,78 @@ public class PocketShopAdapter extends RecyclerView.Adapter<PocketShopAdapter.Po
     private void showBuyDialog(final int id, final String name)
     {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         View rootView = LayoutInflater.from(mContext).inflate(R.layout.buy_layout, null, false);
+        builder.setView(rootView);
+        builder.setTitle("Purchase");
+        final AlertDialog dialog = builder.show();
 
         final EditText moneyField = (EditText) rootView.findViewById(R.id.buy_field);
         final Button buyButton = (Button) rootView.findViewById(R.id.buy_button);
 
         buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
 
                 double amount = 0.0;
                 try {
                     amount = Double.parseDouble(moneyField.getText().toString());
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     Toast.makeText(mContext, "Invalid amount", Toast.LENGTH_LONG).show();
                 }
                 if (amount > 0) {
                     buyWithWallet(amount);
-                } else {
+                }
+                else {
                     Toast.makeText(mContext, "Invalid amount", Toast.LENGTH_LONG).show();
+                }
+
+                if(dialog != null) {
+                    dialog.dismiss();
                 }
             }
         });
 
-        // Set grid view to alertDialog
-        builder.setView(rootView);
-        builder.setTitle("Purchase");
-        builder.show();
+
     }
 
-    private void buyWithWallet(double amount) {
-        Toast.makeText(mContext, "WOHOOO", Toast.LENGTH_LONG).show();
+    private void buyWithWallet(double amount)
+    {
+        new BuyItem().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Double[]{amount});
+    }
+
+    private void showLessFundsDialog()
+    {
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("Pocket transaction failed!");
+            builder.setMessage("Transaction failed due to limited funds in Pocket. Press continue to add more funds.");
+            builder.setPositiveButton("Add Funds", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    PocketsAddMoneyFragment fragment = new PocketsAddMoneyFragment();
+                    FragmentManager fragmentManager = ((Activity) mContext).getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                }
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                }
+            });
+
+            builder.create().show();
+        }
+        catch (Exception e) {
+            Log.e("LOG_TAG", "Exception while showing add funds dialog");
+        }
+
     }
 
     @Override
@@ -123,10 +177,10 @@ public class PocketShopAdapter extends RecyclerView.Adapter<PocketShopAdapter.Po
                 // perform your search here using the searchConstraint String.
 
                 constraint = constraint.toString().toLowerCase();
-                for (int i = 0; i < mShopList.size(); i++) {
-                    String shopName = mShopList.get(i).getName();
+                for (int i = 0; i < mOriginalList.size(); i++) {
+                    String shopName = mOriginalList.get(i).getName();
                     if (shopName.toLowerCase().startsWith(constraint.toString()))  {
-                        filteredShops.add(mShopList.get(i));
+                        filteredShops.add(mOriginalList.get(i));
                     }
                 }
 
@@ -153,6 +207,54 @@ public class PocketShopAdapter extends RecyclerView.Adapter<PocketShopAdapter.Po
             imageView = (ImageView) itemView.findViewById(R.id.image);
             messageTv = (TextView) itemView.findViewById(R.id.shop_name);
             buyButton = (Button) itemView.findViewById(R.id.buy_button);
+        }
+    }
+
+    public class BuyItem extends AsyncTask<Double, Void, Integer>
+    {
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Integer doInBackground(Double... params)
+        {
+            int result = Constants.WALLET_PURCHASE_TRANSACTION_FAILED;
+            NetworkHelper networkHelper = new NetworkHelper();
+            PocketAccount pocketAccount = SecurityUtils.getPocketsAccount();
+            double balance = networkHelper.getWalletBalance(pocketAccount.getPhoneNumber());
+            if (balance < params[0]) {
+                result = Constants.WALLET_PURCHASE_TRANSACTION_FAILED_DUE_TO_LESS_FUNDS;
+            }
+            else {
+                boolean transactionResult = networkHelper.debitWalletAmount(pocketAccount.getPhoneNumber(), params[0],
+                        "promo1", "Adding funds", "submerchant1");
+                if (transactionResult) {
+                    result = Constants.WALLET_PURCHASE_SUCCESSFUL;
+                }
+                else {
+                    result = Constants.WALLET_PURCHASE_TRANSACTION_FAILED;
+                }
+
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result)
+        {
+            if (result == Constants.WALLET_PURCHASE_SUCCESSFUL) {
+                Toast.makeText(mContext, "Purchase successful", Toast.LENGTH_LONG).show();
+            }
+            else if (result == Constants.WALLET_PURCHASE_TRANSACTION_FAILED) {
+                Toast.makeText(mContext, "Purchase failed.", Toast.LENGTH_LONG).show();
+            }
+            else if (result == Constants.WALLET_PURCHASE_TRANSACTION_FAILED_DUE_TO_LESS_FUNDS) {
+                showLessFundsDialog();
+            }
         }
     }
 }

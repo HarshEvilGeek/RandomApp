@@ -59,7 +59,7 @@ public class AccountSummaryFragment extends Fragment
         });
         mAccountSummarySwipeRefresh.setColorSchemeColors(Color.BLUE);
         getActivity().setTitle("Summary");
-        loadData(false);
+        loadData(true);
         return rootView;
     }
 

@@ -25,7 +25,7 @@
         <item
             android:id="@+id/recommendations"
             android:icon="@drawable/ic_recommendations"
-            android:title="Recommendations" />
+            android:title="@string/action_recommendations" />
     </group>
 
     <item android:title="Pockets">

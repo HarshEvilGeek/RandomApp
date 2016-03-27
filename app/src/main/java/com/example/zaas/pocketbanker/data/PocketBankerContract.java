@@ -101,9 +101,10 @@ public class PocketBankerContract {
     {
         String RECOMMENDATION_ID = "recommendation_id";
         String MESSAGE = "message";
-        String URL = "url";
+        String IMAGE_URL = "image_url";
         String CATEGORY = "category";
         String REASON = "reason";
+        String OPEN_URL = "open_url";
     }
 
     public static class Account implements BaseColumns, AccountBaseColumns, AccountColumns

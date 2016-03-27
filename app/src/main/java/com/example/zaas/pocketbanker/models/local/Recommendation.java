@@ -17,7 +17,8 @@ public class Recommendation extends DbModel
     private int id;
     private String recommendationId;
     private String message;
-    private String url;
+    private String imageUrl;
+    private String openUrl;
     private TransactionCategoryUtils.Category category;
     private String reason;
 
@@ -26,12 +27,13 @@ public class Recommendation extends DbModel
 
     }
 
-    public Recommendation(String recommendationId, String message, String url,
+    public Recommendation(String recommendationId, String message, String imageUrl, String openUrl,
             TransactionCategoryUtils.Category category, String reason)
     {
         this.recommendationId = recommendationId;
         this.message = message;
-        this.url = url;
+        this.imageUrl = imageUrl;
+        this.openUrl = openUrl;
         this.category = category;
         this.reason = reason;
     }
@@ -66,14 +68,24 @@ public class Recommendation extends DbModel
         this.message = message;
     }
 
-    public String getUrl()
+    public String getImageUrl()
     {
-        return url;
+        return imageUrl;
     }
 
-    public void setUrl(String url)
+    public void setImageUrl(String imageUrl)
     {
-        this.url = url;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getOpenUrl()
+    {
+        return openUrl;
+    }
+
+    public void setOpenUrl(String openUrl)
+    {
+        this.openUrl = openUrl;
     }
 
     public TransactionCategoryUtils.Category getCategory()
@@ -104,7 +116,8 @@ public class Recommendation extends DbModel
             setRecommendationId(cursor.getString(cursor
                     .getColumnIndex(PocketBankerContract.Recommendations.RECOMMENDATION_ID)));
             setMessage(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Recommendations.MESSAGE)));
-            setUrl(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Recommendations.URL)));
+            setImageUrl(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Recommendations.IMAGE_URL)));
+            setOpenUrl(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Recommendations.OPEN_URL)));
             setCategory(TransactionCategoryUtils.Category.values()[cursor.getInt(cursor
                     .getColumnIndex(PocketBankerContract.Recommendations.CATEGORY))]);
             setReason(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Recommendations.REASON)));
@@ -136,7 +149,8 @@ public class Recommendation extends DbModel
         ContentValues cv = new ContentValues();
         cv.put(PocketBankerContract.Recommendations.RECOMMENDATION_ID, recommendationId);
         cv.put(PocketBankerContract.Recommendations.MESSAGE, message);
-        cv.put(PocketBankerContract.Recommendations.URL, url);
+        cv.put(PocketBankerContract.Recommendations.IMAGE_URL, imageUrl);
+        cv.put(PocketBankerContract.Recommendations.OPEN_URL, openUrl);
         cv.put(PocketBankerContract.Recommendations.CATEGORY, category.ordinal());
         cv.put(PocketBankerContract.Recommendations.REASON, reason);
         return cv;
