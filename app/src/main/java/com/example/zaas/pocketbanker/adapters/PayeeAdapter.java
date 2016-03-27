@@ -53,7 +53,7 @@ public class PayeeAdapter extends RecyclerView.Adapter<PayeeAdapter.PayeeViewHol
     {
         Payee payee = mPayeeList.get(position);
         holder.name.setText(payee.getName());
-        holder.shortName.setText(payee.getShortName());
+        holder.accountNumber.setText(payee.getAccountNo());
     }
 
     @Override
@@ -70,14 +70,14 @@ public class PayeeAdapter extends RecyclerView.Adapter<PayeeAdapter.PayeeViewHol
     public class PayeeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         private final TextView name;
-        private final TextView shortName;
+        private final TextView accountNumber;
 
         public PayeeViewHolder(View itemView)
         {
             super(itemView);
             itemView.setOnClickListener(this);
             name = (TextView) itemView.findViewById(R.id.name);
-            shortName = (TextView) itemView.findViewById(R.id.short_name);
+            accountNumber = (TextView) itemView.findViewById(R.id.account_number);
         }
 
         @Override
