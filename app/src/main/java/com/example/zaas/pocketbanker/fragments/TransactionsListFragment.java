@@ -90,7 +90,7 @@ public class TransactionsListFragment extends Fragment
         setDatePickers();
         populateArguments();
         populateDatePickerHeading();
-        getActivity().setTitle("Transactions for " + accountNo);
+        getActivity().setTitle("Acc. " + accountNo);
         loadData();
         return rootView;
 
@@ -135,10 +135,10 @@ public class TransactionsListFragment extends Fragment
     private void populateDatePickerHeading()
     {
         if (Constants.HEADER_TYPE_BANKACCOUNT.equals(headerType) || Constants.HEADER_TYPE_CARD.equals(headerType)) {
-            dateSelectionTextTV.setText("Transaction History:");
+            dateSelectionTextTV.setText("Transaction History");
         }
         else if (Constants.HEADER_TYPE_LOANACCOUNT.equals(headerType)) {
-            dateSelectionTextTV.setText("EMI History:");
+            dateSelectionTextTV.setText("EMI History");
         }
     }
 
