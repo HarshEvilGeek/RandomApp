@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.BranchAtm;
+import com.example.zaas.pocketbanker.utils.AtmBranchUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,6 +34,7 @@ public class BranchAtmMapActivity extends AppCompatActivity implements OnMapRead
     private boolean mIsSingleMode;
     private int mSingleBranchAtmID;
     private List<BranchAtm> mBranchATMs;
+    private List<BranchAtm> mDummyBranchATMs;
     // TODO: implement this
     private LatLng mCurrentLocation;
     private GoogleMap mMap;
@@ -53,6 +55,7 @@ public class BranchAtmMapActivity extends AppCompatActivity implements OnMapRead
             ab.setDisplayHomeAsUpEnabled(true);
         }
         mBranchATMs = PocketBankerDBHelper.getInstance().getAllBranchAtms();
+        mDummyBranchATMs = AtmBranchUtils.getDummyBranchAtms();
         mIsSingleMode = extras.getBoolean(SINGLE_MAP_KEY);
         handleExtras(extras);
         setContentView(R.layout.activity_atm_branch_map);
@@ -126,6 +129,9 @@ public class BranchAtmMapActivity extends AppCompatActivity implements OnMapRead
             for (BranchAtm branchAtm : mBranchATMs) {
                 addMarker(branchAtm);
                 builder.include(branchAtm.getMapLocation());
+            }
+            for (BranchAtm branchAtm : mDummyBranchATMs) {
+                addMarker(branchAtm);
             }
             LatLngBounds bounds = builder.build();
             mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));

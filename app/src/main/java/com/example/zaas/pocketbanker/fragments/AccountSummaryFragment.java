@@ -32,17 +32,15 @@ import com.example.zaas.pocketbanker.utils.Constants;
 public class AccountSummaryFragment extends Fragment
 {
 
+    private static String LOG_TAG = AccountSummaryFragment.class.getSimpleName();
     RecyclerView mAccountSummaryRV;
     AccountSummaryFragmentAdapter mAdapter;
     SwipeRefreshLayout mAccountSummarySwipeRefresh;
-
-    private static String LOG_TAG = AccountSummaryFragment.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        // testAccountSummary();
     }
 
     @Nullable
@@ -131,7 +129,7 @@ public class AccountSummaryFragment extends Fragment
 
                 try {
                     String testDesc = URLEncoder.encode("test description", "UTF-8");
-                    nh.transferFunds("88881949", "5555666677770950", "5555666677770949", 10000, testDesc, 1, "PMR");
+                    nh.transferFunds("5555666677770950", "5555666677770949", 10000, testDesc, 1, "PMR");
                     // nh.getBranchAtmLocations("ATM", 72.9376984, 19.1445007);
                     nh.getLoanAccountSummary("88881949");
                     nh.getLoanEMIDetails("LBMUM11112220949");

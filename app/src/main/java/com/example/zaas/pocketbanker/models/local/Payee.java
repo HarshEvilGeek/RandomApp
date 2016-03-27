@@ -1,11 +1,15 @@
 package com.example.zaas.pocketbanker.models.local;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
 
 import com.example.zaas.pocketbanker.data.PocketBankerContract;
 import com.example.zaas.pocketbanker.data.PocketBankerOpenHelper;
+import com.example.zaas.pocketbanker.models.network.RegisteredPayees;
 
 /**
  * Model for Payee Created by adugar on 3/19/16.
@@ -37,8 +41,19 @@ public class Payee extends DbModel
         this.customerId = customerId;
     }
 
+    public Payee(RegisteredPayees registeredPayee)
+    {
+        payeeId = registeredPayee.getPayeeid();
+        name = registeredPayee.getPayeename();
+        accountNo = registeredPayee.getPayeeaccountno();
+        shortName = registeredPayee.getShortname();
+        customerId = registeredPayee.getCustid();
+        creationDate = getTimeInMillis(registeredPayee.getCreationdate());
+    }
+
     @Override
-    public void instantiateFromCursor(Cursor cursor) {
+    public void instantiateFromCursor(Cursor cursor)
+    {
         if (cursor != null) {
             setId(cursor.getInt(cursor.getColumnIndex(PocketBankerContract.Payees._ID)));
             setPayeeId(cursor.getString(cursor.getColumnIndex(PocketBankerContract.Payees.PAYEE_ID)));
@@ -53,17 +68,20 @@ public class Payee extends DbModel
     }
 
     @Override
-    public String getSelectionString() {
+    public String getSelectionString()
+    {
         return PocketBankerContract.Payees.PAYEE_ID + " = ?";
     }
 
     @Override
-    public String[] getSelectionValues() {
-        return new String[] {payeeId};
+    public String[] getSelectionValues()
+    {
+        return new String[] { payeeId };
     }
 
     @Override
-    public boolean isEqual(DbModel model) {
+    public boolean isEqual(DbModel model)
+    {
         return model instanceof Payee && payeeId.equals(((Payee) model).getPayeeId());
     }
 
@@ -80,8 +98,23 @@ public class Payee extends DbModel
     }
 
     @Override
-    public String getTable() {
+    public String getTable()
+    {
         return PocketBankerOpenHelper.Tables.PAYEES;
+    }
+
+    private long getTimeInMillis(String dateString)
+    {
+        long milliseconds = System.currentTimeMillis();
+        try {
+            SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = f.parse(dateString);
+            milliseconds = d.getTime();
+        }
+        catch (Exception e) {
+            //
+        }
+        return milliseconds;
     }
 
     public int getId()

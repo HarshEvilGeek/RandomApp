@@ -88,7 +88,7 @@ public class AccountSummaryFragmentAdapter extends RecyclerView.Adapter<Recycler
 
             AccountSummaryFragmentHeaderViewHolder vh = (AccountSummaryFragmentHeaderViewHolder) holder;
 
-            vh.headerTV.setText(uiItem.getTitle());
+            vh.headerTV.setText(uiItem.getTitle() + "S");
 
         }
         else if (Constants.SUMMARY_ITEM_TYPE_ITEM == uiItem.getItemType()) {

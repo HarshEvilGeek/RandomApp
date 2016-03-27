@@ -1,5 +1,8 @@
 package com.example.zaas.pocketbanker.activities;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -9,7 +12,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -21,14 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zaas.pocketbanker.R;
-import com.example.zaas.pocketbanker.fragments.PinOrFingerprintFragment;
 import com.example.zaas.pocketbanker.models.local.PocketAccount;
+import com.example.zaas.pocketbanker.preferences.PocketBankerPreferences;
 import com.example.zaas.pocketbanker.sync.NetworkHelper;
 import com.example.zaas.pocketbanker.utils.Constants;
-import com.example.zaas.pocketbanker.utils.SecurityUtils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by akhil on 3/25/16.
@@ -43,13 +41,21 @@ public class CreatePocketsActivity extends BaseRestrictedActivity {
     RadioGroup genderGroup;
     RadioButton genderMale;
     RadioButton genderFemale;
-
-    private long birthdayValue = System.currentTimeMillis() - (21 * Constants.ONE_YEAR_IN_MILLIS);
-
     ProgressDialog createProgressDialog;
     boolean createInProgress = false;
-
     Button createOrLogin;
+    private long birthdayValue = System.currentTimeMillis() - (21 * Constants.ONE_YEAR_IN_MILLIS);
+    private DatePickerDialog.OnDateSetListener birthdayPickerListener = new DatePickerDialog.OnDateSetListener() {
+
+        // when dialog box is closed, below method will be called.
+        public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay)
+        {
+            Time updateDate = new Time();
+            updateDate.set(selectedDay, selectedMonth, selectedYear);
+            birthdayValue = updateDate.normalize(true);
+            updateDates();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +74,18 @@ public class CreatePocketsActivity extends BaseRestrictedActivity {
         genderMale = (RadioButton) findViewById(R.id.gender_male);
         genderFemale = (RadioButton) findViewById(R.id.gender_female);
 
-        createOrLogin = (Button) findViewById(R.id.create_or_login);
+        String name = PocketBankerPreferences.get(PocketBankerPreferences.NAME);
+        if (!TextUtils.isEmpty(name)) {
+            if (name.contains(" ")) {
+                firstName.setText(name.substring(0, name.indexOf(" ")));
+                lastName.setText(name.substring(name.indexOf(" ") + 1, name.length()));
+            }
+            else {
+                firstName.setText(name);
+            }
+        }
 
+        createOrLogin = (Button) findViewById(R.id.create_or_login);
         createOrLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,7 +122,6 @@ public class CreatePocketsActivity extends BaseRestrictedActivity {
         setDatePickers();
     }
 
-
     private void setDatePickers() {
         birthDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,16 +144,13 @@ public class CreatePocketsActivity extends BaseRestrictedActivity {
                 initialDate.monthDay);
     }
 
-    private DatePickerDialog.OnDateSetListener birthdayPickerListener = new DatePickerDialog.OnDateSetListener() {
+    private void startPocketsActivity()
+    {
+        Intent intent = new Intent(CreatePocketsActivity.this, MainActivity.class);
+        intent.putExtra(MainActivity.TARGET_FRAGMENT_KEY, MainActivity.FRAGMENT_POCKETS_HOME);
+        CreatePocketsActivity.this.startActivity(intent);
 
-        // when dialog box is closed, below method will be called.
-        public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
-            Time updateDate = new Time();
-            updateDate.set(selectedDay, selectedMonth, selectedYear);
-            birthdayValue = updateDate.normalize(true);
-            updateDates();
-        }
-    };
+    }
 
     class CreatePocketsTask extends AsyncTask<PocketAccount, String, String> {
 
@@ -172,13 +184,5 @@ public class CreatePocketsActivity extends BaseRestrictedActivity {
                 Toast.makeText(CreatePocketsActivity.this, "Pockets creation or linking failed.", Toast.LENGTH_LONG).show();
             }
         }
-    }
-
-    private void startPocketsActivity()
-    {
-        Intent intent = new Intent(CreatePocketsActivity.this, MainActivity.class);
-        intent.putExtra(MainActivity.TARGET_FRAGMENT_KEY, MainActivity.FRAGMENT_POCKETS_HOME);
-        CreatePocketsActivity.this.startActivity(intent);
-
     }
 }

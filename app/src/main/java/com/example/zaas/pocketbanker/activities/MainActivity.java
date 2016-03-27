@@ -6,29 +6,32 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.fragments.ATMBranchLocatorFragment;
 import com.example.zaas.pocketbanker.fragments.AccountSummaryFragment;
 import com.example.zaas.pocketbanker.fragments.AnalyticsFragment;
+import com.example.zaas.pocketbanker.fragments.ChatBotFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsAddMoneyFragment;
-import com.example.zaas.pocketbanker.fragments.PocketsRechargeShopFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsFriendsFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsHistoryFragment;
 import com.example.zaas.pocketbanker.fragments.PocketsHomeFragment;
+import com.example.zaas.pocketbanker.fragments.PocketsRechargeShopFragment;
 import com.example.zaas.pocketbanker.fragments.RecommendationsFragment;
 import com.example.zaas.pocketbanker.fragments.TransactionsFragment;
 import com.example.zaas.pocketbanker.fragments.TransferFundsFragment;
 import com.example.zaas.pocketbanker.interfaces.IFloatingButtonListener;
+import com.example.zaas.pocketbanker.preferences.PocketBankerPreferences;
 import com.example.zaas.pocketbanker.utils.SecurityUtils;
 
 /**
@@ -79,6 +82,9 @@ public class MainActivity extends BaseRestrictedActivity
             navigationView.inflateMenu(R.menu.activity_main_drawer_with_pockets);
         }
         navigationView.setNavigationItemSelectedListener(this);
+
+        TextView nameTv = (TextView) navigationView.getHeaderView(0).findViewById(R.id.accountName);
+        nameTv.setText(PocketBankerPreferences.get(PocketBankerPreferences.NAME));
 
         if (getIntent() != null && getIntent().getIntExtra(TARGET_FRAGMENT_KEY, 0) > 0) {
             if (getIntent().getIntExtra(TARGET_FRAGMENT_KEY, 0) == FRAGMENT_POCKETS_HOME) {
@@ -164,6 +170,8 @@ public class MainActivity extends BaseRestrictedActivity
             fragment = new PocketsFriendsFragment();
         } else if (id == R.id.pockets_history) {
             fragment = new PocketsHistoryFragment();
+        } else if(id == R.id.chat_bot) {
+            fragment = new ChatBotFragment();
         }
 
         goToFragment(fragment);

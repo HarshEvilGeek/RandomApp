@@ -36,4 +36,6 @@ public interface Constants
     String WALLET_CREATED_SUCCESSFULLY = "Wallet Created Successfully";
     String WALLET_ALREADY_EXISTS = "Wallet Already Exist";
     String WALLET_CREATION_FAILED = "WALLET_CREATION_FAILED";
+    String CHAT_BOT_TYPE_QUESTION = "question";
+    String CHAT_BOT_TYPE_ANSWER = "answer";
  }
