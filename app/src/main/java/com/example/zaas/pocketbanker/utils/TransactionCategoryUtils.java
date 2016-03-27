@@ -27,6 +27,49 @@ public class TransactionCategoryUtils
     private static final String DUMMY_ACCOUNT_NUMBER_1 = "120938029383";
     private static Map<String, Category> sTransactionCategoryMap;
 
+    public static String getMerchant(String remark)
+    {
+        if (TextUtils.isEmpty(remark)) {
+            return getRandomMerchant();
+        }
+
+        if (remark.toLowerCase().contains("pmr")) {
+            return "pmr";
+        }
+        if (remark.toLowerCase().contains("fuel")) {
+            return "uber";
+        }
+        else if (remark.toLowerCase().contains("car")) {
+            return "uber";
+        }
+        else if (remark.toLowerCase().contains("movie")) {
+            return "pvr";
+        }
+        else if (remark.toLowerCase().contains("restaurant")) {
+            return "mcdonalds";
+        }
+        else if (remark.toLowerCase().contains("insurance payment")) {
+            return "fortis";
+        }
+        else if (remark.toLowerCase().contains("school")) {
+            return "school";
+        }
+        else if (remark.toLowerCase().contains("electricity")) {
+            return "home";
+        }
+        else if (remark.toLowerCase().contains("groceries")) {
+            return "home";
+        }
+        else if (remark.toLowerCase().contains("home")) {
+            return "home";
+        }
+        else if (remark.toLowerCase().contains("mutual fund")) {
+            return "investment";
+        }
+
+        return getRandomMerchant();
+    }
+
     public static String getRandomMerchant()
     {
         Random r = new Random();
@@ -73,6 +116,9 @@ public class TransactionCategoryUtils
     public static List<TransactionCategory> getInitialTransactionCategories()
     {
         List<TransactionCategory> list = new ArrayList<>();
+
+        // Unknown merchants
+        list.add(new TransactionCategory("pmr", Category.UNKNOWN));
 
         // Travel merchants
         list.add(new TransactionCategory("yatra", Category.TRAVEL));
@@ -134,10 +180,20 @@ public class TransactionCategoryUtils
         list.add(new TransactionCategory("apollo", Category.HEALTH));
 
         // Movies merchants
-        list.add(new TransactionCategory("pvr", Category.HEALTH));
-        list.add(new TransactionCategory("inox", Category.HEALTH));
-        list.add(new TransactionCategory("imax", Category.HEALTH));
-        list.add(new TransactionCategory("fame", Category.HEALTH));
+        list.add(new TransactionCategory("pvr", Category.MOVIES));
+        list.add(new TransactionCategory("inox", Category.MOVIES));
+        list.add(new TransactionCategory("imax", Category.MOVIES));
+        list.add(new TransactionCategory("fame", Category.MOVIES));
+
+        // Education merchants
+        list.add(new TransactionCategory("school", Category.EDUCATION));
+        list.add(new TransactionCategory("college", Category.EDUCATION));
+
+        // Home merchants
+        list.add(new TransactionCategory("home", Category.HOME));
+
+        // Investments merchants
+        list.add(new TransactionCategory("investment", Category.INVESTMENTS));
 
         return list;
     }
@@ -199,7 +255,7 @@ public class TransactionCategoryUtils
         allTransactions.addAll(PocketBankerDBHelper.getInstance().getAllTransactions());
 
         // Comment this line when dummy transactions are no longer required
-        allTransactions.addAll(dummyTransactions);
+        // allTransactions.addAll(dummyTransactions);
 
         return allTransactions;
     }
@@ -212,6 +268,9 @@ public class TransactionCategoryUtils
         COMMUNICATION,
         FOOD,
         HEALTH,
-        MOVIES
+        MOVIES,
+        EDUCATION,
+        HOME,
+        INVESTMENTS
     }
 }

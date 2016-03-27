@@ -1,9 +1,12 @@
 package com.example.zaas.pocketbanker.activities;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -27,6 +30,7 @@ import com.example.zaas.pocketbanker.data.PocketBankerDBHelper;
 import com.example.zaas.pocketbanker.models.local.Account;
 import com.example.zaas.pocketbanker.models.local.Payee;
 import com.example.zaas.pocketbanker.preferences.PocketBankerPreferences;
+import com.example.zaas.pocketbanker.sync.NetworkHelper;
 
 /**
  * Created by adugar on 3/20/16.
@@ -35,10 +39,14 @@ public class TransferFundsToPayeeActivity extends AppCompatActivity
 {
     public static final String PAYEE_LOCAL_ID = "PAYEE_LOCAL_ID";
     EditText mAmount;
+    EditText mDescription;
     private Spinner mAccountSpinner;
+    private Spinner mTransactionTypeSpinner;
     private List<Account> mAccounts;
     private Account mSelectedAccount;
+    private String mSelectedTransactionType;
     private Payee mPayee;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -113,6 +121,31 @@ public class TransferFundsToPayeeActivity extends AppCompatActivity
         toAccountNumber.setText(mPayee.getAccountNo());
 
         mAmount = (EditText) findViewById(R.id.amount);
+        mDescription = (EditText) findViewById(R.id.description);
+
+        mTransactionTypeSpinner = (Spinner) findViewById(R.id.transaction_type_spinner);
+        final List<String> transactionTypeStrings = new ArrayList<>();
+        TransactionType[] types = TransactionType.values();
+        for (TransactionType type : types) {
+            transactionTypeStrings.add(type.toString());
+        }
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
+                transactionTypeStrings);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mTransactionTypeSpinner.setAdapter(dataAdapter);
+        mTransactionTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                mSelectedTransactionType = transactionTypeStrings.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+                mSelectedTransactionType = TransactionType.PMR.toString();
+            }
+        });
 
         final Button transfer = (Button) findViewById(R.id.transfer);
         transfer.setOnClickListener(new View.OnClickListener() {
@@ -152,13 +185,20 @@ public class TransferFundsToPayeeActivity extends AppCompatActivity
     private void showConfirmationDialog(String amount)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(String.format(getString(R.string.transfer_confirmation_message), amount, "Akshay Dugar",
-                mPayee.getName()));
+        builder.setMessage(String.format(getString(R.string.transfer_confirmation_message), amount,
+                PocketBankerPreferences.get(PocketBankerPreferences.NAME), mPayee.getName()));
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                // Do nothing
+                String srcAccount = mSelectedAccount.getAccountNumber();
+                String destAccount = mPayee.getAccountNo();
+                String amount = mAmount.getText().toString();
+                String description = mDescription.getText().toString();
+                String payeeId = mPayee.getPayeeId();
+                String type = mSelectedTransactionType;
+
+                new TransferFundsTask().execute(srcAccount, destAccount, amount, description, payeeId, type);
             }
         });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -169,6 +209,115 @@ public class TransferFundsToPayeeActivity extends AppCompatActivity
             }
         });
         builder.show();
+    }
+
+    private void showResultDialog(String referenceNumber)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (!TextUtils.isEmpty(referenceNumber)) {
+            builder.setMessage(String.format(getString(R.string.transfer_result_message), referenceNumber));
+        }
+        else {
+            builder.setMessage(getString(R.string.funds_transfer_failed_msg));
+        }
+        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                finish();
+            }
+        });
+        builder.show();
+    }
+
+    private void showProgressDialog()
+    {
+        try {
+            mProgressDialog = ProgressDialog.show(this, null, getString(R.string.transferring_funds));
+        }
+        catch (Exception e) {
+            // Ignore
+        }
+    }
+
+    private void stopProgressDialog()
+    {
+        if (mProgressDialog != null) {
+            try {
+                mProgressDialog.dismiss();
+            }
+            catch (Exception e) {
+                // Ignore
+            }
+            finally {
+                mProgressDialog = null;
+            }
+        }
+    }
+
+    public enum TransactionType
+    {
+        PMR("PMR"),
+        DIRECT_TO_HOME("Direct-To-Home payments"),
+        SCHOOL_FEE_PAYMENT("School fee payment"),
+        MOVIE_TICKET("Movie Ticket"),
+        ELECTRICITY("Electricity"),
+        RESTAURANT_TICKET("Restaurant ticket"),
+        FUEL("Fuel"),
+        GROCERIES("Groceries"),
+        HOME_LOAN_EMI("Home Loan EMI"),
+        INSURANCE_PAYMENT("Insurance Payment"),
+        CAR_INSURANCE("Car Insurance"),
+        MUTUAL_FUND_PAYMENTS("Mutual Fund Payments");
+
+        private final String value;
+
+        TransactionType(String value)
+        {
+            this.value = value;
+        }
+
+        @Override
+        public String toString()
+        {
+            return value;
+        }
+    }
+
+    public class TransferFundsTask extends AsyncTask<String, Void, String>
+    {
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+            showProgressDialog();
+        }
+
+        @Override
+        protected String doInBackground(String... params)
+        {
+            NetworkHelper networkHelper = new NetworkHelper();
+
+            long amount = 0;
+            int payeeId = -1;
+            try {
+                amount = Long.parseLong(params[2]);
+                payeeId = Integer.parseInt(params[4]);
+            }
+            catch (Exception e) {
+                // DO nothing
+            }
+            String refNo = networkHelper.transferFunds(params[0], params[1], amount, params[3], payeeId, params[5]);
+
+            return refNo;
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            stopProgressDialog();
+            showResultDialog(result);
+        }
     }
 
     public class AccountSpinnerAdapter extends ArrayAdapter<Account>

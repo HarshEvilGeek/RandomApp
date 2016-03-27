@@ -41,7 +41,7 @@ public class Transaction extends DbModel
 
     public Transaction(String accountNumber, double amount, double balance, Type type, String remark, long time)
     {
-        this(accountNumber, amount, balance, type, remark, time, TransactionCategoryUtils.getRandomMerchant());
+        this(accountNumber, amount, balance, type, remark, time, TransactionCategoryUtils.getMerchant(remark));
     }
 
     public Transaction(String accountNumber, double amount, double balance, Type type, String remark, long time,
