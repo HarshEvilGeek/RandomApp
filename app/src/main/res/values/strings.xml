@@ -51,4 +51,6 @@
     <string name="enter_description">Enter description</string>
     <string name="transferring_funds">Transferring funds...</string>
     <string name="type_of_transaction">Type of transaction</string>
+    <string name="contact_address">ICICI Bank Limited                         ICICI Phone Banking Center, ICICI Bank Tower, 7th floor,                         Survey no: 115/27, Plot no. 12, Nanakramguda, Serilingampally,                         Hyderabad – 500032.</string>
+    <string name="contact_branch_atm">Visit the Help Desk at any Branch or drop us a line ATM DropBox. Use the new ATM/Branch Locator in this app</string>
 </resources>
