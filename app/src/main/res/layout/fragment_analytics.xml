@@ -5,20 +5,14 @@
     android:orientation="vertical" >
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:gravity="center"
-        android:padding="@dimen/card_margin_small"
-        android:background="@color/colorAccent"
-        android:text="Debit Transactions"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        style="@style/HeaderStyle"
+        android:text="Debit Transactions" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/card_margin">
+        android:background="@color/colorAccent"
+        android:padding="@dimen/card_margin">
 
         <TextView
             android:id="@+id/from_date"
@@ -42,7 +36,7 @@
             android:layout_marginRight="@dimen/card_margin"
             android:padding="@dimen/card_margin_small"
             android:text="TO"
-            android:textColor="@color/colorAccent"
+            android:textColor="@android:color/white"
             android:textSize="14sp"
             android:textStyle="bold"/>
 
