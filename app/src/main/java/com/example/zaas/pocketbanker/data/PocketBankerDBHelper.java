@@ -22,6 +22,7 @@ import com.example.zaas.pocketbanker.models.local.DbModel;
 import com.example.zaas.pocketbanker.models.local.LoanEMI;
 import com.example.zaas.pocketbanker.models.local.Payee;
 import com.example.zaas.pocketbanker.models.local.Recommendation;
+import com.example.zaas.pocketbanker.models.local.Shop;
 import com.example.zaas.pocketbanker.models.local.Transaction;
 import com.example.zaas.pocketbanker.models.local.TransactionCategory;
 
@@ -127,6 +128,28 @@ public class PocketBankerDBHelper
             }
         }
         return recommendationList;
+    }
+
+    public List<Shop> getAllShops()
+    {
+        Cursor c = null;
+        List<Shop> shopList = new ArrayList<>();
+        Shop shop = new Shop();
+        shop.setId(1);
+        shop.setName("Recharge your mobile");
+        shop.setUrl("http://files.hostgator.co.in/hostgator244459/image/recharge_m_1a.jpg");
+        Shop shop2 = new Shop();
+        shop2.setId(2);
+        shop2.setName("McDonalds");
+        shop2.setUrl("http://2.bp.blogspot.com/-4hgRPCvosa0/VCoWtmcTfLI/AAAAAAAABZE/YPap5ES5_o0/s1600/mcd-logo.png");
+        Shop shop3 = new Shop();
+        shop3.setId(3);
+        shop3.setName("Book My Show");
+        shop3.setUrl("http://www.afaqs.com/all/news/images/news_story_grfx/2013/12/39336/Bookmyshow-new-logo.jpg");
+        shopList.add(shop);
+        shopList.add(shop2);
+        shopList.add(shop3);
+        return shopList;
     }
 
     public List<Transaction> getAllTransactions()
