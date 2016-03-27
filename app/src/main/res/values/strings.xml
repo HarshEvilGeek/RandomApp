@@ -37,10 +37,16 @@
     <string name="amount_hint">Enter amount</string>
     <string name="enter_amount">Please enter amount</string>
     <string name="transfer_confirmation_message">Transfer \u20B9%1$s from %2$s to %3$s?</string>
+    <string name="transfer_result_message">Funds transferred successfully!\nReference No:%1$s</string>
+    <string name="funds_transfer_failed_msg">Funds transfer failed\nPlease try again after some time</string>
 
     <string name="customer_id">Customer ID</string>
     <string name="password">Password</string>
     <string name="log_in">LOGIN</string>
     <string name="registered_payees">Registered Payees</string>
     <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="enter_description">Enter description</string>
+    <string name="transferring_funds">Transferring funds...</string>
+    <string name="type_of_transaction">Type of transaction</string>
 </resources>

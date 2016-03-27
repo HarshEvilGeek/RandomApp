@@ -14,7 +14,7 @@ public class FundTransfer
     @SerializedName ("transaction_date")
     private String transactionDate;
 
-    @SerializedName ("reference_no")
+    @SerializedName ("referance_no")
     private String refNo;
 
     @SerializedName ("transaction_amount")

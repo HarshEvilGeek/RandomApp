@@ -1,6 +1,7 @@
 package com.example.zaas.pocketbanker.sync;
 
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -713,9 +714,11 @@ public class NetworkHelper
 
     }
 
-    public void transferFunds(String customerId, String srcAccount, String destAccount, long amount, String payeeDesc,
+    public String transferFunds(String srcAccount, String destAccount, long amount, String payeeDesc,
             int payeeId, String typeOfTrans)
     {
+        FundTransfer fundTransfer = null;
+
         try {
 
             Log.i(LOG_TAG, "Transferring funds ");
@@ -725,7 +728,7 @@ public class NetworkHelper
 
             String pd = "";
             if (!TextUtils.isEmpty(payeeDesc)) {
-                pd = payeeDesc;
+                pd = URLEncoder.encode(payeeDesc, "UTF-8");
             }
             int pid = -1;
             if (payeeId != -1) {
@@ -733,7 +736,7 @@ public class NetworkHelper
             }
             String tot = "";
             if (!TextUtils.isEmpty(typeOfTrans)) {
-                tot = typeOfTrans;
+                tot = URLEncoder.encode(typeOfTrans, "UTF-8");
             }
 
             // TODO : what we need to do if payeeId is not given by user
@@ -746,7 +749,6 @@ public class NetworkHelper
             Response fundTransferResponse = methods.makeTransaction(href);
 
             RequestCode requestCode = null;
-            FundTransfer fundTransfer = null;
             Gson gson = new Gson();
 
             if (fundTransferResponse != null) {
@@ -789,6 +791,10 @@ public class NetworkHelper
             Log.e(LOG_TAG, "Exception while making transaction", e);
         }
 
+        if (fundTransfer != null) {
+            return fundTransfer.getRefNo();
+        }
+        return null;
     }
 
     public void getLoanTransactionDetails(String accountNo)
