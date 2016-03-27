@@ -78,6 +78,10 @@ public class ChatBotFragment extends Fragment
                 "Check out our new ATM/Branch locator in the app for easily reaching the nearest ICICI Bank branch");
         keywordsMap.put(new StringKey("nearby", "atm"),
                 "Check out our new ATM/Branch locator in the app for easily reaching the nearest ICICI Bank ATM");
+        keywordsMap.put(new StringKey("stolen", "card"),
+                "Contact ICICI Bank Customer Care to report stolen/lost Credit Card");
+        keywordsMap.put(new StringKey("lost", "card"),
+                "Contact ICICI Bank Customer Care to report stolen/lost Credit Card");
     }
 
     final Handler handler = new Handler();
