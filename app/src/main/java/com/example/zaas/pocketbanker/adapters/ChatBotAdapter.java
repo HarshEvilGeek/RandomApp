@@ -29,22 +29,38 @@ import com.example.zaas.pocketbanker.utils.Constants;
 public class ChatBotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
 
-    private List<ChatBotUIItem> mUiItems;
-    private Context mContext;
-
     private static long TIME_DIFFERENCE_TO_SHOW_ON_UI = 10 * 60 * 1000;
     private static StyleSpan styleSpanBold = new StyleSpan(Typeface.BOLD);
-
     FrameLayout.LayoutParams questionLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT);
-
     FrameLayout.LayoutParams answerLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.LEFT);
+    private List<ChatBotUIItem> mUiItems;
+    private Context mContext;
 
     public ChatBotAdapter(Context context, List<ChatBotUIItem> uiItems)
     {
         mUiItems = uiItems;
         mContext = context;
+    }
+
+    private static String getDateText(Context context, long time)
+    {
+        int flags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR;
+
+        return DateUtils.formatDateTime(context, time, flags);
+    }
+
+    private static boolean isYesterday(long timeStamp)
+    {
+        Calendar now = Calendar.getInstance();
+        Calendar givenTime = Calendar.getInstance();
+        givenTime.setTimeInMillis(timeStamp);
+
+        return (now.get(Calendar.DATE) - givenTime.get(Calendar.DATE) == 1)
+                && (now.get(Calendar.MONTH) == givenTime.get(Calendar.MONTH))
+                && (now.get(Calendar.YEAR) == givenTime.get(Calendar.YEAR));
+
     }
 
     public void setUiItems(List<ChatBotUIItem> uiItems)
@@ -101,8 +117,9 @@ public class ChatBotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             vh.messageLL.setGravity(Gravity.LEFT);
             vh.message.setLayoutParams(answerLayoutParams);
             vh.timeStampView.setLayoutParams(answerLayoutParams);
-            vh.message.setTextColor(Color.WHITE);
+            vh.message.setTextColor(Color.BLACK);
             vh.message.setBackgroundResource(R.drawable.answer);
+            vh.message.setGravity(Gravity.LEFT);
 
         }
         else if (uiItem.getType().equals(Constants.CHAT_BOT_TYPE_QUESTION)) {
@@ -110,32 +127,12 @@ public class ChatBotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             vh.messageLL.setGravity(Gravity.RIGHT);
             vh.message.setLayoutParams(questionLayoutParams);
             vh.timeStampView.setLayoutParams(questionLayoutParams);
-            vh.message.setTextColor(Color.BLACK);
+            vh.message.setTextColor(Color.WHITE);
             vh.message.setBackgroundResource(R.drawable.question);
+            vh.message.setGravity(Gravity.RIGHT);
 
         }
 
-    }
-
-    public class ChatBotViewHolder extends RecyclerView.ViewHolder
-    {
-
-        private TextView timeStampView;
-        private TextView message;
-        // private LinearLayout timestampLayout;
-        private LinearLayout messageLL;
-        private FrameLayout messageFL;
-
-        public ChatBotViewHolder(View itemView)
-        {
-            super(itemView);
-            timeStampView = (TextView) itemView.findViewById(R.id.timeStamp);
-            message = (TextView) itemView.findViewById(R.id.message_tv);
-            // timestampLayout = (LinearLayout) itemView.findViewById(R.id.timeStampLayout);
-            messageLL = (LinearLayout) itemView.findViewById(R.id.chat_item_ll);
-            messageFL = (FrameLayout) itemView.findViewById(R.id.message_framelayout);
-
-        }
     }
 
     /**
@@ -170,31 +167,30 @@ public class ChatBotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return builder;
     }
 
-    private static String getDateText(Context context, long time)
-    {
-        int flags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR;
-
-        return DateUtils.formatDateTime(context, time, flags);
-    }
-
-    private static boolean isYesterday(long timeStamp)
-    {
-        Calendar now = Calendar.getInstance();
-        Calendar givenTime = Calendar.getInstance();
-        givenTime.setTimeInMillis(timeStamp);
-
-        if ((now.get(Calendar.DATE) - givenTime.get(Calendar.DATE) == 1)
-                && (now.get(Calendar.MONTH) == givenTime.get(Calendar.MONTH))
-                && (now.get(Calendar.YEAR) == givenTime.get(Calendar.YEAR))) {
-            return true;
-        }
-
-        return false;
-    }
-
     private String getTimeText(Context context, long time)
     {
         int flags = DateUtils.FORMAT_SHOW_TIME;
         return DateUtils.formatDateTime(context, time, flags);
+    }
+
+    public class ChatBotViewHolder extends RecyclerView.ViewHolder
+    {
+
+        private TextView timeStampView;
+        private TextView message;
+        // private LinearLayout timestampLayout;
+        private LinearLayout messageLL;
+        private FrameLayout messageFL;
+
+        public ChatBotViewHolder(View itemView)
+        {
+            super(itemView);
+            timeStampView = (TextView) itemView.findViewById(R.id.timeStamp);
+            message = (TextView) itemView.findViewById(R.id.message_tv);
+            // timestampLayout = (LinearLayout) itemView.findViewById(R.id.timeStampLayout);
+            messageLL = (LinearLayout) itemView.findViewById(R.id.chat_item_ll);
+            messageFL = (FrameLayout) itemView.findViewById(R.id.message_framelayout);
+
+        }
     }
 }
