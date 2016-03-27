@@ -73,13 +73,49 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
 
     private void insertRecommendations(SQLiteDatabase db)
     {
-        Recommendation recommendation = new Recommendation("1", "Avail 15% off on movie tickets on BookMyShow",
-                "http://www.afaqs.com/all/news/images/news_story_grfx/2013/12/39336/Bookmyshow-new-logo.jpg",
-                TransactionCategoryUtils.Category.MOVIES, "Shown because of your interest in movies");
+        Recommendation recommendation = new Recommendation("1",
+                "Zoom off with 20% discount on Self Drive cars on zoomcar.com",
+                "http://www.mpower2015.com/images/pastSponsers/currentSponsors/zoomcar.jpg",
+                "http://www.icicibank.com/offers/zoom-car-offer.page", TransactionCategoryUtils.Category.TRAVEL,
+                "Offer for ICICI Bank Credit and Debit Card");
         db.insert(Tables.RECOMMENDATIONS, null, recommendation.toContentValues());
-        recommendation = new Recommendation("2", "Buy 1 Get 1 in McDonald's",
-                "http://2.bp.blogspot.com/-4hgRPCvosa0/VCoWtmcTfLI/AAAAAAAABZE/YPap5ES5_o0/s1600/mcd-logo.png",
-                TransactionCategoryUtils.Category.FOOD, "Based on your interest in restaurants");
+        recommendation = new Recommendation("2", "Get 15% discount at TGI Fridays",
+                "http://thewebhunter.se/wp-content/uploads/2013/03/t-g-i-f.jpg",
+                "http://www.icicibank.com/offers/culinary-treats-tgif-offer.page",
+                TransactionCategoryUtils.Category.FOOD, "Culinary treats from ICICI Bank Cards");
+        db.insert(Tables.RECOMMENDATIONS, null, recommendation.toContentValues());
+        recommendation = new Recommendation(
+                "3",
+                "Use Internet Banking and get \u20B9100 off on Flipkart",
+                "https://pbs.twimg.com/profile_images/378800000043109980/af33c8d83e946c83563135cecbab46f6_400x400.jpeg",
+                "http://www.icicibank.com/offers/flipkart-discount-on-mobile-banking-offer.page",
+                TransactionCategoryUtils.Category.SHOPPING, "Shopping deals especially for you");
+        db.insert(Tables.RECOMMENDATIONS, null, recommendation.toContentValues());
+        recommendation = new Recommendation("4", "Book a holiday and get \u20B95000 off per person",
+                "https://sotcholidaysofindia.files.wordpress.com/2013/02/cropped-sotc.jpg",
+                "http://www.icicibank.com/offers/sotc-holiday-offer.page", TransactionCategoryUtils.Category.SHOPPING,
+                "Internet banking offer");
+        db.insert(Tables.RECOMMENDATIONS, null, recommendation.toContentValues());
+        recommendation = new Recommendation("5", "Get Pockets card and enjoy 15% off at CCD",
+                "http://2.bp.blogspot.com/-rlA9r-JE42Y/VoKBM1h8SRI/AAAAAAAAAMg/fob5IZozCmQ/s1600/pocket.jpg",
+                "http://www.icicibank.com/offers/pockets-ccd-offer.page", TransactionCategoryUtils.Category.SHOPPING,
+                "Expires on 31-12-2016");
+        db.insert(Tables.RECOMMENDATIONS, null, recommendation.toContentValues());
+        recommendation = new Recommendation("6",
+                "Get up to \u20B91000 cashback on domestic flight bookings at MakeMyTrip",
+                "http://www.giftxoxo.com/image/data/Gift%20Voucher/Vouchers_big/E-vouchers/makemytrip.jpg",
+                "http://www.icicibank.com/offers/makemytrip-domestic-flight-offer.page",
+                TransactionCategoryUtils.Category.TRAVEL, "Travel deals especially for you");
+        db.insert(Tables.RECOMMENDATIONS, null, recommendation.toContentValues());
+        recommendation = new Recommendation("6", "Get \u20B9100 cashback at IRCTC",
+                "http://allupdates.in/wp-content/uploads/2015/11/irctc-login.jpg",
+                "http://www.icicibank.com/offers/irctc-100-cashback.page", TransactionCategoryUtils.Category.TRAVEL,
+                "Travel deals especially for you");
+        db.insert(Tables.RECOMMENDATIONS, null, recommendation.toContentValues());
+        recommendation = new Recommendation("7", "Get 30% off at bigbasket",
+                "http://www.indiaretailing.com/wp-content/uploads/2016/03/bigbasket.jpg",
+                "http://www.icicibank.com/offers/bigbasket-offer.page", TransactionCategoryUtils.Category.SHOPPING,
+                "Use ICICI Bank Internet Banking, Credit or Debit Card");
         db.insert(Tables.RECOMMENDATIONS, null, recommendation.toContentValues());
     }
 
@@ -291,8 +327,10 @@ public class PocketBankerOpenHelper extends SQLiteOpenHelper
         String CREATE_TABLE_RECOMMENDATIONS_QUERY = "CREATE table " + RECOMMENDATIONS + " ("
                 + PocketBankerContract.Recommendations._ID + " integer primary key autoincrement, "
                 + PocketBankerContract.Recommendations.RECOMMENDATION_ID + " text, "
-                + PocketBankerContract.Recommendations.MESSAGE + " text, " + PocketBankerContract.Recommendations.URL
-                + " text, " + PocketBankerContract.Recommendations.REASON + " text, "
+                + PocketBankerContract.Recommendations.MESSAGE + " text, "
+                + PocketBankerContract.Recommendations.IMAGE_URL + " text, "
+                + PocketBankerContract.Recommendations.OPEN_URL + " text, "
+                + PocketBankerContract.Recommendations.REASON + " text, "
                 + PocketBankerContract.Recommendations.CATEGORY + " integer);";
     }
 }
