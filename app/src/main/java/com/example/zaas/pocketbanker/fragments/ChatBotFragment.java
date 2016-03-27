@@ -121,7 +121,7 @@ public class ChatBotFragment extends Fragment
         chatBotRecyclerView.setAdapter(mAdapter);
         chatBotRecyclerView.setLayoutManager(new LinearLayoutManager(chatBotRecyclerView.getContext()));
 
-        getActivity().setTitle("Chat Bot");
+        getActivity().setTitle("Help Bot");
         return rootView;
     }
 

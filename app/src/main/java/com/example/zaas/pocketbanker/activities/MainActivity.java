@@ -169,8 +169,6 @@ public class MainActivity extends BaseRestrictedActivity
             fragment = new PocketsAddMoneyFragment();
         } else if (id == R.id.pockets_buy_item) {
             fragment = new PocketsRechargeShopFragment();
-        } else if (id == R.id.pockets_friends) {
-            fragment = new PocketsFriendsFragment();
         } else if (id == R.id.pockets_history) {
             fragment = new PocketsHistoryFragment();
         } else if(id == R.id.chat_bot) {
