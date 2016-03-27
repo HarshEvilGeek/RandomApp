@@ -20,6 +20,7 @@
         android:layout_marginTop="40dp"
         android:backgroundTint="@android:color/white"
         android:hint="@string/name"
+        android:inputType="textCapWords"
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/white">
 
@@ -32,6 +33,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:hint="@string/customer_id"
+        android:inputType="number"
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/white" />
 
