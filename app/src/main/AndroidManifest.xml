@@ -68,6 +68,10 @@
             android:name=".activities.TransactionCategoryActivity"
             android:label="@string/action_transactions">
         </activity>
+        <activity
+            android:name=".activities.AccountSummaryDetailActivity"
+            android:label="Details">
+        </activity>
         <service android:name=".services.FetchAddressIntentService"
             android:exported="false" />
 
