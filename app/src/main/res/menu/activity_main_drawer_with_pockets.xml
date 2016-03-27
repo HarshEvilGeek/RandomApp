@@ -4,50 +4,50 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/account_summary"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_account_summary"
             android:title="Account Summary" />
         <item
             android:id="@+id/transactions"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_transactions"
             android:title="Transactions" />
         <item
             android:id="@+id/transfer_funds"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_transfer_funds"
             android:title="Transfer Funds" />
         <item
             android:id="@+id/atm_branch_locator"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_atm_branch_locator"
             android:title="ATM/Branch Locator" />
         <item
             android:id="@+id/analytics"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_analytics"
             android:title="Analytics" />
         <item
             android:id="@+id/recommendations"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_recommendations"
             android:title="Recommendations" />
 
         <item android:title="Pockets">
             <menu>
                 <item
                     android:id="@+id/pockets_home"
-                    android:icon="@drawable/ic_menu_share"
+                    android:icon="@drawable/ic_pockets"
                     android:title="Home" />
                 <item
                     android:id="@+id/pockets_add_money"
-                    android:icon="@drawable/ic_menu_share"
+                    android:icon="@drawable/ic_add"
                     android:title="Add Money" />
                 <item
                     android:id="@+id/pockets_buy_item"
-                    android:icon="@drawable/ic_menu_share"
+                    android:icon="@drawable/ic_recharge_shop"
                     android:title="Recharge/Shop" />
                 <item
                     android:id="@+id/pockets_friends"
-                    android:icon="@drawable/ic_menu_share"
+                    android:icon="@drawable/ic_friends"
                     android:title="Friends" />
                 <item
                     android:id="@+id/pockets_history"
-                    android:icon="@drawable/ic_menu_share"
+                    android:icon="@drawable/ic_history"
                     android:title="History" />
             </menu>
         </item>
@@ -57,12 +57,12 @@
         <menu>
             <item
                 android:id="@+id/chat_bot"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_bot"
                 android:title="ICICI Bot" />
 
             <item
                 android:id="@+id/contact_us"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_contact_us"
                 android:title="Contact Us" />
         </menu>
     </item>
@@ -71,12 +71,12 @@
         <menu>
             <item
                 android:id="@+id/notifications"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_notifications"
                 android:title="Notifications" />
 
             <item
                 android:id="@+id/log_out"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@drawable/ic_logout"
                 android:title="Log Out" />
         </menu>
     </item>
