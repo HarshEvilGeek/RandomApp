@@ -1,4 +1,4 @@
-package com.example.zaas.pocketbanker.fragments;
+package com.example.zaas.pocketbanker.activities;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -7,15 +7,19 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -36,7 +40,7 @@ import com.example.zaas.pocketbanker.utils.Constants;
 /**
  * Created by zaraahmed on 3/20/16.
  */
-public class AccountSummaryDetailFragment extends Fragment
+public class AccountSummaryDetailActivity extends AppCompatActivity
 {
 
     RecyclerView mAccountSummaryDetailFragmentRV;
@@ -46,48 +50,41 @@ public class AccountSummaryDetailFragment extends Fragment
     // bank acc/loan acc/card
     String headerType;
     SwipeRefreshLayout mAccountSummaryDetailSwipeRefresh;
+    private Context mContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-    }
+        mContext = this;
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setTitle("Details");
+            ab.setHomeButtonEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
+        setContentView(R.layout.account_summary_detail_fragment);
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-
-        View rootView = inflater.inflate(R.layout.account_summary_detail_fragment, container, false);
-
-        mAccountSummaryDetailFragmentRV = (RecyclerView) rootView.findViewById(R.id.account_summary_detail_fragment_RV);
-        mAccountSummaryDetailSwipeRefresh = (SwipeRefreshLayout) rootView
-                .findViewById(R.id.account_summary_detail_swipe_refresh);
+        mAccountSummaryDetailFragmentRV = (RecyclerView) findViewById(R.id.account_summary_detail_fragment_RV);
+        mAccountSummaryDetailSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.account_summary_detail_swipe_refresh);
         mAccountSummaryDetailSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh()
-            {
+            public void onRefresh() {
                 fetchNetworkData();
             }
         });
         mAccountSummaryDetailSwipeRefresh.setColorSchemeColors(Color.BLUE);
 
-        getActivity().setTitle("Summary");
-        populateArguments();
+        setTitle("Summary");
+        Bundle extras = getIntent().getExtras();
+        handleExtras(extras);
         loadData(true);
-        return rootView;
-
     }
 
-    private void populateArguments()
-    {
-        Bundle args = getArguments();
-        if (args != null) {
+    private void handleExtras(Bundle extras) {
 
-            accountNo = args.getString(Constants.SUMMARY_DETAIL_FRAGMENT_ACCOUNT_NUMBER);
-            headerType = args.getString(Constants.SUMMARY_DETAIL_FRAGMENT_HEADER_TYPE);
-
-        }
+        accountNo = extras.getString(Constants.SUMMARY_DETAIL_FRAGMENT_ACCOUNT_NUMBER);
+        headerType = extras.getString(Constants.SUMMARY_DETAIL_FRAGMENT_HEADER_TYPE);
     }
 
     private void fetchNetworkData()
@@ -255,7 +252,7 @@ public class AccountSummaryDetailFragment extends Fragment
         protected void onPostExecute(List<AccountSummaryDetailItem> uiItems)
         {
             if (mAdapter == null) {
-                mAdapter = new AccountSummaryDetailFragmentAdapter(getActivity(), uiItems);
+                mAdapter = new AccountSummaryDetailFragmentAdapter(mContext, uiItems);
                 mAccountSummaryDetailFragmentRV.setAdapter(mAdapter);
                 mAccountSummaryDetailFragmentRV.setLayoutManager(new LinearLayoutManager(
                         mAccountSummaryDetailFragmentRV.getContext()));
@@ -307,5 +304,17 @@ public class AccountSummaryDetailFragment extends Fragment
             stopProgressInPullToRefresh();
             enablePullToRefresh();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
