@@ -90,7 +90,7 @@ public class TransactionsListFragment extends Fragment
         setDatePickers();
         populateArguments();
         populateDatePickerHeading();
-        getActivity().setTitle("Acc. " + accountNo);
+        getActivity().setTitle("Acc. # " + accountNo);
         loadData();
         return rootView;
 

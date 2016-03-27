@@ -85,7 +85,7 @@ public class AccountSummaryDetailFragmentAdapter extends RecyclerView.Adapter<Re
             final AccountSummaryDetailHeaderUIITem headerUIITem = uiItem.getHeaderUIITem();
             AccountSummaryDetailFragmentHeaderViewHolder viewHolder = (AccountSummaryDetailFragmentHeaderViewHolder) vh;
 
-            viewHolder.accNoTV.setText(headerUIITem.getAccountNo());
+            viewHolder.accNoTV.setText("Acc. # " + headerUIITem.getAccountNo());
 
             if (Constants.HEADER_TYPE_BANKACCOUNT.equals(headerUIITem.getHeaderType())) {
 
