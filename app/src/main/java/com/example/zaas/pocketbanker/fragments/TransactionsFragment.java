@@ -59,7 +59,7 @@ public class TransactionsFragment extends Fragment
         mTransactionsSummarySwipeRefresh.setColorSchemeColors(Color.BLUE);
 
         getActivity().setTitle("Transactions");
-        loadData(false);
+        loadData(true);
         return rootView;
     }
 

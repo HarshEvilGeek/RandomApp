@@ -74,7 +74,7 @@ public class AccountSummaryDetailFragment extends Fragment
 
         getActivity().setTitle("Summary");
         populateArguments();
-        loadData(false);
+        loadData(true);
         return rootView;
 
     }
