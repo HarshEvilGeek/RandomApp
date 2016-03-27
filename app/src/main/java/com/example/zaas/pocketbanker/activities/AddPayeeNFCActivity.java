@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.zaas.pocketbanker.R;
 import com.example.zaas.pocketbanker.models.local.Payee;
+import com.example.zaas.pocketbanker.preferences.PocketBankerPreferences;
 
 /**
  * Activity that lets user add a new payee via NFC
@@ -66,7 +67,7 @@ public class AddPayeeNFCActivity extends BaseRestrictedActivity implements NfcAd
     @Override
     public NdefMessage createNdefMessage(NfcEvent event)
     {
-        Payee self = new Payee("1", "Akshay Dugar", "510110", "Agz", System.currentTimeMillis(), "AKI110");
+        Payee self = new Payee("1", PocketBankerPreferences.get(PocketBankerPreferences.NAME), "5555666677770949", "Agz", System.currentTimeMillis(), "AKI110");
         String text = (self.getName() + ";" + self.getAccountNo());
         return new NdefMessage(new NdefRecord[] { NdefRecord.createMime(
                 "application/vnd.com.example.zaas.pocketbanker", text.getBytes()) });
