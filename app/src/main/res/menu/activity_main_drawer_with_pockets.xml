@@ -42,10 +42,6 @@
                     android:icon="@drawable/ic_recharge_shop"
                     android:title="Recharge/Shop" />
                 <item
-                    android:id="@+id/pockets_friends"
-                    android:icon="@drawable/ic_friends"
-                    android:title="Friends" />
-                <item
                     android:id="@+id/pockets_history"
                     android:icon="@drawable/ic_history"
                     android:title="History" />
@@ -58,7 +54,7 @@
             <item
                 android:id="@+id/chat_bot"
                 android:icon="@drawable/ic_bot"
-                android:title="ICICI Bot" />
+                android:title="Help Bot" />
 
             <item
                 android:id="@+id/contact_us"
@@ -69,11 +65,6 @@
 
     <item android:title="Settings">
         <menu>
-            <item
-                android:id="@+id/notifications"
-                android:icon="@drawable/ic_notifications"
-                android:title="Notifications" />
-
             <item
                 android:id="@+id/log_out"
                 android:icon="@drawable/ic_logout"

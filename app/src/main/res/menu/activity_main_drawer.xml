@@ -42,7 +42,7 @@
             <item
                 android:id="@+id/chat_bot"
                 android:icon="@drawable/ic_bot"
-                android:title="ICICI Bot" />
+                android:title="Help Bot" />
 
             <item
                 android:id="@+id/contact_us"
@@ -53,10 +53,6 @@
 
     <item android:title="Settings">
         <menu>
-            <item
-                android:id="@+id/notifications"
-                android:icon="@drawable/ic_notifications"
-                android:title="Notifications" />
 
             <item
                 android:id="@+id/log_out"
