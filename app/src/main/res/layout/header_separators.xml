@@ -1,31 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="20dp"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/card_margin"
     android:layout_marginRight="@dimen/card_margin"
-    android:layout_marginTop="@dimen/card_margin_small"
-    card_view:cardCornerRadius="10dp">
+    android:layout_marginTop="@dimen/card_margin">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/header_tv"
-            style="@style/Base.TextAppearance.AppCompat.Small"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="@android:color/white"
-            android:gravity="center"
-            android:textAllCaps="true"
-            android:textStyle="bold" />
+            android:layout_height="6dp"
+            android:background="@color/colorPrimaryDark"
+        />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/card_margin_smaller"
+            android:paddingBottom="@dimen/card_margin_small"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/header_tv"
+                style="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
